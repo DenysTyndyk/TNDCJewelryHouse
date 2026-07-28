@@ -1,0 +1,57 @@
+// Profile only — passwords via Supabase Auth (not stored here)
+UserData{
+    private int _idUser PK
+    private string _firstName
+    private string _secondName
+    private string _phoneNumber
+    private string _email
+    private int _roleId FK  // -> RoleTable
+}
+
+RoleTable{
+    private int _idRole PK
+    // enum: Owner, Admin, DefaultUser
+}
+
+// Cart in DB only for logged-in users.
+// Guest cart: localStorage in the browser until register/login, then MERGE into PersonalCart.
+PersonalCart{
+    private int _idCart PK
+    private int _idUser FK  // -> UserData (1 user : 1 cart)
+}
+
+// Line items — cart references catalog Items (does not own them)
+CartItem{
+    private int _idCartItem PK
+    private int _idCart FK   // -> PersonalCart
+    private int _idItem FK   // -> Items
+    private int _quantity
+}
+
+// rings, Earrings, Necklace, etc.
+// later: size variants possible
+Items{
+    private int _idItem PK
+    public decimal Price
+    public string description  // TODO: i18n PL/EN/UK
+    public float Size
+    private int _idCategory FK  // -> ItemsCategory
+    // TODO: image URL(s) / Storage paths
+}
+
+ItemsCategory{
+    private int _idCategory PK
+    public string Name  // TODO: i18n if needed
+}
+
+/*
+Relationships:
+  RoleTable 1 — * UserData
+  UserData 1 — 1 PersonalCart
+  PersonalCart 1 — * CartItem
+  Items 1 — * CartItem
+  ItemsCategory 1 — * Items
+
+Auth: Supabase Auth stores / hashes passwords.
+Guest -> user: migrate localStorage cart into PersonalCart+CartItem (sum qty if same item), then clear localStorage.
+*/
