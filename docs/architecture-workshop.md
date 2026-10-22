@@ -2,7 +2,7 @@
 
 **You** write the architecture. This document only asks questions and lists what a solid thesis chapter usually covers. The AI must not fill in `docs/architecture.md` for you unless you explicitly request a full solution.
 
-Target stack context: **TypeScript · React · Next.js · Tailwind · Node.js · Supabase · Docker · Git**.
+Target stack context: **TypeScript · React (Vite) · FastAPI · PostgreSQL 16 + pgvector · Docker · Git**.
 
 Product: family jewelry e-commerce (catalog, cart, about, contact/location, new arrivals, categories). Content languages: **PL / EN / UK**. Docs language: **English**.
 
@@ -56,7 +56,7 @@ You plan Docker for **frontend and backend**. Decide and justify:
 | Candidate | Keep? | Responsibility | Talks to |
 |-----------|-------|----------------|----------|
 | Next.js `web` | ? | UI / SSR / routing (`/cart`, …) | ? |
-| Node.js `api` | ? | Business rules / order flow? | ? |
+| FastAPI `api` | ? | Business rules / order flow? | ? |
 | Supabase (hosted or CLI) | ? | Postgres, Auth, Storage? | ? |
 | Other (CDN, mailer…) | ? | | |
  I want your advice about it

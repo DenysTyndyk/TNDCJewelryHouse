@@ -672,21 +672,6 @@ p {
   color: var(--color-warm-white);
 }
 
-/* .map-panel {
-  min-height: 22rem;
-  border: 1px solid var(--color-border);
-  background:
-    linear-gradient(
-      160deg,
-      color-mix(in srgb, var(--color-malachite) 35%, var(--color-deep-black)),
-      var(--color-bg-elevated)
-    );
-  display: grid;
-  place-items: center;
-  text-align: center;
-  padding: var(--space-6);
-  color: var(--color-text-muted);
-} */
 .map-panel--embed {
   padding: 0;
   overflow: hidden;
@@ -1071,4 +1056,28 @@ padding-right: 1em ;
     width: 100%;
     justify-content: space-between;
   }
+}
+
+.empty-cart-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 6px;
+  padding: 4px 14px;
+  color: #c5a25d; /* Золотий акцент */
+  border: 1px solid rgba(197, 162, 93, 0.4);
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  background: rgba(197, 162, 93, 0.08);
+  transition: all 0.3s ease;
+}
+
+.empty-cart-link:hover {
+  background: #c5a25d;
+  color: #0a0a0a;
+  border-color: #c5a25d;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(197, 162, 93, 0.25);
 }

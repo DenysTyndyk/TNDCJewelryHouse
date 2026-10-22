@@ -42,4 +42,4 @@ Open the URL Vite prints (usually `http://localhost:5173`).
 
 ## Out of scope (later phases)
 
-Auth, cart merge to DB, Node API, Supabase, Docker, Next.js migration, payment.
+Auth against the FastAPI API, cart merge to Postgres, Docker, payment.

@@ -1,7 +1,7 @@
 import '../../styles/site.css';
 import ImageSliderOnHover from "./ImageSliderOnHover.jsx";
-import {useState} from 'react'
-import {useCart} from '../../context/cartContext.jsx'
+import { useCart } from '../../context/cartContext';
+import type { Item } from '../../types'
 const activeCart_svg = <svg
 xmlns="http://www.w3.org/2000/svg"
 width="18"
@@ -27,9 +27,9 @@ const removeFromCart_svg = <svg xmlns="http://www.w3.org/2000/svg" width="18" he
 <line x1="10" y1="11" x2="10" y2="17"/>
 <line x1="14" y1="11" x2="14" y2="17"/>
 </svg> 
-function ItemCard({ item }) {
+function ItemCard({ item }: { item: Item }) {
     const {toggleCart, cartItems} = useCart();
-    const isInCart = cartItems.find((it) => it.id === item.id)
+    const isInCart = cartItems.find((it: Item) => it.id === item.id)
   return (
     <article className="product">
       <ImageSliderOnHover images = {item.images} alt={item.title}/>

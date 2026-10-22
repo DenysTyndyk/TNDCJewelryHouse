@@ -3,17 +3,18 @@ import { useState, useEffect } from 'react';
 import ItemCard from '../components/ItemCard/ItemCard';
 import data from '../mockProducts/data.json';
 import {Link} from 'react-router-dom'
+import type { Item } from '../types';
 function Home() {
-  const [newArrivals, setNewArrivals] = useState([]);
+  const [newArrivals, setNewArrivals] = useState<Item[]>([]);
   useEffect(() => {
-    setNewArrivals(data.items.slice(0, 3));
+    setNewArrivals(data.items.slice(0, 3) as Item[]);
   }, []);
     return (
         <main>
       <section className="hero">
         <div className="hero__media" aria-hidden="true">
           <div className="hero__glow"></div>
-          <img className="hero__ornament" src="../brand/moodboard.png" alt="" />
+          <img className="hero__ornament" src="/brand/moodboard.png" alt="" />
         </div>
         <div className="hero__content">
           <p className="hero__brand reveal">TNDC Jewelry House</p>
@@ -23,8 +24,8 @@ function Home() {
             memory.
           </p>
           <div className="btn-group reveal reveal-delay-2">
-            <a className="btn btn--primary" href="/categories">Explore collection</a>
-            <a className="btn btn--ghost" href="#new">New arrivals</a>
+            <Link className="btn btn--primary" to="/categories">Explore collection</Link>
+            <Link className="btn btn--ghost" to="#new">New arrivals</Link>
           </div>
         </div>
       </section>

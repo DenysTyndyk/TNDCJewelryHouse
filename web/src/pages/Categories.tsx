@@ -3,14 +3,15 @@ import { useState } from 'react';
 import data from '../mockProducts/data.json';
 import ItemCard from '../components/ItemCard/ItemCard';
 import { useLocation } from 'react-router-dom';
+import type { Item } from '../types';
 function Categories() {
   const location = useLocation();
   const initialCategory = location.state?.category || 'all';
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
-  const items = (data as { items: any[] }).items || [];
+  const items = (data as { items: Item[] }).items || [];
   const filteredItems = selectedCategory === 'all' 
     ? items 
-    : items.filter((item) => item.category === selectedCategory);
+    : items.filter((item: Item) => item.category === selectedCategory);
 
     return (
         <main>
@@ -32,7 +33,7 @@ function Categories() {
           </div>
 
          <div className="product-grid">
-            {filteredItems.map((item) => (
+            {filteredItems.map((item: Item) => (
               <ItemCard key={item.id} item={item} />
             ))}
           </div>

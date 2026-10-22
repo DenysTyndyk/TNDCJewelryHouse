@@ -2,11 +2,13 @@
 
 Family jewelry e-commerce — diploma thesis and portfolio project.
 
-## Stack (planned)
+## Stack
 
-TypeScript · React · Next.js · Tailwind · Node.js · Supabase · Docker · Git
+TypeScript · React (Vite) · FastAPI · PostgreSQL 16 + pgvector · Docker · Git
 
-Phase 1 UI currently uses **Vite + React + TypeScript** with CSS tokens (Tailwind optional later).
+Two markets: Ukraine (primary — UAH, `uk`) and Poland (PLN, `pl`). Supabase Auth is not used; authentication will live in the FastAPI API. Decisions: [`docs/architecture.md`](./docs/architecture.md).
+
+The storefront in `web/` is **Vite + React + TypeScript** with CSS tokens. Auth on the client is a stub until that API exists.
 
 ## Web UI (Phase 1)
 
