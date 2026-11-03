@@ -1,6 +1,7 @@
 import '../styles/site.css';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useCart } from '../context/cartContext';
+import { useAuth } from '../context/authContext';
 import { useEffect, useState } from 'react';
 
 const navLinks: { to: string; label: string; end?: boolean }[] = [
@@ -13,6 +14,7 @@ const navLinks: { to: string; label: string; end?: boolean }[] = [
 function Header() {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const { cartCount } = useCart();
+  const { user } = useAuth();
   const location = useLocation();
 
   const toggleMenu = () => setIsNavOpen((prev) => !prev);
@@ -73,6 +75,13 @@ function Header() {
           >
             Cart
             <span className="nav__cart-count">{cartCount}</span>
+          </NavLink>
+          <NavLink
+            className={({ isActive }) => `nav__account${isActive ? ' is-active' : ''}`}
+            to={user ? '/account' : '/login'}
+            onClick={closeMenu}
+          >
+            {user ? 'Account' : 'Login'}
           </NavLink>
         </nav>
       </div>

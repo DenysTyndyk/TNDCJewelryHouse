@@ -45,13 +45,14 @@ M7 залежить лише від M3 і може йти паралельно �
 
 ### M1 — Схема БД і міграції (1–2 тижні)
 - Compose: `postgres` (pgvector), `CREATE EXTENSION vector`; Alembic з першого дня.
-- SQLAlchemy-моделі + міграції з DBML, з правками: `markets`, `shipping_methods`, `exchange_rates` (обов'язкова), `variant_prices` (+ `is_manual_override`, `markup_percent` на ринку — D6), `product_translations` (uk/pl/en), `refresh_tokens`, `email_verification_tokens`, `password_reset_tokens`, `user_events`, `search_queries`; `product_embeddings` з PK `(product_id, locale, model_name)`; `products.search_vector` + GIN.
-- Узагальнення `user_addresses` (`delivery_provider` enum, `provider_point_id`, `market_id`), `carts.market_id`, `orders` (`market_id`, `shipping_method_id`, `exchange_rate_used`, `session_token`, `locale`, timestamps, `recommendation_influenced`), `order_items.product_id`, `cart_items.unit_price_at_add`, `product_variants.length_mm/reserved_quantity`, `product_gemstones.is_center_stone`, `product_images.alt_text/width/height/storage_key`, enum `Status`→`CartStatus`.
+- SQLAlchemy-моделі + міграції з DBML: `shipping_methods`, `user_addresses`, `variant_prices` (+ `is_manual_override` — ручна ціна не перезаписується перерахунком, D6), `category_translations`/`product_translations` (uk обов'язкова, en опційно), `refresh_tokens`, `email_verification_tokens`, `password_reset_tokens`, `user_events`, `search_queries`; `product_embeddings` з PK `(product_id, locale, model_name)`; `products.search_vector` + GIN.
+- Один ринок (Україна, UAH за замовчуванням); таблиць `markets`/`exchange_rates` немає, `market_id` прибрано з `orders`/`carts`/`user_addresses`/`shipping_methods`/`user_profiles`. `Currency` enum (`UAH`/`PLN`/`USD`) лишається на рівні `variant_prices`/`orders`/`payments`/`price_history` для відображення ціни в кількох валютах — без таблиці курсів конвертація не персистентна (рахується на льоту або через зовнішній сервіс).
+- Решта полів без змін: `order_items.product_id`, `cart_items.unit_price_at_add`, `product_variants.length_mm/reserved_quantity`, `product_gemstones.is_center_stone`, `product_images.alt_text/width/height/storage_key`, enum `CartStatus`.
 - Всі `*_at` — `DateTime(timezone=True)`. `users.email` — partial unique index `WHERE deleted_at IS NULL` (case-insensitive); те саме для інших unique з soft delete.
 - ON DELETE: CASCADE для залежних каталожних/кошикових таблиць; RESTRICT для orders/order_items/payments; SET NULL для nullable `orders.user_id`.
 - Тригер `set_updated_at()`; CHECK: stock>=0, price>0, quantity>0, fineness IN (375,500,585,750,875,925,958,999).
-- Seed: 2 ринки, категорії, 20–40 товарів, варіанти, ціни UAH + PLN (PLN через D6), камені, переклади uk/pl/en, admin + тестові юзери (Faker + кілька реальних товарів).
-- **DoD**: `alembic upgrade head` з нуля; `downgrade -1` працює; seed достатній для демо обох ринків.
+- Seed: категорії, 20–40 товарів, варіанти, ціни в UAH, камені, переклади uk, admin + тестові юзери (Faker + кілька реальних товарів).
+- **DoD**: `alembic upgrade head` з нуля; `downgrade -1` працює; seed достатній для демо. ✅ Виконано — міграції `0001`–`0003` застосовані й перевірені (upgrade/downgrade), seed-скрипт додано в `api/scripts/seed.py`.
 - **Deliverable**: розділ «Projekt bazy danych».
 
 ### M2 — FastAPI і власна автентифікація (2–3 тижні)
@@ -135,8 +136,8 @@ M7 залежить лише від M3 і може йти паралельно �
 ## Перші кроки після затвердження
 1. M0: `index.css`, імпорт/`useContext` cartContext, заглушка authContext.
 2. Записати D1–D8 в `docs/architecture.md`, оновити `README.md`; скопіювати цей план в `docs/roadmap.md`.
-3. Оновити DBML (markets, variant_prices + override, shipping_methods, exchange_rates, delivery_provider, translations uk/pl/en).
-4. Старт M1: compose з pgvector, Alembic, перша міграція (markets/users/user_profiles/categories/products/product_variants/variant_prices).
+3. ✅ DBML оновлено під один ринок: прибрано `markets`/`exchange_rates`, `variant_prices` + override, `shipping_methods`, `delivery_provider`, переклади uk (+ en опційно).
+4. ✅ M1 виконано: compose з pgvector, Alembic (`0001` enum/extension/функція, `0002` автогенерація таблиць, `0003` тригери), seed-скрипт.
 
 ## Verification
 - M0: `npm run dev`, пройти всі маршрути, консоль чиста.

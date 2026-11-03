@@ -34,6 +34,13 @@ TNDC Jewelry House — online jewelry store with UX personalization algorithms (
 - **Ignored Directories**: Do NOT read, search, or index heavy generated or dependency directories (e.g., `node_modules/`, `venv/`, `.venv/`, `__pycache__/`, `build/`, `dist/`, `.git/`, `.idea/`).
 - **Heavy & Generated Files**: Do NOT inspect large lockfiles (`package-lock.json`, `yarn.lock`, `poetry.lock`), binary assets, or database dump files (`.sql`, `.dump`). Focus exclusively on relevant source code.
 
+# Navigation & Project Context Rules
+
+Code Graph First (MUST): Before the first exploratory Glob/Grep/Read in a new task (searching for a module, "where is X defined", analyzing dependencies) — first run graphify explain "<module or file>" (graph: graphify-out/graph.json) to inspect its relationships, and only then open specific files using the discovered paths.
+Not applicable when: The file path is already known directly (specified by the user or identified in a previous step of the task) — in this case, read it without querying the graph.
+Fallback: If graphify-out/graph.json does not exist or is clearly outdated — state this directly (do not stay silent) and ask whether to run graphify update . to build/update the graph, rather than silently scanning the directory tree.
+Index Refresh: If the task added new files/modules — upon completion, remind the user to run graphify update . (or run it yourself if permitted by project rules — see "Manual Execution Only").
+
 ## Development & Execution Commands
 
 ### Docker (Preferred Runtime)

@@ -45,13 +45,14 @@ M7 zależy tylko od katalogu (M3) i może iść równolegle z M4/M6.
 
 ### M1 — Schemat bazy i migracje (1–2 tygodnie)
 - Compose: `postgres` (pgvector), `CREATE EXTENSION vector`; Alembic od pierwszego dnia.
-- Modele SQLAlchemy + migracje z DBML, z poprawkami: `markets`, `shipping_methods`, `exchange_rates` (obowiązkowa), `variant_prices` (+ `is_manual_override`, `markup_percent` na rynku — D6), `product_translations` (uk/pl/en), `refresh_tokens`, `email_verification_tokens`, `password_reset_tokens`, `user_events`, `search_queries`; `product_embeddings` z kluczem głównym `(product_id, locale, model_name)`; `products.search_vector` + GIN.
-- Uogólnienie `user_addresses` (`delivery_provider` enum, `provider_point_id`, `market_id`), `carts.market_id`, `orders` (`market_id`, `shipping_method_id`, `exchange_rate_used`, `session_token`, `locale`, znaczniki czasu, `recommendation_influenced`), `order_items.product_id`, `cart_items.unit_price_at_add`, `product_variants.length_mm/reserved_quantity`, `product_gemstones.is_center_stone`, `product_images.alt_text/width/height/storage_key`, enum `Status`→`CartStatus`.
+- Modele SQLAlchemy + migracje z DBML: `shipping_methods`, `user_addresses`, `variant_prices` (+ `is_manual_override` — ręczna cena nie jest nadpisywana przez przeliczanie, D6), `category_translations`/`product_translations` (uk obowiązkowa, en opcjonalnie), `refresh_tokens`, `email_verification_tokens`, `password_reset_tokens`, `user_events`, `search_queries`; `product_embeddings` z kluczem głównym `(product_id, locale, model_name)`; `products.search_vector` + GIN.
+- Jeden rynek (Ukraina, UAH domyślnie); tabel `markets`/`exchange_rates` nie ma, `market_id` usunięto z `orders`/`carts`/`user_addresses`/`shipping_methods`/`user_profiles`. Enum `Currency` (`UAH`/`PLN`/`USD`) pozostaje na poziomie `variant_prices`/`orders`/`payments`/`price_history` do wyświetlania ceny w kilku walutach — bez tabeli kursów przeliczenie nie jest trwałe (liczone na bieżąco lub przez zewnętrzny serwis).
+- Pozostałe pola bez zmian: `order_items.product_id`, `cart_items.unit_price_at_add`, `product_variants.length_mm/reserved_quantity`, `product_gemstones.is_center_stone`, `product_images.alt_text/width/height/storage_key`, enum `CartStatus`.
 - Wszystkie kolumny `*_at` — `DateTime(timezone=True)`. `users.email` — częściowy indeks unikalny `WHERE deleted_at IS NULL` (bez rozróżniania wielkości liter); ta sama zasada dla innych pól unikalnych z soft delete.
 - ON DELETE: CASCADE dla zależnych tabel katalogu i koszyka; RESTRICT dla orders/order_items/payments; SET NULL dla nullable `orders.user_id`.
 - Trigger `set_updated_at()`; CHECK: stock>=0, price>0, quantity>0, fineness IN (375,500,585,750,875,925,958,999).
-- Seed: 2 rynki, kategorie, 20–40 produktów, warianty, ceny UAH + PLN (PLN wg D6), kamienie, tłumaczenia uk/pl/en, admin + użytkownicy testowi (Faker + kilka prawdziwych produktów).
-- **DoD**: `alembic upgrade head` od zera; `downgrade -1` działa; seed wystarcza do dema obu rynków.
+- Seed: kategorie, 20–40 produktów, warianty, ceny w UAH, kamienie, tłumaczenia uk, admin + użytkownicy testowi (Faker + kilka prawdziwych produktów).
+- **DoD**: `alembic upgrade head` od zera; `downgrade -1` działa; seed wystarcza do dema. ✅ Wykonano — migracje `0001`–`0003` zastosowane i zweryfikowane (upgrade/downgrade), skrypt seed w `api/scripts/seed.py`.
 - **Deliverable**: rozdział „Projekt bazy danych".
 
 ### M2 — FastAPI i własne uwierzytelnianie (2–3 tygodnie)
@@ -135,8 +136,8 @@ Sekcje „Polecane dla Ciebie", „Podobne produkty", „Ostatnio przeglądane",
 ## Pierwsze kroki
 1. M0: `index.css`, import/`useContext` cartContext, zaślepka authContext.
 2. Zapisać D1–D8 w `docs/architecture.md`, zaktualizować `README.md`.
-3. Zaktualizować DBML (markets, variant_prices + override, shipping_methods, exchange_rates, delivery_provider, tłumaczenia uk/pl/en).
-4. Start M1: compose z pgvector, Alembic, pierwsza migracja (markets/users/user_profiles/categories/products/product_variants/variant_prices).
+3. ✅ Zaktualizowano DBML pod jeden rynek: usunięto `markets`/`exchange_rates`, `variant_prices` + override, `shipping_methods`, `delivery_provider`, tłumaczenia uk (+ en opcjonalnie).
+4. ✅ M1 wykonane: compose z pgvector, Alembic (`0001` enum/extension/funkcja, `0002` autogenerowane tabele, `0003` triggery), skrypt seed.
 
 ## Weryfikacja
 - M0: `npm run dev`, przejść wszystkie trasy, konsola czysta.

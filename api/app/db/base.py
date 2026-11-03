@@ -4,7 +4,6 @@ from typing import Annotated
 from sqlalchemy import BigInteger, DateTime, Integer, MetaData, func
 from sqlalchemy.orm import DeclarativeBase, mapped_column
 
-# Stable constraint names keep Alembic autogenerate and downgrades deterministic.
 NAMING_CONVENTION = {
     "ix": "ix_%(column_0_label)s",
     "uq": "uq_%(table_name)s_%(column_0_name)s",
@@ -16,7 +15,6 @@ NAMING_CONVENTION = {
 
 class Base(DeclarativeBase):
     metadata = MetaData(naming_convention=NAMING_CONVENTION)
-    # Every datetime is timestamptz: Europe/Kyiv and Europe/Warsaw must not drift apart.
     type_annotation_map = {datetime: DateTime(timezone=True)}
 
 

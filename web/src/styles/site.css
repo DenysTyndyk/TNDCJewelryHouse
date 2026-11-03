@@ -137,6 +137,18 @@ p {
   font-weight: 600;
 }
 
+.nav__account {
+  position: relative;
+  padding-left: clamp(1rem, 3vw, 2rem);
+  border-left: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+}
+
+.nav__account:hover,
+.nav__account.is-active {
+  color: var(--color-gold-light) !important;
+}
+
 .nav-toggle {
   display: none;
   align-items: center;
@@ -730,6 +742,65 @@ p {
 .field textarea {
   min-height: 8rem;
   resize: vertical;
+}
+
+/* —— Auth forms —— */
+.auth-section {
+  display: flex;
+  justify-content: center;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 26rem;
+  padding: var(--space-8) var(--space-6);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+}
+
+.auth-card h1 {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 500;
+  color: var(--color-warm-white);
+  text-align: center;
+  margin-bottom: var(--space-2);
+}
+
+.auth-card__subtitle {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-6);
+}
+
+.auth-form {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.auth-form .btn {
+  width: 100%;
+  margin-top: var(--space-2);
+}
+
+.auth-form__error {
+  color: #e2726c;
+  font-size: var(--text-sm);
+  text-align: center;
+}
+
+.auth-card__footer {
+  margin-top: var(--space-6);
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.auth-card__footer a {
+  color: var(--color-gold-light);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 .filters {
