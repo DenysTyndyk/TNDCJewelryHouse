@@ -31,9 +31,9 @@ export const AuthProvider = ({ children }) => {
       return { error: err.message };
     }
   }
-  async function signUp(email, password, firstName, lastName){
+  async function signUp(email, password, firstName, lastName, phoneNumber){
     try{
-      await authApi.register(email,password,firstName,lastName)
+      await authApi.register(email,password,firstName,lastName,phoneNumber)
       return {error: null}
     }
     catch (err){

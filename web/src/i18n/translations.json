@@ -1,0 +1,470 @@
+{
+  "uk": {
+    "languageNames": { "uk": "Українська", "pl": "Polski", "en": "English" },
+    "header": {
+      "home": "Головна",
+      "categories": "Категорії",
+      "about": "Про нас",
+      "contact": "Контакти",
+      "cart": "Кошик",
+      "account": "Акаунт",
+      "login": "Увійти",
+      "menu": "Меню",
+      "close": "Закрити",
+      "openMenu": "Відкрити меню",
+      "closeMenu": "Закрити меню"
+    },
+    "footer": {
+      "copyright": "© TNDC Jewelry House",
+      "visit": "Відвідати майстерню"
+    },
+    "home": {
+      "heroText": "Вироби з золота і малахіту, виготовлені вручну — для щоденної елегантності та довгої пам'яті.",
+      "exploreCollection": "Переглянути колекцію",
+      "newArrivals": "Новинки",
+      "newArrivalsEyebrow": "Актуальні новинки",
+      "newArrivalsLead": "Свіже з майстерні — мотиви конюшини, м'яке золото і глибокий зелений камінь.",
+      "browse": "Огляд",
+      "categoriesTitle": "Категорії"
+    },
+    "categories": {
+      "eyebrow": "Колекція",
+      "title": "Категорії",
+      "filterAll": "Всі",
+      "filters": { "Earrings": "Сережки", "Necklaces": "Кольє", "Rings": "Каблучки", "Bracelets": "Браслети" }
+    },
+    "about": {
+      "eyebrow": "Наша історія",
+      "title": "Про нас",
+      "lead": "Сімейна майстерня, де золото, камінь і вмілі руки зустрічаються.",
+      "paragraph1": "Ювелірний дім TNDC JEWELRY HOUSE був заснований у 2009 році вінничанкою Наталією Тиндик. Понад 12 років ми створюємо справжні витвори мистецтва з унікальним та впізнаваним дизайном.\nВироби зі срібла та золота, інкрустовані діамантами, рубінами, смарагдами та іншим дорогоцінним камінням, підкорили серця українців своєю вишуканістю й елегантністю.",
+      "assortmentTitle": "Наш асортимент та послуги",
+      "assortmentText": "Ми постійно оновлюємо колекції, реагуючи на світові тенденції ювелірної моди та зберігаючи найвищі стандарти якості. У нашому каталозі ви знайдете широкий вибір оригінальних прикрас:",
+      "assortmentList1": "Класичні та дизайнерські вироби: каблучки, сережки, кольє, підвіски, ланцюжки, браслети.",
+      "assortmentList2": "Індивідуальне виготовлення: створення ексклюзивних прикрас під замовлення за вашими побажаннями або навіть за власним ескізом чи малюнком.",
+      "assortmentList3": "Сервіс: повний спектр ювелірних послуг та обслуговування.",
+      "philosophyTitle": "Філософія бренду",
+      "philosophyQuote": "«Я можу з впевненістю сказати, що за роки роботи мені вдалося зібрати команду справжніх професіоналів, які здатні виготовити прикрасу будь-якої складності. Наша головна мета — втілювати в життя мрії українців.»",
+      "philosophyAuthor": "— Наталія ТИНДИК, засновниця бренду",
+      "whyUsTitle": "Чому обирають нас?",
+      "whyUs1": "Індивідуальний підхід: Ми підбираємо прикраси з урахуванням побажань та фінансових можливостей кожного клієнта.",
+      "whyUs2": "Гарантія якості: Багаторічний досвід майстрів у поєднанні з сучасними технологіями дозволяє нам давати офіційну гарантію на всі вироби.",
+      "whyUs3": "Визнання та досвід: TNDC JEWELRY HOUSE — постійний учасник і лауреат міжнародних виставок, таких як «Ювелірний світ», «Ювелір Престиж», «Ювелір Еліт» та «Ювелірний салон».",
+      "whyUs4": "У 2019 році засновниця бренду Наталія Дмитрівна стала лауреаткою конкурсу «Жінка Вінниччини», успішно поєднуючи розбудову ювелірного дому, громадську діяльність та виховання сина.",
+      "whyUs5": "Подаруйте своєму образу довершений та сяючий штрих разом із колекцією від TNDC JEWELRY HOUSE!",
+      "statCraftLabel": "Майстерність",
+      "statCraftValue": "Вироби зі срібла і золота, інкрустовані діамантами, рубінами, смарагдами та іншим дорогоцінним камінням",
+      "statLanguagesLabel": "Мови",
+      "statPromiseLabel": "Обіцянка",
+      "statPromiseValue": "Справжні фотографії з нашої майстерні"
+    },
+    "contact": {
+      "eyebrow": "Завітайте та напишіть",
+      "title": "Контакти та розташування",
+      "name": "Ім'я",
+      "namePlaceholder": "Ваше ім'я",
+      "email": "Email",
+      "preferredLanguage": "Бажана мова",
+      "message": "Повідомлення",
+      "messagePlaceholder": "Як ми можемо допомогти?",
+      "send": "Надіслати",
+      "mapAlt": "Заповнювач карти",
+      "hoursLabel": "Години роботи",
+      "hoursValue": "Пн-Пт 9:00-18:00"
+    },
+    "cart": {
+      "eyebrow": "Покупки",
+      "emptyMessage": "Ваш кошик порожній. Поверніться до магазину, щоб переглянути прикраси",
+      "emptyLink": "Перейти",
+      "orderSummary": "Підсумок замовлення",
+      "subtotal": "Разом",
+      "total": "Всього",
+      "checkout": "Оформити замовлення",
+      "continueShopping": "Продовжити покупки"
+    },
+    "account": {
+      "loading": "Завантаження…",
+      "title": "Акаунт",
+      "signOut": "Вийти"
+    },
+    "auth": {
+      "login": {
+        "title": "Увійти",
+        "subtitle": "Раді бачити вас знову",
+        "password": "Пароль",
+        "submit": "Увійти",
+        "submitting": "Входимо…",
+        "noAccount": "Немає акаунта?",
+        "signUp": "Зареєструватись",
+        "forgotPassword": "Забули пароль?"
+      },
+      "register": {
+        "title": "Реєстрація",
+        "subtitle": "Створіть акаунт TNDC Jewelry House",
+        "firstName": "Ім'я",
+        "firstNamePlaceholder": "Ваше ім'я",
+        "lastName": "Прізвище",
+        "lastNamePlaceholder": "Ваше прізвище",
+        "phoneNumber": "Номер телефону",
+        "password": "Пароль",
+        "passwordPlaceholder": "Мінімум 8 символів",
+        "confirmPassword": "Повторіть пароль",
+        "confirmPasswordPlaceholder": "Повторіть пароль",
+        "submit": "Зареєструватись",
+        "submitting": "Реєструємо…",
+        "haveAccount": "Вже є акаунт?",
+        "signIn": "Увійти",
+        "passwordMismatch": "Паролі не співпадають",
+        "invalidPhone": "Невірний формат номера телефону. Приклад: +380501234567",
+        "doneTitle": "Перевірте пошту",
+        "doneSubtitle": "Якщо ця email-адреса ще не зареєстрована, на неї надіслано лист з посиланням для підтвердження акаунта. Перейдіть за ним, а тоді увійдіть.",
+        "toLogin": "До сторінки входу"
+      },
+      "forgotPassword": {
+        "title": "Забули пароль?",
+        "subtitle": "Вкажіть email — надішлемо посилання для скидання пароля",
+        "submit": "Надіслати посилання",
+        "submitting": "Надсилаємо…",
+        "rememberedPassword": "Згадали пароль?",
+        "signIn": "Увійти",
+        "doneTitle": "Перевірте пошту",
+        "doneSubtitle": "Якщо ця email-адреса зареєстрована, на неї надіслано лист з посиланням для скидання пароля.",
+        "toLogin": "До сторінки входу"
+      },
+      "resetPassword": {
+        "title": "Новий пароль",
+        "subtitle": "Введіть новий пароль для свого акаунта",
+        "newPassword": "Новий пароль",
+        "passwordPlaceholder": "Мінімум 8 символів",
+        "submit": "Зберегти пароль",
+        "submitting": "Зберігаємо…",
+        "toLogin": "До сторінки входу",
+        "missingToken": "Токен відсутній у посиланні."
+      },
+      "verifyEmail": {
+        "title": "Підтвердження email",
+        "checking": "Перевіряємо токен…",
+        "success": "Email успішно підтверджено.",
+        "signIn": "Увійти",
+        "toLogin": "До сторінки входу",
+        "missingToken": "Токен підтвердження відсутній у посиланні."
+      }
+    },
+    "product": {
+      "addToCart": "Додати до кошика",
+      "removeFromCart": "Видалити з кошика"
+    }
+  },
+  "pl": {
+    "languageNames": { "uk": "Українська", "pl": "Polski", "en": "English" },
+    "header": {
+      "home": "Strona główna",
+      "categories": "Kategorie",
+      "about": "O nas",
+      "contact": "Kontakt",
+      "cart": "Koszyk",
+      "account": "Konto",
+      "login": "Zaloguj się",
+      "menu": "Menu",
+      "close": "Zamknij",
+      "openMenu": "Otwórz menu",
+      "closeMenu": "Zamknij menu"
+    },
+    "footer": {
+      "copyright": "© TNDC Jewelry House",
+      "visit": "Odwiedź pracownię"
+    },
+    "home": {
+      "heroText": "Ręcznie wykonane wyroby ze złota i malachitu — na codzienną elegancję i trwałą pamięć.",
+      "exploreCollection": "Zobacz kolekcję",
+      "newArrivals": "Nowości",
+      "newArrivalsEyebrow": "Aktualne nowości",
+      "newArrivalsLead": "Prosto z pracowni — motywy koniczyny, delikatne złoto i głęboki zielony kamień.",
+      "browse": "Przeglądaj",
+      "categoriesTitle": "Kategorie"
+    },
+    "categories": {
+      "eyebrow": "Kolekcja",
+      "title": "Kategorie",
+      "filterAll": "Wszystkie",
+      "filters": { "Earrings": "Kolczyki", "Necklaces": "Naszyjniki", "Rings": "Pierścionki", "Bracelets": "Bransoletki" }
+    },
+    "about": {
+      "eyebrow": "Nasza historia",
+      "title": "O nas",
+      "lead": "Rodzinna pracownia, w której złoto, kamień i wprawne ręce się spotykają.",
+      "paragraph1": "Dom jubilerski TNDC JEWELRY HOUSE został założony w 2009 roku przez Natalię Tyndyk z Winnicy. Od ponad 12 lat tworzymy prawdziwe dzieła sztuki o unikalnym i rozpoznawalnym wzornictwie.\nWyroby ze srebra i złota, wysadzane diamantami, rubinami, szmaragdami i innymi kamieniami szlachetnymi, zdobyły serca klientów swoją wytwornością i elegancją.",
+      "assortmentTitle": "Nasz asortyment i usługi",
+      "assortmentText": "Nieustannie odświeżamy kolekcje, reagując na światowe trendy jubilerskie i zachowując najwyższe standardy jakości. W naszym katalogu znajdziesz szeroki wybór oryginalnej biżuterii:",
+      "assortmentList1": "Klasyczne i autorskie wyroby: pierścionki, kolczyki, naszyjniki, wisiorki, łańcuszki, bransoletki.",
+      "assortmentList2": "Realizacje na indywidualne zamówienie: ekskluzywna biżuteria według Twoich życzeń lub własnego szkicu.",
+      "assortmentList3": "Serwis: pełny zakres usług jubilerskich i obsługi.",
+      "philosophyTitle": "Filozofia marki",
+      "philosophyQuote": "„Mogę z pewnością powiedzieć, że przez lata pracy udało mi się zebrać zespół prawdziwych profesjonalistów, zdolnych wykonać biżuterię o każdym stopniu złożoności. Naszym głównym celem jest urzeczywistnianie marzeń naszych klientów.”",
+      "philosophyAuthor": "— Natalia TYNDYK, założycielka marki",
+      "whyUsTitle": "Dlaczego wybierają nas?",
+      "whyUs1": "Indywidualne podejście: dobieramy biżuterię z uwzględnieniem życzeń i możliwości finansowych każdego klienta.",
+      "whyUs2": "Gwarancja jakości: wieloletnie doświadczenie mistrzów w połączeniu z nowoczesnymi technologiami pozwala nam udzielać oficjalnej gwarancji na wszystkie wyroby.",
+      "whyUs3": "Uznanie i doświadczenie: TNDC JEWELRY HOUSE jest stałym uczestnikiem i laureatem międzynarodowych wystaw, takich jak „Świat Jubilerski”, „Jubiler Prestiż”, „Jubiler Elit” i „Salon Jubilerski”.",
+      "whyUs4": "W 2019 roku założycielka marki, Natalia Dmytriwna, została laureatką konkursu „Kobieta Winnicczyzny”, z sukcesem łącząc rozwój domu jubilerskiego, działalność społeczną i wychowanie syna.",
+      "whyUs5": "Podaruj swojemu wizerunkowi dopracowany i promienny akcent wraz z kolekcją TNDC JEWELRY HOUSE!",
+      "statCraftLabel": "Rzemiosło",
+      "statCraftValue": "Wyroby ze srebra i złota, wysadzane diamantami, rubinami, szmaragdami i innymi kamieniami szlachetnymi",
+      "statLanguagesLabel": "Języki",
+      "statPromiseLabel": "Obietnica",
+      "statPromiseValue": "Prawdziwe zdjęcia z naszej pracowni"
+    },
+    "contact": {
+      "eyebrow": "Odwiedź i napisz",
+      "title": "Kontakt i lokalizacja",
+      "name": "Imię",
+      "namePlaceholder": "Twoje imię",
+      "email": "Email",
+      "preferredLanguage": "Preferowany język",
+      "message": "Wiadomość",
+      "messagePlaceholder": "Jak możemy pomóc?",
+      "send": "Wyślij wiadomość",
+      "mapAlt": "Zastępnik mapy",
+      "hoursLabel": "Godziny otwarcia",
+      "hoursValue": "Pon-Pt 9:00-18:00"
+    },
+    "cart": {
+      "eyebrow": "Zakupy",
+      "emptyMessage": "Twój koszyk jest pusty. Wróć do sklepu, aby przeglądać biżuterię",
+      "emptyLink": "Przejdź",
+      "orderSummary": "Podsumowanie zamówienia",
+      "subtotal": "Suma częściowa",
+      "total": "Razem",
+      "checkout": "Przejdź do kasy",
+      "continueShopping": "Kontynuuj zakupy"
+    },
+    "account": {
+      "loading": "Wczytywanie…",
+      "title": "Konto",
+      "signOut": "Wyloguj się"
+    },
+    "auth": {
+      "login": {
+        "title": "Zaloguj się",
+        "subtitle": "Miło Cię znowu widzieć",
+        "password": "Hasło",
+        "submit": "Zaloguj się",
+        "submitting": "Logowanie…",
+        "noAccount": "Nie masz konta?",
+        "signUp": "Zarejestruj się",
+        "forgotPassword": "Zapomniałeś hasła?"
+      },
+      "register": {
+        "title": "Rejestracja",
+        "subtitle": "Utwórz konto TNDC Jewelry House",
+        "firstName": "Imię",
+        "firstNamePlaceholder": "Twoje imię",
+        "lastName": "Nazwisko",
+        "lastNamePlaceholder": "Twoje nazwisko",
+        "phoneNumber": "Numer telefonu",
+        "password": "Hasło",
+        "passwordPlaceholder": "Minimum 8 znaków",
+        "confirmPassword": "Powtórz hasło",
+        "confirmPasswordPlaceholder": "Powtórz hasło",
+        "submit": "Zarejestruj się",
+        "submitting": "Rejestracja…",
+        "haveAccount": "Masz już konto?",
+        "signIn": "Zaloguj się",
+        "passwordMismatch": "Hasła nie są zgodne",
+        "invalidPhone": "Nieprawidłowy format numeru telefonu. Przykład: +380501234567",
+        "doneTitle": "Sprawdź skrzynkę pocztową",
+        "doneSubtitle": "Jeśli ten adres e-mail nie jest jeszcze zarejestrowany, wysłaliśmy na niego link potwierdzający konto. Kliknij go, a następnie zaloguj się.",
+        "toLogin": "Przejdź do logowania"
+      },
+      "forgotPassword": {
+        "title": "Zapomniałeś hasła?",
+        "subtitle": "Podaj email — wyślemy link do zresetowania hasła",
+        "submit": "Wyślij link",
+        "submitting": "Wysyłanie…",
+        "rememberedPassword": "Pamiętasz hasło?",
+        "signIn": "Zaloguj się",
+        "doneTitle": "Sprawdź skrzynkę pocztową",
+        "doneSubtitle": "Jeśli ten adres e-mail jest zarejestrowany, wysłaliśmy na niego link do zresetowania hasła.",
+        "toLogin": "Przejdź do logowania"
+      },
+      "resetPassword": {
+        "title": "Nowe hasło",
+        "subtitle": "Wprowadź nowe hasło do swojego konta",
+        "newPassword": "Nowe hasło",
+        "passwordPlaceholder": "Minimum 8 znaków",
+        "submit": "Zapisz hasło",
+        "submitting": "Zapisywanie…",
+        "toLogin": "Przejdź do logowania",
+        "missingToken": "Brak tokenu w linku."
+      },
+      "verifyEmail": {
+        "title": "Potwierdzenie email",
+        "checking": "Sprawdzamy token…",
+        "success": "Email został pomyślnie potwierdzony.",
+        "signIn": "Zaloguj się",
+        "toLogin": "Przejdź do logowania",
+        "missingToken": "Brak tokenu potwierdzającego w linku."
+      }
+    },
+    "product": {
+      "addToCart": "Dodaj do koszyka",
+      "removeFromCart": "Usuń z koszyka"
+    }
+  },
+  "en": {
+    "languageNames": { "uk": "Українська", "pl": "Polski", "en": "English" },
+    "header": {
+      "home": "Home",
+      "categories": "Categories",
+      "about": "About",
+      "contact": "Contact",
+      "cart": "Cart",
+      "account": "Account",
+      "login": "Login",
+      "menu": "Menu",
+      "close": "Close",
+      "openMenu": "Open menu",
+      "closeMenu": "Close menu"
+    },
+    "footer": {
+      "copyright": "© TNDC Jewelry House",
+      "visit": "Visit the atelier"
+    },
+    "home": {
+      "heroText": "Hand-finished pieces in gold and malachite — made for everyday elegance and lasting memory.",
+      "exploreCollection": "Explore collection",
+      "newArrivals": "New arrivals",
+      "newArrivalsEyebrow": "Current new arrivals",
+      "newArrivalsLead": "Fresh from the atelier — clover motifs, soft gold, and deep green stone.",
+      "browse": "Browse",
+      "categoriesTitle": "Categories"
+    },
+    "categories": {
+      "eyebrow": "Collection",
+      "title": "Categories",
+      "filterAll": "All",
+      "filters": { "Earrings": "Earrings", "Necklaces": "Necklaces", "Rings": "Rings", "Bracelets": "Bracelets" }
+    },
+    "about": {
+      "eyebrow": "Our story",
+      "title": "About us",
+      "lead": "A family atelier where gold, stone, and careful hands meet.",
+      "paragraph1": "The TNDC JEWELRY HOUSE was founded in 2009 by Natalia Tyndyk from Vinnytsia. For over 12 years we have been creating genuine works of art with a unique and recognizable design.\nSilver and gold pieces set with diamonds, rubies, emeralds, and other precious stones have won the hearts of our clients with their refinement and elegance.",
+      "assortmentTitle": "Our range and services",
+      "assortmentText": "We continuously refresh our collections, responding to global jewellery trends while keeping the highest quality standards. In our catalogue you will find a wide selection of original jewellery:",
+      "assortmentList1": "Classic and designer pieces: rings, earrings, necklaces, pendants, chains, bracelets.",
+      "assortmentList2": "Custom-made pieces: exclusive jewellery made to order, to your wishes or even your own sketch.",
+      "assortmentList3": "Service: a full range of jewellery services and support.",
+      "philosophyTitle": "Brand philosophy",
+      "philosophyQuote": "\"I can confidently say that over the years I have managed to gather a team of true professionals capable of making jewellery of any complexity. Our main goal is to bring our clients' dreams to life.\"",
+      "philosophyAuthor": "— Natalia TYNDYK, brand founder",
+      "whyUsTitle": "Why choose us?",
+      "whyUs1": "Individual approach: we select jewellery considering the wishes and budget of every client.",
+      "whyUs2": "Quality guarantee: years of craftsmanship combined with modern technology let us give an official guarantee on all our pieces.",
+      "whyUs3": "Recognition and experience: TNDC JEWELRY HOUSE is a regular participant and laureate of international exhibitions such as \"Jewellery World\", \"Jeweller Prestige\", \"Jeweller Elite\" and \"Jewellery Salon\".",
+      "whyUs4": "In 2019 the brand's founder, Natalia Dmytrivna, became a laureate of the \"Woman of Vinnytsia Region\" contest, successfully combining growing a jewellery house, community work, and raising her son.",
+      "whyUs5": "Give your look a polished, radiant finishing touch with a collection from TNDC JEWELRY HOUSE!",
+      "statCraftLabel": "Craft",
+      "statCraftValue": "Silver and gold pieces set with diamonds, rubies, emeralds, and other precious stones",
+      "statLanguagesLabel": "Languages",
+      "statPromiseLabel": "Promise",
+      "statPromiseValue": "Real photos from our atelier"
+    },
+    "contact": {
+      "eyebrow": "Visit & write",
+      "title": "Contact & location",
+      "name": "Name",
+      "namePlaceholder": "Your name",
+      "email": "Email",
+      "preferredLanguage": "Preferred language",
+      "message": "Message",
+      "messagePlaceholder": "How can we help?",
+      "send": "Send message",
+      "mapAlt": "Map placeholder",
+      "hoursLabel": "Hours",
+      "hoursValue": "Mon-Fri 9:00-18:00"
+    },
+    "cart": {
+      "eyebrow": "Shopping",
+      "emptyMessage": "Your cart is empty. Return to the shop to browse accessories",
+      "emptyLink": "Click",
+      "orderSummary": "Order summary",
+      "subtotal": "Subtotal",
+      "total": "Total",
+      "checkout": "Proceed to checkout",
+      "continueShopping": "Continue shopping"
+    },
+    "account": {
+      "loading": "Loading…",
+      "title": "Account",
+      "signOut": "Sign out"
+    },
+    "auth": {
+      "login": {
+        "title": "Login",
+        "subtitle": "Glad to see you again",
+        "password": "Password",
+        "submit": "Login",
+        "submitting": "Signing in…",
+        "noAccount": "Don't have an account?",
+        "signUp": "Sign up",
+        "forgotPassword": "Forgot password?"
+      },
+      "register": {
+        "title": "Register",
+        "subtitle": "Create your TNDC Jewelry House account",
+        "firstName": "First name",
+        "firstNamePlaceholder": "Your first name",
+        "lastName": "Last name",
+        "lastNamePlaceholder": "Your last name",
+        "phoneNumber": "Phone number",
+        "password": "Password",
+        "passwordPlaceholder": "Minimum 8 characters",
+        "confirmPassword": "Repeat password",
+        "confirmPasswordPlaceholder": "Repeat password",
+        "submit": "Sign up",
+        "submitting": "Registering…",
+        "haveAccount": "Already have an account?",
+        "signIn": "Login",
+        "passwordMismatch": "Passwords do not match",
+        "invalidPhone": "Invalid phone number format. Example: +380501234567",
+        "doneTitle": "Check your email",
+        "doneSubtitle": "If this email is not already registered, a verification link has been sent to it. Follow it, then log in.",
+        "toLogin": "Go to login"
+      },
+      "forgotPassword": {
+        "title": "Forgot password?",
+        "subtitle": "Enter your email — we'll send a password reset link",
+        "submit": "Send link",
+        "submitting": "Sending…",
+        "rememberedPassword": "Remembered your password?",
+        "signIn": "Login",
+        "doneTitle": "Check your email",
+        "doneSubtitle": "If this email is registered, a password reset link has been sent to it.",
+        "toLogin": "Go to login"
+      },
+      "resetPassword": {
+        "title": "New password",
+        "subtitle": "Enter a new password for your account",
+        "newPassword": "New password",
+        "passwordPlaceholder": "Minimum 8 characters",
+        "submit": "Save password",
+        "submitting": "Saving…",
+        "toLogin": "Go to login",
+        "missingToken": "Token is missing from the link."
+      },
+      "verifyEmail": {
+        "title": "Email verification",
+        "checking": "Checking token…",
+        "success": "Email verified successfully.",
+        "signIn": "Login",
+        "toLogin": "Go to login",
+        "missingToken": "Verification token is missing from the link."
+      }
+    },
+    "product": {
+      "addToCart": "Add to cart",
+      "removeFromCart": "Remove from cart"
+    }
+  }
+}

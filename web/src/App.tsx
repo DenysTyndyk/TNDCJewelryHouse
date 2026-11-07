@@ -1,8 +1,9 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Home, Categories, Contact, Cart, About , AppLayout, Login,Register,Account, VerifyEmail, ForgotPassword, ResetPassword} from './pages'
-import {CartProvider,AuthProvider} from './context'
+import {CartProvider,AuthProvider,LanguageProvider} from './context'
 function App() {
   return (
+    <LanguageProvider>
     <AuthProvider>
         <CartProvider>
     <BrowserRouter>
@@ -24,6 +25,7 @@ function App() {
     </BrowserRouter>
         </CartProvider>
     </AuthProvider>
+    </LanguageProvider>
   )
 }
 

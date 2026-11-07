@@ -1,23 +1,39 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context';
+import { useLanguage } from '../context/languageContext';
 import '../styles/site.css';
+
+const PHONE_PATTERN = /^\+[1-9]\d{7,14}$/;
 
 function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
   const { signUp } = useAuth();
+  const { t } = useLanguage();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setSubmitting(true);
     setError(null);
-    const { error } = await signUp(email, password, firstName, lastName);
+
+    if (password !== confirmPassword) {
+      setError(t('auth.register.passwordMismatch'));
+      return;
+    }
+    if (phoneNumber && !PHONE_PATTERN.test(phoneNumber)) {
+      setError(t('auth.register.invalidPhone'));
+      return;
+    }
+
+    setSubmitting(true);
+    const { error } = await signUp(email, password, firstName, lastName, phoneNumber || undefined);
     setSubmitting(false);
     if (error) {
       setError(error);
@@ -31,13 +47,12 @@ function Register() {
       <main>
         <section className="section auth-section">
           <div className="auth-card">
-            <h1>Перевірте пошту</h1>
+            <h1>{t('auth.register.doneTitle')}</h1>
             <p className="auth-card__subtitle">
-              Якщо ця email-адреса ще не зареєстрована, на неї надіслано лист з посиланням для
-              підтвердження акаунта. Перейдіть за ним, а тоді увійдіть.
+              {t('auth.register.doneSubtitle')}
             </p>
             <Link className="btn btn--primary" to="/login" style={{ width: '100%', display: 'flex' }}>
-              До сторінки входу
+              {t('auth.register.toLogin')}
             </Link>
           </div>
         </section>
@@ -49,32 +64,44 @@ function Register() {
     <main>
       <section className="section auth-section">
         <div className="auth-card">
-          <h1>Реєстрація</h1>
-          <p className="auth-card__subtitle">Створіть акаунт TNDC Jewelry House</p>
+          <h1>{t('auth.register.title')}</h1>
+          <p className="auth-card__subtitle">{t('auth.register.subtitle')}</p>
 
           <form className="auth-form" onSubmit={handleSubmit}>
             <div className="field">
-              <label htmlFor="firstName">Ім'я</label>
+              <label htmlFor="firstName">{t('auth.register.firstName')}</label>
               <input
                 id="firstName"
                 name="firstName"
                 type="text"
                 autoComplete="given-name"
-                placeholder="Ваше ім'я"
+                placeholder={t('auth.register.firstNamePlaceholder')}
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
               />
             </div>
             <div className="field">
-              <label htmlFor="lastName">Прізвище</label>
+              <label htmlFor="lastName">{t('auth.register.lastName')}</label>
               <input
                 id="lastName"
                 name="lastName"
                 type="text"
                 autoComplete="family-name"
-                placeholder="Ваше прізвище"
+                placeholder={t('auth.register.lastNamePlaceholder')}
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
+              />
+            </div>
+            <div className="field">
+              <label htmlFor="phoneNumber">{t('auth.register.phoneNumber')}</label>
+              <input
+                id="phoneNumber"
+                name="phoneNumber"
+                type="tel"
+                autoComplete="tel"
+                placeholder="+380501234567"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
               />
             </div>
             <div className="field">
@@ -91,15 +118,29 @@ function Register() {
               />
             </div>
             <div className="field">
-              <label htmlFor="password">Пароль</label>
+              <label htmlFor="password">{t('auth.register.password')}</label>
               <input
                 id="password"
                 name="password"
                 type="password"
                 autoComplete="new-password"
-                placeholder="Мінімум 8 символів"
+                placeholder={t('auth.register.passwordPlaceholder')}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
+                minLength={8}
+              />
+            </div>
+            <div className="field">
+              <label htmlFor="confirmPassword">{t('auth.register.confirmPassword')}</label>
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                autoComplete="new-password"
+                placeholder={t('auth.register.confirmPasswordPlaceholder')}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 minLength={8}
               />
@@ -108,12 +149,12 @@ function Register() {
             {error && <p className="auth-form__error">{error}</p>}
 
             <button className="btn btn--primary" type="submit" disabled={submitting}>
-              {submitting ? 'Реєструємо…' : 'Зареєструватись'}
+              {submitting ? t('auth.register.submitting') : t('auth.register.submit')}
             </button>
           </form>
 
           <p className="auth-card__footer">
-            Вже є акаунт? <Link to="/login">Увійти</Link>
+            {t('auth.register.haveAccount')} <Link to="/login">{t('auth.register.signIn')}</Link>
           </p>
         </div>
       </section>

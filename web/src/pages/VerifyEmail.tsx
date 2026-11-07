@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import * as authApi from '../api/authApi';
+import { useLanguage } from '../context/languageContext';
 import '../styles/site.css';
 
 function VerifyEmail() {
@@ -8,11 +9,12 @@ function VerifyEmail() {
   const token = searchParams.get('token');
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
   const [error, setError] = useState<string | null>(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (!token) {
       setStatus('error');
-      setError('Токен підтвердження відсутній у посиланні.');
+      setError(t('auth.verifyEmail.missingToken'));
       return;
     }
     authApi
@@ -22,21 +24,21 @@ function VerifyEmail() {
         setStatus('error');
         setError(err.message);
       });
-  }, [token]);
+  }, [token, t]);
 
   return (
     <main>
       <section className="section auth-section">
         <div className="auth-card">
-          <h1>Підтвердження email</h1>
+          <h1>{t('auth.verifyEmail.title')}</h1>
 
-          {status === 'loading' && <p className="auth-card__subtitle">Перевіряємо токен…</p>}
+          {status === 'loading' && <p className="auth-card__subtitle">{t('auth.verifyEmail.checking')}</p>}
 
           {status === 'success' && (
             <>
-              <p className="auth-card__subtitle">Email успішно підтверджено.</p>
+              <p className="auth-card__subtitle">{t('auth.verifyEmail.success')}</p>
               <Link className="btn btn--primary" to="/login" style={{ width: '100%', display: 'flex' }}>
-                Увійти
+                {t('auth.verifyEmail.signIn')}
               </Link>
             </>
           )}
@@ -45,7 +47,7 @@ function VerifyEmail() {
             <>
               <p className="auth-form__error">{error}</p>
               <Link className="btn btn--ghost" to="/login" style={{ width: '100%', display: 'flex' }}>
-                До сторінки входу
+                {t('auth.verifyEmail.toLogin')}
               </Link>
             </>
           )}

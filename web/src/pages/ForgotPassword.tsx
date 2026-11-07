@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import * as authApi from '../api/authApi';
+import { useLanguage } from '../context/languageContext';
 import '../styles/site.css';
 
 function ForgotPassword() {
   const [email, setEmail] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
+  const { t } = useLanguage();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -24,12 +26,12 @@ function ForgotPassword() {
       <main>
         <section className="section auth-section">
           <div className="auth-card">
-            <h1>Перевірте пошту</h1>
+            <h1>{t('auth.forgotPassword.doneTitle')}</h1>
             <p className="auth-card__subtitle">
-              Якщо ця email-адреса зареєстрована, на неї надіслано лист з посиланням для скидання пароля.
+              {t('auth.forgotPassword.doneSubtitle')}
             </p>
             <Link className="btn btn--primary" to="/login" style={{ width: '100%', display: 'flex' }}>
-              До сторінки входу
+              {t('auth.forgotPassword.toLogin')}
             </Link>
           </div>
         </section>
@@ -41,8 +43,8 @@ function ForgotPassword() {
     <main>
       <section className="section auth-section">
         <div className="auth-card">
-          <h1>Забули пароль?</h1>
-          <p className="auth-card__subtitle">Вкажіть email — надішлемо посилання для скидання пароля</p>
+          <h1>{t('auth.forgotPassword.title')}</h1>
+          <p className="auth-card__subtitle">{t('auth.forgotPassword.subtitle')}</p>
 
           <form className="auth-form" onSubmit={handleSubmit}>
             <div className="field">
@@ -59,12 +61,12 @@ function ForgotPassword() {
               />
             </div>
             <button className="btn btn--primary" type="submit" disabled={submitting}>
-              {submitting ? 'Надсилаємо…' : 'Надіслати посилання'}
+              {submitting ? t('auth.forgotPassword.submitting') : t('auth.forgotPassword.submit')}
             </button>
           </form>
 
           <p className="auth-card__footer">
-            Згадали пароль? <Link to="/login">Увійти</Link>
+            {t('auth.forgotPassword.rememberedPassword')} <Link to="/login">{t('auth.forgotPassword.signIn')}</Link>
           </p>
         </div>
       </section>

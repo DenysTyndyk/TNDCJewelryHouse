@@ -17,11 +17,13 @@ from app.repositories import user_repository as repo
 class AuthError(Exception):
     pass
 
-def register(db: Session, email: str, password: str, first_name: str | None, last_name: str | None) -> None:
+def register(db: Session, email: str, password: str, first_name: str | None, last_name: str | None, phone_number: str | None = None) -> None:
    if repo.get_by_email(db, email):
         return
+   if phone_number and repo.get_by_phone_number(db, phone_number):
+        return
    user = repo.create_user(db, email, password_hash=hash_password(password))
-   repo.create_user_profile(db, user.id, first_name, last_name)
+   repo.create_user_profile(db, user.id, first_name, last_name, phone_number)
    _issue_email_verification_token(db,user)
    db.commit()
 

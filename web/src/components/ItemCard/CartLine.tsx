@@ -1,5 +1,6 @@
 import '../../styles/site.css';
 import { useCart } from '../../context';
+import { useLanguage } from '../../context/languageContext';
 import type { Item } from '../../types';
 const removeFromCart_svg = <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
 <path d="M3 6h18"/>
@@ -10,6 +11,7 @@ const removeFromCart_svg = <svg xmlns="http://www.w3.org/2000/svg" width="18" he
 </svg> 
 function CartLine({ item }: { item: Item }) {
     const {toggleCart} = useCart() ;
+    const { t } = useLanguage();
     const thumbImage = item.images?.[0];
     return (
         <article className="product product--cart-line">
@@ -27,7 +29,7 @@ function CartLine({ item }: { item: Item }) {
                 onClick={() => toggleCart(item )}  
                 className="remove-from-cart-btn" 
                 type="button" 
-                aria-label="Remove item from cart"
+                aria-label={t('product.removeFromCart')}
               >
                 {removeFromCart_svg}
               </button>

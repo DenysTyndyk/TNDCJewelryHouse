@@ -57,11 +57,15 @@ def revoke_all_for_user(db: Session, user_id: int) -> None:
         token.revoked_at = datetime.now(timezone.utc)
     db.flush()
 
-def create_user_profile(db: Session, user_id: int, first_name: str | None, last_name: str | None) -> UserProfile:
-    profile = UserProfile(user_id=user_id, first_name=first_name, last_name=last_name)
+def create_user_profile(db: Session, user_id: int, first_name: str | None, last_name: str | None, phone_number: str | None = None) -> UserProfile:
+    profile = UserProfile(user_id=user_id, first_name=first_name, last_name=last_name, phone_number=phone_number)
     db.add(profile)
     db.flush()
     return profile
+
+def get_by_phone_number(db: Session, phone_number: str) -> UserProfile | None:
+    stmt = select(UserProfile).where(UserProfile.phone_number == phone_number)
+    return db.scalar(stmt)
 
 def create_email_verification_token(db: Session, user_id: int, token_hash: str, expires_at: datetime) -> EmailVerificationToken:
     token = EmailVerificationToken(user_id=user_id, token_hash=token_hash, expires_at=expires_at)

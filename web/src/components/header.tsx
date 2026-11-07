@@ -2,20 +2,22 @@ import '../styles/site.css';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useCart } from '../context/cartContext';
 import { useAuth } from '../context/authContext';
+import { useLanguage, type Language } from '../context/languageContext';
 import { useEffect, useState } from 'react';
-
-const navLinks: { to: string; label: string; end?: boolean }[] = [
-  { to: '/', label: 'Home', end: true },
-  { to: '/categories', label: 'Categories' },
-  { to: '/about', label: 'About' },
-  { to: '/contact', label: 'Contact' },
-];
 
 function Header() {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const { cartCount } = useCart();
   const { user } = useAuth();
+  const { language, setLanguage, languages, t } = useLanguage();
   const location = useLocation();
+
+  const navLinks: { to: string; label: string; end?: boolean }[] = [
+    { to: '/', label: t('header.home'), end: true },
+    { to: '/categories', label: t('header.categories') },
+    { to: '/about', label: t('header.about') },
+    { to: '/contact', label: t('header.contact') },
+  ];
 
   const toggleMenu = () => setIsNavOpen((prev) => !prev);
   const closeMenu = () => setIsNavOpen(false);
@@ -43,7 +45,7 @@ function Header() {
           type="button"
           aria-expanded={isNavOpen}
           aria-controls="site-nav"
-          aria-label={isNavOpen ? 'Close menu' : 'Open menu'}
+          aria-label={isNavOpen ? t('header.closeMenu') : t('header.openMenu')}
           onClick={toggleMenu}
         >
           <span className="nav-toggle__lines" aria-hidden="true">
@@ -51,7 +53,7 @@ function Header() {
             <span className="nav-toggle__bar" />
             <span className="nav-toggle__bar" />
           </span>
-          <span className="nav-toggle__label">{isNavOpen ? 'Close' : 'Menu'}</span>
+          <span className="nav-toggle__label">{isNavOpen ? t('header.close') : t('header.menu')}</span>
         </button>
 
         <nav id="site-nav" className={`nav${isNavOpen ? ' is-open' : ''}`} aria-label="Main">
@@ -73,7 +75,7 @@ function Header() {
             to="/cart"
             onClick={closeMenu}
           >
-            Cart
+            {t('header.cart')}
             <span className="nav__cart-count">{cartCount}</span>
           </NavLink>
           <NavLink
@@ -81,8 +83,20 @@ function Header() {
             to={user ? '/account' : '/login'}
             onClick={closeMenu}
           >
-            {user ? 'Account' : 'Login'}
+            {user ? t('header.account') : t('header.login')}
           </NavLink>
+          <select
+            className="nav__lang"
+            aria-label="Language"
+            value={language}
+            onChange={(e) => setLanguage(e.target.value as Language)}
+          >
+            {languages.map((lang) => (
+              <option key={lang} value={lang}>
+                {t(`languageNames.${lang}`)}
+              </option>
+            ))}
+          </select>
         </nav>
       </div>
 
@@ -91,7 +105,7 @@ function Header() {
         className={`nav-backdrop${isNavOpen ? ' is-visible' : ''}`}
         aria-hidden={!isNavOpen}
         tabIndex={isNavOpen ? 0 : -1}
-        aria-label="Close menu"
+        aria-label={t('header.closeMenu')}
         onClick={closeMenu}
       />
     </header>

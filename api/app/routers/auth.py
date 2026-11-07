@@ -27,7 +27,7 @@ def _set_refresh_cookie(response: Response, refresh_token: str)-> None:
 @router.post("/register", response_model=MessageResponse, status_code=status.HTTP_201_CREATED)
 @limiter.limit("5/minute")
 def register(request: Request, payload: RegisterRequest, db: Session = Depends(get_db)):
-    auth_service.register(db, payload.email, payload.password, payload.first_name, payload.last_name)
+    auth_service.register(db, payload.email, payload.password, payload.first_name, payload.last_name, payload.phone_number)
     return MessageResponse(message="If this email is not already registered, a verification link has been sent")
 
 @router.post("/login", response_model=TokenResponse)

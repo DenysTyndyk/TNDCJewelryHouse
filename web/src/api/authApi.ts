@@ -23,10 +23,10 @@ async function request(path: string, options: RequestInit={}){
     return data;
 }
 
-export function register(email: string, password: string, firstName?: string, lastName?: string){
+export function register(email: string, password: string, firstName?: string, lastName?: string, phoneNumber?: string){
     return request('/auth/register',{
         method: 'POST',
-        body: JSON.stringify({email,password,first_name: firstName,last_name: lastName}),
+        body: JSON.stringify({email,password,first_name: firstName,last_name: lastName,phone_number: phoneNumber}),
     });
 }
 

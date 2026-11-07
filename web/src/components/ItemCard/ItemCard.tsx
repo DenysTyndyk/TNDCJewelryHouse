@@ -1,6 +1,7 @@
 import '../../styles/site.css';
 import ImageSliderOnHover from "./ImageSliderOnHover.jsx";
 import { useCart } from '../../context/cartContext';
+import { useLanguage } from '../../context/languageContext';
 import type { Item } from '../../types'
 const activeCart_svg = <svg
 xmlns="http://www.w3.org/2000/svg"
@@ -29,6 +30,7 @@ const removeFromCart_svg = <svg xmlns="http://www.w3.org/2000/svg" width="18" he
 </svg> 
 function ItemCard({ item }: { item: Item }) {
     const {toggleCart, cartItems} = useCart();
+    const { t } = useLanguage();
     const isInCart = cartItems.find((it: Item) => it.id === item.id)
   return (
     <article className="product">
@@ -39,7 +41,7 @@ function ItemCard({ item }: { item: Item }) {
         {item.description && <p className="product__description">{item.description}</p>}
         <div className="product__price-row">
           <span className="product__price">PLN {item.price}</span>
-          <button onClick={() => toggleCart(item)}  className="add-to-cart-btn" type="button" aria-label="Add to cart">
+          <button onClick={() => toggleCart(item)}  className="add-to-cart-btn" type="button" aria-label={isInCart ? t('product.removeFromCart') : t('product.addToCart')}>
             {isInCart ? removeFromCart_svg : activeCart_svg}
           </button>
         </div>

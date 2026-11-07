@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context';
+import { useLanguage } from '../context/languageContext';
 import '../styles/site.css';
 
 function Login() {
@@ -9,6 +10,7 @@ function Login() {
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const { signIn } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
 
   async function handleSubmit(e: React.FormEvent) {
@@ -28,8 +30,8 @@ function Login() {
     <main>
       <section className="section auth-section">
         <div className="auth-card">
-          <h1>Увійти</h1>
-          <p className="auth-card__subtitle">Радi бачити вас знову</p>
+          <h1>{t('auth.login.title')}</h1>
+          <p className="auth-card__subtitle">{t('auth.login.subtitle')}</p>
 
           <form className="auth-form" onSubmit={handleSubmit}>
             <div className="field">
@@ -46,7 +48,7 @@ function Login() {
               />
             </div>
             <div className="field">
-              <label htmlFor="password">Пароль</label>
+              <label htmlFor="password">{t('auth.login.password')}</label>
               <input
                 id="password"
                 name="password"
@@ -62,14 +64,14 @@ function Login() {
             {error && <p className="auth-form__error">{error}</p>}
 
             <button className="btn btn--primary" type="submit" disabled={submitting}>
-              {submitting ? 'Входимо…' : 'Увійти'}
+              {submitting ? t('auth.login.submitting') : t('auth.login.submit')}
             </button>
           </form>
 
           <p className="auth-card__footer">
-            Немає акаунта? <Link to="/register">Зареєструватись</Link>
+            {t('auth.login.noAccount')} <Link to="/register">{t('auth.login.signUp')}</Link>
             <br />
-            <Link to="/forgot-password">Забули пароль?</Link>
+            <Link to="/forgot-password">{t('auth.login.forgotPassword')}</Link>
           </p>
         </div>
       </section>

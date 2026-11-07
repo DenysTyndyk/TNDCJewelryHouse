@@ -1,12 +1,14 @@
 import '../styles/site.css';
+import { useLanguage } from '../context/languageContext';
 function Contact() {
+    const { t } = useLanguage();
     return (
 
         <main>
       <section className="page-hero">
         <div className="container">
-          <p className="section__eyebrow">Visit &amp; write</p>
-          <h1>Contact &amp; location</h1>
+          <p className="section__eyebrow">{t('contact.eyebrow')}</p>
+          <h1>{t('contact.title')}</h1>
         </div>
       </section>
 
@@ -14,11 +16,11 @@ function Contact() {
         <div className="container split">
           <form className="contact-form" action="#" method="get">
             <div className="field">
-              <label htmlFor="name">Name</label>
-              <input id="name" name="name" type="text" autoComplete="name" placeholder="Your name" />
+              <label htmlFor="name">{t('contact.name')}</label>
+              <input id="name" name="name" type="text" autoComplete="name" placeholder={t('contact.namePlaceholder')} />
             </div>
             <div className="field">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email">{t('contact.email')}</label>
               <input
                 id="email"
                 name="email"
@@ -28,7 +30,7 @@ function Contact() {
               />
             </div>
             <div className="field">
-              <label htmlFor="lang">Preferred language</label>
+              <label htmlFor="lang">{t('contact.preferredLanguage')}</label>
               <select id="lang" name="lang">
                 <option>Polski</option>
                 <option>English</option>
@@ -36,14 +38,14 @@ function Contact() {
               </select>
             </div>
             <div className="field">
-              <label htmlFor="message">Message</label>
-              <textarea id="message" name="message" placeholder="How can we help?"></textarea>
+              <label htmlFor="message">{t('contact.message')}</label>
+              <textarea id="message" name="message" placeholder={t('contact.messagePlaceholder')}></textarea>
             </div>
-            <button className="btn btn--primary" type="submit">Send message</button>
+            <button className="btn btn--primary" type="submit">{t('contact.send')}</button>
           </form>
 
           <div>
-            <div className="map-panel--embed" role="img" aria-label="Map placeholder">
+            <div className="map-panel--embed" role="img" aria-label={t('contact.mapAlt')}>
               <div>
               <iframe
         src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d1117.8425869586451!2d28.428206269734616!3d49.22953499821158!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zNDnCsDEzJzQ2LjMiTiAyOMKwMjUnNDMuOSJF!5e1!3m2!1suk!2spl!4v1785087674640!5m2!1suk!2spl"
@@ -63,8 +65,8 @@ function Contact() {
                 <dd>Tunduk_natasha@ukr.net</dd>
               </div>
               <div>
-                <dt>Hours</dt>
-                <dd>Mon-Fri 9:00-18:00</dd>
+                <dt>{t('contact.hoursLabel')}</dt>
+                <dd>{t('contact.hoursValue')}</dd>
               </div>
             </dl>
           </div>
