@@ -133,7 +133,7 @@ class VariantPrice(Base):
     sale_price: Mapped[Optional[Decimal]] = mapped_column(Numeric(12, 2))
     sale_starts_at: Mapped[Optional[datetime]]
     sale_ends_at: Mapped[Optional[datetime]]
-    # D6: when true, the PLN recalculation job must not overwrite this row.
+    # D6: when true, a bulk price-recalculation job must not overwrite this row.
     is_manual_override: Mapped[bool] = mapped_column(server_default=text("false"))
     is_active: Mapped[bool] = mapped_column(server_default=text("true"))
 

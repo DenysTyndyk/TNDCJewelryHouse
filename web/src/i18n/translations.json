@@ -31,7 +31,9 @@
       "eyebrow": "Колекція",
       "title": "Категорії",
       "filterAll": "Всі",
-      "filters": { "Earrings": "Сережки", "Necklaces": "Кольє", "Rings": "Каблучки", "Bracelets": "Браслети" }
+      "filters": { "Earrings": "Сережки", "Necklaces": "Кольє", "Rings": "Каблучки", "Bracelets": "Браслети" },
+      "panel": { "any": "Будь-який", "priceMax": "Ціна до, грн", "inStock": "В наявності", "sort": "Сортування", "reset": "Скинути", "empty": "За цими фільтрами нічого не знайдено", "more": "Показати ще" },
+      "sort": { "newest": "Новинки", "price_asc": "Спочатку дешевші", "price_desc": "Спочатку дорожчі", "popular": "Популярні" }
     },
     "about": {
       "eyebrow": "Наша історія",
@@ -74,6 +76,9 @@
     },
     "cart": {
       "eyebrow": "Покупки",
+      "quantity": "Кількість",
+      "decrease": "Зменшити кількість",
+      "increase": "Збільшити кількість",
       "emptyMessage": "Ваш кошик порожній. Поверніться до магазину, щоб переглянути прикраси",
       "emptyLink": "Перейти",
       "orderSummary": "Підсумок замовлення",
@@ -152,8 +157,21 @@
     },
     "product": {
       "addToCart": "Додати до кошика",
-      "removeFromCart": "Видалити з кошика"
-    }
+      "removeFromCart": "Видалити з кошика",
+      "goToCart": "Уже в кошику — перейти",
+      "loading": "Завантаження…",
+      "notFound": "Товар не знайдено",
+      "outOfStock": "Немає в наявності",
+      "variant": "Варіант",
+      "loadError": "Не вдалося завантажити товари",
+      "centerStone": "центральний",
+      "specs": { "title": "Характеристики", "sku": "Артикул", "metal": "Метал", "color": "Колір металу", "fineness": "Проба", "weight": "Вага", "length": "Довжина", "size": "Розмір", "gemstones": "Камені" },
+      "metal": { "Gold": "Золото", "Silver": "Срібло", "Platinum": "Платина" },
+      "color": { "White": "Біле", "Yellow": "Жовте", "Rose": "Рожеве", "Bicolor": "Комбіноване" },
+      "gemstoneType": { "Natural": "Натуральний", "LabGrown": "Лабораторний" },
+      "units": { "g": "г", "mm": "мм", "pcs": "шт.", "ct": "кар." }
+    },
+    "gemstones": { "diamond": "Діамант", "sapphire": "Сапфір", "ruby": "Рубін", "emerald": "Смарагд", "amethyst": "Аметист", "topaz": "Топаз", "pearl": "Перлина", "cubic_zirconia": "Фіаніт" }
   },
   "pl": {
     "languageNames": { "uk": "Українська", "pl": "Polski", "en": "English" },
@@ -187,7 +205,9 @@
       "eyebrow": "Kolekcja",
       "title": "Kategorie",
       "filterAll": "Wszystkie",
-      "filters": { "Earrings": "Kolczyki", "Necklaces": "Naszyjniki", "Rings": "Pierścionki", "Bracelets": "Bransoletki" }
+      "filters": { "Earrings": "Kolczyki", "Necklaces": "Naszyjniki", "Rings": "Pierścionki", "Bracelets": "Bransoletki" },
+      "panel": { "any": "Dowolny", "priceMax": "Cena do, UAH", "inStock": "Dostępne", "sort": "Sortowanie", "reset": "Wyczyść", "empty": "Brak produktów dla wybranych filtrów", "more": "Pokaż więcej" },
+      "sort": { "newest": "Nowości", "price_asc": "Od najtańszych", "price_desc": "Od najdroższych", "popular": "Popularne" }
     },
     "about": {
       "eyebrow": "Nasza historia",
@@ -230,6 +250,9 @@
     },
     "cart": {
       "eyebrow": "Zakupy",
+      "quantity": "Ilość",
+      "decrease": "Zmniejsz ilość",
+      "increase": "Zwiększ ilość",
       "emptyMessage": "Twój koszyk jest pusty. Wróć do sklepu, aby przeglądać biżuterię",
       "emptyLink": "Przejdź",
       "orderSummary": "Podsumowanie zamówienia",
@@ -308,8 +331,21 @@
     },
     "product": {
       "addToCart": "Dodaj do koszyka",
-      "removeFromCart": "Usuń z koszyka"
-    }
+      "removeFromCart": "Usuń z koszyka",
+      "goToCart": "Już w koszyku — przejdź",
+      "loading": "Ładowanie…",
+      "notFound": "Nie znaleziono produktu",
+      "outOfStock": "Brak w magazynie",
+      "variant": "Wariant",
+      "loadError": "Nie udało się załadować produktów",
+      "centerStone": "centralny",
+      "specs": { "title": "Charakterystyka", "sku": "Kod produktu", "metal": "Metal", "color": "Kolor metalu", "fineness": "Próba", "weight": "Waga", "length": "Długość", "size": "Rozmiar", "gemstones": "Kamienie" },
+      "metal": { "Gold": "Złoto", "Silver": "Srebro", "Platinum": "Platyna" },
+      "color": { "White": "Białe", "Yellow": "Żółte", "Rose": "Różowe", "Bicolor": "Dwukolorowe" },
+      "gemstoneType": { "Natural": "Naturalny", "LabGrown": "Laboratoryjny" },
+      "units": { "g": "g", "mm": "mm", "pcs": "szt.", "ct": "ct" }
+    },
+    "gemstones": { "diamond": "Diament", "sapphire": "Szafir", "ruby": "Rubin", "emerald": "Szmaragd", "amethyst": "Ametyst", "topaz": "Topaz", "pearl": "Perła", "cubic_zirconia": "Cyrkonia" }
   },
   "en": {
     "languageNames": { "uk": "Українська", "pl": "Polski", "en": "English" },
@@ -343,7 +379,9 @@
       "eyebrow": "Collection",
       "title": "Categories",
       "filterAll": "All",
-      "filters": { "Earrings": "Earrings", "Necklaces": "Necklaces", "Rings": "Rings", "Bracelets": "Bracelets" }
+      "filters": { "Earrings": "Earrings", "Necklaces": "Necklaces", "Rings": "Rings", "Bracelets": "Bracelets" },
+      "panel": { "any": "Any", "priceMax": "Price up to, UAH", "inStock": "In stock", "sort": "Sort by", "reset": "Reset", "empty": "No products match these filters", "more": "Show more" },
+      "sort": { "newest": "Newest", "price_asc": "Price: low to high", "price_desc": "Price: high to low", "popular": "Popular" }
     },
     "about": {
       "eyebrow": "Our story",
@@ -386,6 +424,9 @@
     },
     "cart": {
       "eyebrow": "Shopping",
+      "quantity": "Quantity",
+      "decrease": "Decrease quantity",
+      "increase": "Increase quantity",
       "emptyMessage": "Your cart is empty. Return to the shop to browse accessories",
       "emptyLink": "Click",
       "orderSummary": "Order summary",
@@ -464,7 +505,20 @@
     },
     "product": {
       "addToCart": "Add to cart",
-      "removeFromCart": "Remove from cart"
-    }
+      "removeFromCart": "Remove from cart",
+      "goToCart": "In your cart — view",
+      "loading": "Loading…",
+      "notFound": "Product not found",
+      "outOfStock": "Out of stock",
+      "variant": "Variant",
+      "loadError": "Failed to load products",
+      "centerStone": "center stone",
+      "specs": { "title": "Specifications", "sku": "SKU", "metal": "Metal", "color": "Metal colour", "fineness": "Fineness", "weight": "Weight", "length": "Length", "size": "Size", "gemstones": "Gemstones" },
+      "metal": { "Gold": "Gold", "Silver": "Silver", "Platinum": "Platinum" },
+      "color": { "White": "White", "Yellow": "Yellow", "Rose": "Rose", "Bicolor": "Two-tone" },
+      "gemstoneType": { "Natural": "Natural", "LabGrown": "Lab-grown" },
+      "units": { "g": "g", "mm": "mm", "pcs": "pcs", "ct": "ct" }
+    },
+    "gemstones": { "diamond": "Diamond", "sapphire": "Sapphire", "ruby": "Ruby", "emerald": "Emerald", "amethyst": "Amethyst", "topaz": "Topaz", "pearl": "Pearl", "cubic_zirconia": "Cubic zirconia" }
   }
 }

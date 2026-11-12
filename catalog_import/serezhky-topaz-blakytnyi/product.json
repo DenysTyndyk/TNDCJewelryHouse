@@ -1,0 +1,38 @@
+{
+  "category": "earrings",
+  "published": true,
+  "is_featured": false,
+  "translations": {
+    "uk": {
+      "name": "Сережки з блакитним топазом",
+      "description": "Сережки з жовтого золота 585 з круглим блакитним топазом у чотирьох крапанах. Англійський замок."
+    },
+    "pl": {
+      "name": "Kolczyki z niebieskim topazem",
+      "description": "Kolczyki z żółtego złota próby 585 z okrągłym niebieskim topazem w czterech łapkach. Zapięcie angielskie."
+    },
+    "en": {
+      "name": "Blue topaz earrings",
+      "description": "585 yellow gold earrings with a round blue topaz in a four-prong setting. Lever-back closure."
+    }
+  },
+  "variants": [
+    {
+      "sku": "ER-TOPAZ-Y585",
+      "metal_type": "Gold",
+      "metal_color": "Yellow",
+      "fineness": 585,
+      "weight": "2.4",
+      "base_price": "9800",
+      "stock_quantity": 3
+    }
+  ],
+  "gemstones": [
+    {
+      "gemstone": "topaz",
+      "quantity": 2,
+      "cut_type": "round",
+      "is_center_stone": true
+    }
+  ]
+}

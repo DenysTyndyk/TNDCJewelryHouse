@@ -6,14 +6,16 @@ from contextvars import ContextVar
 
 from fastapi import FastAPI, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
 from sqlalchemy import text
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
-from app.core.config import settings
+from app.core.config import MEDIA_DIR, settings
 from app.core.limiter import limiter
 from app.db.session import SessionLocal
-from app.routers import auth
+from app.routers import admin_catalog, auth, catalog
+from app.services.admin_catalog_service import ConflictError, InvalidImageError, NotFoundError
 
 request_id_context: ContextVar[str] = ContextVar("request_id", default=None)
 
@@ -68,6 +70,18 @@ async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONR
         content={"detail": "Internal server error"},
     )
 
+@app.exception_handler(NotFoundError)
+async def not_found_handler(request: Request, exc: NotFoundError) -> JSONResponse:
+    return JSONResponse(status_code=status.HTTP_404_NOT_FOUND, content={"detail": str(exc)})
+
+@app.exception_handler(ConflictError)
+async def conflict_handler(request: Request, exc: ConflictError) -> JSONResponse:
+    return JSONResponse(status_code=status.HTTP_409_CONFLICT, content={"detail": str(exc)})
+
+@app.exception_handler(InvalidImageError)
+async def invalid_image_handler(request: Request, exc: InvalidImageError) -> JSONResponse:
+    return JSONResponse(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content={"detail": str(exc)})
+
 @app.get("/health")
 def health():
     return {"status": "ok"}
@@ -84,3 +98,8 @@ def ready():
 
 
 app.include_router(auth.router)
+app.include_router(catalog.router)
+app.include_router(admin_catalog.router)
+
+MEDIA_DIR.mkdir(exist_ok=True)  
+app.mount("/media", StaticFiles(directory=MEDIA_DIR), name="media")

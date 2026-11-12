@@ -10,9 +10,11 @@ const removeFromCart_svg = <svg xmlns="http://www.w3.org/2000/svg" width="18" he
 <line x1="14" y1="11" x2="14" y2="17"/>
 </svg> 
 function CartLine({ item }: { item: Item }) {
-    const {toggleCart} = useCart() ;
+    const {toggleCart, setQuantity} = useCart() ;
     const { t } = useLanguage();
     const thumbImage = item.images?.[0];
+    const quantity = item.quantity ?? 1;
+    const currency = item.currency ?? 'UAH';
     return (
         <article className="product product--cart-line">
           <img className="product__thumb" src={thumbImage} alt={item.title} />
@@ -24,7 +26,12 @@ function CartLine({ item }: { item: Item }) {
             </div>
     
             <div className="product__price-row">
-              <span className="product__price">PLN {item.price}</span>
+              <div className="qty-stepper" role="group" aria-label={t('cart.quantity')}>
+                <button type="button" onClick={() => setQuantity(item.id, quantity - 1)} disabled={quantity <= 1} aria-label={t('cart.decrease')}>−</button>
+                <span aria-live="polite">{quantity}</span>
+                <button type="button" onClick={() => setQuantity(item.id, quantity + 1)} disabled={quantity >= 10} aria-label={t('cart.increase')}>+</button>
+              </div>
+              <span className="product__price">{currency} {item.price * quantity}</span>
               <button 
                 onClick={() => toggleCart(item )}  
                 className="remove-from-cart-btn" 

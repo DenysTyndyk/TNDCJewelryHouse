@@ -1,8 +1,11 @@
+import type { Locale } from './catalog';
+
 export type User = {
   id: number;
   email: string;
   role: string;
   status: string;
+  preferred_language: Locale;
 };
 
 export type AuthResult = { error: string | null };
@@ -20,4 +23,5 @@ export type AuthContextValue = {
     phoneNumber?: string
   ) => Promise<AuthResult>;
   signOut: () => Promise<void>;
+  changeLanguage: (lang: Locale) => void;
 };

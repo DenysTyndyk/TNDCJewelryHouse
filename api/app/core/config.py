@@ -1,4 +1,10 @@
+from pathlib import Path
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+# api/media, resolved from this file so it does not depend on the working directory
+MEDIA_DIR = Path(__file__).resolve().parents[2] / "media"
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file="../.env", extra="ignore")
 
@@ -14,6 +20,7 @@ class Settings(BaseSettings):
     email_verification_token_expire_hours: int = 24
     password_reset_token_expire_minutes: int = 30
     frontend_base_url: str = "http://localhost:5173"
+    media_base_url: str = "http://localhost:8000/media"
     cors_origins: list[str] = ["http://localhost:5173"]
 
 settings = Settings()

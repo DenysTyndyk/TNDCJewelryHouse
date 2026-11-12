@@ -3,6 +3,8 @@ import ImageSliderOnHover from "./ImageSliderOnHover.jsx";
 import { useCart } from '../../context/cartContext';
 import { useLanguage } from '../../context/languageContext';
 import type { Item } from '../../types'
+import { Link } from 'react-router-dom';
+
 const activeCart_svg = <svg
 xmlns="http://www.w3.org/2000/svg"
 width="18"
@@ -37,10 +39,10 @@ function ItemCard({ item }: { item: Item }) {
       <ImageSliderOnHover images = {item.images} alt={item.title}/>
       <div className="product__meta">
         <span className="product__cat">{item.category}</span>
-        <h3 className="product__name">{item.title}</h3>
+<h3 className="product__name">{item.slug ? <Link to={`/products/${item.slug}`}>{item.title}</Link> : item.title}</h3>
         {item.description && <p className="product__description">{item.description}</p>}
         <div className="product__price-row">
-          <span className="product__price">PLN {item.price}</span>
+<span className="product__price">{item.currency ?? 'UAH'} {item.price}</span>
           <button onClick={() => toggleCart(item)}  className="add-to-cart-btn" type="button" aria-label={isInCart ? t('product.removeFromCart') : t('product.addToCart')}>
             {isInCart ? removeFromCart_svg : activeCart_svg}
           </button>

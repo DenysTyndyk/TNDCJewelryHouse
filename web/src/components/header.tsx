@@ -8,8 +8,8 @@ import { useEffect, useState } from 'react';
 function Header() {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const { cartCount } = useCart();
-  const { user } = useAuth();
-  const { language, setLanguage, languages, t } = useLanguage();
+  const { user, changeLanguage } = useAuth();
+  const { language, languages, t } = useLanguage();
   const location = useLocation();
 
   const navLinks: { to: string; label: string; end?: boolean }[] = [
@@ -89,7 +89,7 @@ function Header() {
             className="nav__lang"
             aria-label="Language"
             value={language}
-            onChange={(e) => setLanguage(e.target.value as Language)}
+            onChange={(e) => changeLanguage(e.target.value as Language)}
           >
             {languages.map((lang) => (
               <option key={lang} value={lang}>

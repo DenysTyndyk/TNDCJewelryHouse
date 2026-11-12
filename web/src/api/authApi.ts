@@ -10,7 +10,7 @@ function extractErrorMessage(data: any, fallback: string): string {
     return fallback;
 }
 
-async function request(path: string, options: RequestInit={}){
+export async function request(path: string, options: RequestInit={}){
     const res = await fetch(`${API_URL}${path}`,{
         ...options,
         credentials: 'include',
@@ -55,6 +55,14 @@ export function logout() {
 
 export function me(accessToken: string) {
   return request('/auth/me', { headers: { Authorization: `Bearer ${accessToken}` } });
+}
+
+export function updatePreferences(accessToken: string, preferredLanguage: string) {
+  return request('/auth/me/preferences', {
+    method: 'PATCH',
+    headers: { Authorization: `Bearer ${accessToken}` },
+    body: JSON.stringify({ preferred_language: preferredLanguage }),
+  });
 }
 
 export function verifyEmail(token: string) {

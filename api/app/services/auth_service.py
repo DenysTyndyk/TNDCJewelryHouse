@@ -13,9 +13,25 @@ from app.core.security import (
     verify_password,
 )
 from app.repositories import user_repository as repo
+from app.schemas.auth import UserResponse
 
 class AuthError(Exception):
     pass
+
+def get_me(db: Session, user: User) -> UserResponse:
+    profile = repo.get_profile(db, user.id)
+    me = UserResponse.model_validate(user)
+    if profile is not None:
+        me.preferred_language = profile.preferred_language
+    return me
+
+def set_preferred_language(db: Session, user: User, language: str) -> UserResponse:
+    profile = repo.get_profile(db, user.id)
+    if profile is None:  
+        profile = repo.create_user_profile(db, user.id, None, None)
+    profile.preferred_language = language
+    db.commit()
+    return get_me(db, user)
 
 def register(db: Session, email: str, password: str, first_name: str | None, last_name: str | None, phone_number: str | None = None) -> None:
    if repo.get_by_email(db, email):

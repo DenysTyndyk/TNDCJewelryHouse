@@ -16,12 +16,11 @@ Ten plik to wersja polska; wersja ukraińska (kanoniczna): [roadmap.uk.md](roadm
 |---|---|
 | D1 | Uwierzytelnianie własne w FastAPI (argon2id, JWT 15 min + refresh z rotacją, blokada konta). Nie Supabase Auth. RLS nie jest granicą bezpieczeństwa |
 | D2 | Postgres 16 + pgvector w Docker Compose; Supabase/Neon opcjonalnie na produkcję |
-| D3 | Dwa rynki: UA (główny: UAH, uk, Nowa Poczta, Monobank/LiqPay) i PL (PLN, pl, InPost, Przelewy24/PayU/BLIK, Stripe jako fallback). Encja `markets` od pierwszego dnia, bez `if country ==` |
+| **D3 (zmienione)** | **Jeden rynek**: Ukraina (UAH, Nowa Poczta, Monobank/LiqPay). Interfejs w trzech językach (**UK główny, PL, EN**), bez osobnego rynku/walutę/dostawców dla PL. Tabel `markets`/`exchange_rates` nie ma (decyzja zrealizowana już w M1) |
 | D4 | i18n przez `product_translations` / `category_translations` |
 | D5 | Embeddingi: `multilingual-e5-small`, 384 wymiary, wersjonowanie (`model_name`, `locale`, `embedding_version`) |
-| **D6** | **Ceny**: cena w PLN jest generowana z kursu (`exchange_rates`) + marży (per rynek), z możliwością ręcznego nadpisania w `variant_prices` (`is_manual_override`). Ręczna wartość nie jest nadpisywana przez przeliczanie |
-| **D7** | **Zmiana rynku w trakcie sesji**: tworzony jest nowy koszyk na nowym rynku, stary pozostaje jako `abandoned`; bez przeliczania |
-| **D8** | **Języki: UK + PL + EN** (EN obowiązkowy). Skutek: 3 lokalizacje w `product_translations` i do 3 embeddingów na produkt (M7); seed i tłumaczenia ×3 |
+| **D6 (zmienione)** | **Ceny tylko w UAH** z `variant_prices`; bez przeliczania kursu (jeden rynek). `is_manual_override` pozostaje do jednorazowego ręcznego nadpisania wyliczonej ceny |
+| **D8** | **Języki: UK + PL + EN** (EN obowiązkowy). Skutek: 3 lokalizacje w `product_translations` i do 3 embeddingów na produkt (M7); seed i tłumaczenia ×3. Język to tylko UI/treść, nie rynek |
 
 Frontend nigdy nie komunikuje się z bazą bezpośrednio; cały dostęp przez FastAPI.
 
@@ -63,19 +62,19 @@ M7 zależy tylko od katalogu (M3) i może iść równolegle z M4/M6.
 - **Ryzyko (wysokie)**: podatności → sprawdzone biblioteki, OWASP ASVS L1, testy negatywne.
 - **Deliverable**: „Bezpieczeństwo i uwierzytelnianie" (diagram sekwencji, argon2, brute force).
 
-### M3 — Katalog + i18n + rynki (2–3 tygodnie)
+### M3 — Katalog + i18n (2–3 tygodnie)
 - API: `GET /products` (paginacja kursorowa, filtry: kategoria/metal/kolor/próba/cena/kamień/dostępność, sortowanie), `GET /products/{slug}`, `GET /categories` (drzewo), admin CRUD + upload obrazów (WebP, kilka rozmiarów).
-- i18n: `Accept-Language` + fallback na język rynku; **PL + UK + EN**; rynek: przełącznik w nagłówku, domyślnie z Accept-Language/geolokalizacji, zapis w cookie i `user_profiles.preferred_market_id`.
-- Ceny w walucie rynku z `variant_prices`; serwis przeliczania PLN = baza UAH × kurs × (1 + marża), pomija wiersze z `is_manual_override` (D6). Kursy: NBU/NBP.
-- Frontend: Categories z API (usunąć `web/src/mockProducts/data.json`), `/products/:slug` z wyborem wariantu, Home — nowości.
-- **DoD**: mocki usunięte; filtr „białe złoto 585, pierścionek, do 3000" zwraca poprawny zestaw; obrazy zoptymalizowane.
+- i18n: język interfejsu — **UK (główny) + PL + EN**; przełącznik w nagłówku jest już zaimplementowany na froncie (`LanguageProvider`/`useLanguage`, wybór zapisywany w `localStorage`); domyślnie UK, `Accept-Language` jako podpowiedź dla gościa; dla zalogowanych — `user_profiles.preferred_language`. Jeden rynek (Ukraina) — bez `preferred_market_id`.
+- Ceny tylko w UAH z `variant_prices`; bez przeliczania kursu (jeden rynek, D6). `is_manual_override` — do jednorazowego ręcznego nadpisania ceny produktu.
+- Frontend: Categories z API (usunąć `web/src/mockProducts/data.json`), `/products/:slug` z wyborem wariantu, Home — nowości; tłumaczenia produktów (`product_translations`) w UK/PL/EN.
+- **DoD**: mocki usunięte; filtr „białe złoto 585, pierścionek, do 3000" zwraca poprawny zestaw; obrazy zoptymalizowane; przełącznik języka wyświetla katalog w wybranym języku.
 - **Deliverable**: moduł katalogu + uzasadnienie wariantów.
 
 ### M4 — Koszyk, zamówienia, płatności (3–4 tygodnie)
-- Koszyk: `session_token` dla gościa, `user_id` dla zalogowanego; merge przy logowaniu (ilości sumowane, koszyk gościa → converted); cartContext na API, w localStorage tylko session_token. **Zmiana rynku → nowy koszyk (D7)**.
-- Zamówienia: wzorzec snapshot; transakcyjne zmniejszanie stanu z `SELECT … FOR UPDATE` (lub `stock_reservations` z TTL); `exchange_rate_used`, statusy ze znacznikami czasu.
-- Płatności: wyłącznie sandbox, żadnych kart w bazie; abstrakcja `PaymentProvider` + rejestr dostępności per rynek; w pełni zaimplementować **po jednym dostawcy na rynek** (UA: LiqPay/Monobank + Nowa Poczta; PL: Przelewy24/PayU + InPost), reszta jako interfejsy; webhook z weryfikacją podpisu; `idempotency_key`.
-- **DoD**: gość→rejestracja→koszyk scalony; zamówienie zmniejsza stan i wysyła e-mail; płatność sandbox → Processing; UA = UAH + Nowa Poczta, PL = PLN + InPost, mieszanie niemożliwe.
+- Koszyk: `session_token` dla gościa, `user_id` dla zalogowanego; merge przy logowaniu (ilości sumowane, koszyk gościa → converted); cartContext na API, w localStorage tylko session_token.
+- Zamówienia: wzorzec snapshot; transakcyjne zmniejszanie stanu z `SELECT … FOR UPDATE` (lub `stock_reservations` z TTL); statusy ze znacznikami czasu.
+- Płatności: wyłącznie sandbox, żadnych kart w bazie; abstrakcja `PaymentProvider` (LiqPay/Monobank) + Nowa Poczta do dostawy; webhook z weryfikacją podpisu; `idempotency_key`.
+- **DoD**: gość→rejestracja→koszyk scalony; zamówienie zmniejsza stan i wysyła e-mail; płatność sandbox → Processing.
 - **Deliverable**: diagram stanów, płatności, idempotentność.
 
 ### M5 — Telemetria UX + RODO (1–2 tygodnie)
@@ -115,7 +114,7 @@ Sekcje „Polecane dla Ciebie", „Podobne produkty", „Ostatnio przeglądane",
 
 ### M10 — Wdrożenie i dokumentacja (3–4 tygodnie, równolegle)
 - Deploy: frontend Netlify/Vercel; API + embedder w Dockerze (Railway/Render/Fly/VPS); zarządzany Postgres z pgvector; storage + CDN; HTTPS, domena, backupy ze sprawdzonym odtworzeniem; health + monitoring błędów.
-- Strony prawne per rynek: PL szczegółowo (regulamin, polityka prywatności, cookies, 14 dni na odstąpienie, ceny brutto, formularz RODO), UA poglądowo (oferta, polityka, zwroty).
+- Strony prawne dla rynku ukraińskiego (oferta/warunki, polityka prywatności, cookies, zwroty); dostępne w tłumaczeniu PL/EN jako treść UI, bez odrębnych wymogów prawnych innego rynku.
 - Dokumentacja ~60–80 stron: Wstęp; Analiza; Wymagania; Architektura; Implementacja; Algorytmy; Wyszukiwanie semantyczne; Testy; Bezpieczeństwo i RODO; Podsumowanie.
 - **DoD**: publiczne demo + tag `v1.0-diploma`; README; instrukcje użytkownika/administratora; 10-minutowy scenariusz dema.
 - Zasada: 1–2 strony szkicu pracy po każdym kamieniu milowym, zrzuty ekranu i diagramy zapisywać od razu.
@@ -125,7 +124,7 @@ Sekcje „Polecane dla Ciebie", „Podobne produkty", „Ostatnio przeglądane",
 
 ## Rejestr ryzyk (najważniejsze)
 - Nadmierny zakres (wysokie/wysoki) → twardy MVP na kamień milowy, tylko sandbox, coupons/reviews/ab — jeśli starczy czasu.
-- Podwójna złożoność dwóch rynków i 3 języków (wysokie/wysoki) → `markets` od początku; PL „minimalnie kompletny".
+- Złożoność 3 języków interfejsu (średnie/średni) → kontekst językowy na froncie jest już zaimplementowany (`LanguageProvider`), tłumaczenia katalogu są seedowane od razu w 3 lokalizacjach.
 - Odkładanie tekstu pracy (wysokie/wysoki) → szkice po każdym kamieniu milowym.
 - Rozjazd kodu i schematu → Alembic, bez ręcznych zmian.
 - Własne uwierzytelnianie (średnie/wysoki) → biblioteki, ASVS, testy negatywne.

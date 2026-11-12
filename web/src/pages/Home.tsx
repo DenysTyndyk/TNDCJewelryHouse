@@ -1,16 +1,20 @@
 import '../styles/site.css';
 import { useState, useEffect } from 'react';
 import ItemCard from '../components/ItemCard/ItemCard';
-import data from '../mockProducts/data.json';
+import { listProducts, toItem } from '../api/catalogApi';
 import {Link} from 'react-router-dom'
 import type { Item } from '../types';
 import { useLanguage } from '../context/languageContext';
 function Home() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [newArrivals, setNewArrivals] = useState<Item[]>([]);
   useEffect(() => {
-    setNewArrivals(data.items.slice(0, 3) as Item[]);
-  }, []);
+    let active = true; // ignore a stale response if the language switches mid-request
+    listProducts({ sort: 'newest', limit: 3, locale: language })
+      .then((page) => active && setNewArrivals(page.items.map(toItem)))
+      .catch(() => active && setNewArrivals([]));
+    return () => { active = false; };
+  }, [language]);
     return (
         <main>
       <section className="hero">
@@ -53,10 +57,10 @@ function Home() {
           <p className="section__eyebrow">{t('home.browse')}</p>
           <h2 className="section__title">{t('home.categoriesTitle')}</h2>
           <div className="category-row">
-            <Link className="category-tile" to="/categories" state={{ category: 'Earrings' }}> <span>{t('categories.filters.Earrings')}</span></Link>
-            <Link className="category-tile" to="/categories" state={{ category: 'Necklaces' }}> <span>{t('categories.filters.Necklaces')}</span></Link>
-            <Link className="category-tile" to="/categories" state={{ category: 'Rings' }}> <span>{t('categories.filters.Rings')}</span></Link>
-            <Link className="category-tile" to="/categories" state={{ category: 'Bracelets' }}> <span>{t('categories.filters.Bracelets')}</span></Link>
+            <Link className="category-tile" to="/categories" state={{ category: 'earrings' }}> <span>{t('categories.filters.Earrings')}</span></Link>
+            <Link className="category-tile" to="/categories" state={{ category: 'necklaces' }}> <span>{t('categories.filters.Necklaces')}</span></Link>
+            <Link className="category-tile" to="/categories" state={{ category: 'rings' }}> <span>{t('categories.filters.Rings')}</span></Link>
+            <Link className="category-tile" to="/categories" state={{ category: 'bracelets' }}> <span>{t('categories.filters.Bracelets')}</span></Link>
           </div>
         </div>
       </section>

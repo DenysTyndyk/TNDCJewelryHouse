@@ -1,5 +1,7 @@
 from pydantic import BaseModel, EmailStr, Field
 
+from app.schemas.catalog import Locale
+
 # E.164 format, e.g. +380501234567 or +48501234567
 PHONE_PATTERN = r"^\+[1-9]\d{7,14}$"
 
@@ -23,11 +25,15 @@ class UserResponse(BaseModel):
     email: EmailStr
     role: str
     status: str
+    preferred_language: Locale = "uk"  
 
     model_config = {
         "from_attributes": True,
     }
-    
+
+class PreferencesUpdate(BaseModel):
+    preferred_language: Locale
+
 class MessageResponse(BaseModel):
     message: str
 

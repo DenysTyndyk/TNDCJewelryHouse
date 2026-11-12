@@ -27,11 +27,15 @@ const ImageSliderOnHover = ({ images, alt = "photo img" }) => {
       {images.length > 1 && (
         <div className="hover-slider__indicators">
           {images.map((_, index) => (
-            <span
+            <button
               key={index}
+              type="button"
               className={`hover-slider__indicator ${
                 index === activeIndex ? 'is-active' : ''
               }`}
+              aria-label={`${alt} ${index + 1}`}
+              aria-pressed={index === activeIndex}
+              onClick={() => setActiveIndex(index)}
             />
           ))}
         </div>

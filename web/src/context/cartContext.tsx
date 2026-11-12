@@ -24,18 +24,34 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       if (prevItems.some((item: Item) => item.id === product.id)) {
         return prevItems.filter((item: Item) => item.id !== product.id);
       } else {
-        return [...prevItems, product];
+        return [...prevItems, { ...product, quantity: 1 }];
       }
     });
+  };
+
+  const addToCart = (product: Item) => {
+    setCartItems((prevItems: Item[]) =>
+      prevItems.some((item) => item.id === product.id) ? prevItems : [...prevItems, { ...product, quantity: 1 }],
+    );
+  };
+
+  const setQuantity = (id: number, quantity: number) => {
+    setCartItems((prevItems: Item[]) =>
+      quantity < 1
+        ? prevItems.filter((item) => item.id !== id)
+        : prevItems.map((item) => (item.id === id ? { ...item, quantity } : item)),
+    );
   };
 
   return (
     <CartContext.Provider
       value={{
         cartItems,
-        cartCount: cartItems.length,
+        cartCount: cartItems.reduce((sum, item) => sum + (item.quantity ?? 1), 0),
         isInCart,
         toggleCart,
+        addToCart,
+        setQuantity,
       }}
     >
       {children}

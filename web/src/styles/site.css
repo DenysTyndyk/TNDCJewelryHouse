@@ -853,6 +853,47 @@ p {
   border-color: transparent;
 }
 
+/* —— Catalog filter panel —— */
+.catalog-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+.catalog-filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.catalog-filters label.catalog-filters__check {
+  flex-direction: row;
+  align-items: center;
+  padding-bottom: 0.55rem;
+}
+
+.catalog-filters select,
+.catalog-filters input[type="number"] {
+  min-width: 8rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text);
+  font: inherit;
+  font-size: var(--text-sm);
+}
+
+.catalog-filters select option {
+  background: var(--color-bg-elevated);
+  color: var(--color-text);
+}
+
 /* —— Footer —— */
 .site-footer {
   border-top: 1px solid var(--color-border);
@@ -919,6 +960,36 @@ p {
   animation-delay: 320ms;
 }
 
+/* —— Product specifications —— */
+.product-specs__title {
+  margin-top: var(--space-6);
+}
+
+.product-specs {
+  display: grid;
+  max-width: 40rem;
+}
+
+.product-specs__row {
+  display: grid;
+  grid-template-columns: minmax(8rem, 1fr) 2fr;
+  gap: var(--space-4);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.product-specs dt {
+  color: var(--color-text-muted);
+}
+
+.product-specs dd {
+  margin: 0;
+}
+
+.product-specs dd p {
+  margin: 0 0 var(--space-1);
+}
+
 /* —— Responsive —— */
 @media (max-width: 900px) {
   .product-grid,
@@ -953,6 +1024,7 @@ p {
     z-index: 41;
     flex-direction: column;
     align-items: stretch;
+    text-align: center;
     gap: var(--space-4);
     background: linear-gradient(
       180deg,
@@ -981,8 +1053,20 @@ p {
     color: var(--color-gold-light);
   }
 
+  /* Desktop separators (left border + padding) would push these off-center in the column menu. */
+  .nav.is-open .nav__account,
+  .nav.is-open .nav__lang {
+    padding-left: 0;
+    border-left: none;
+  }
+
+  .nav.is-open .nav__lang {
+    align-self: center;
+    text-align-last: center;
+  }
+
   .nav.is-open .nav__cart {
-    align-self: flex-start;
+    align-self: center;
     margin-top: var(--space-2);
     padding: var(--space-3) var(--space-5);
     border: 1px solid var(--color-border-strong);
@@ -1175,4 +1259,65 @@ padding-right: 1em ;
   border-color: #c5a25d;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(197, 162, 93, 0.25);
+}
+
+/* Product page: one centred column */
+.product-page {
+  text-align: center;
+}
+
+/* Photo: about a third of the container on desktop, full width on phones */
+.product-page__gallery {
+  max-width: 420px;
+  margin: 16px auto 24px;
+}
+
+.product-page .section__lead {
+  margin-inline: auto;
+}
+
+.product-page .filters {
+  justify-content: center;
+}
+
+/* Table sits in the centre, but its text stays left-aligned so rows are easy to scan */
+.product-page .product-specs {
+  margin-inline: auto;
+  text-align: left;
+}
+
+/* Cart quantity stepper, styled like the remove button next to it */
+.qty-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qty-stepper button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: transparent;
+  color: inherit;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.qty-stepper button:hover:not(:disabled) {
+  border-color: #c5a25d;
+}
+
+.qty-stepper button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.qty-stepper span {
+  min-width: 1.5em;
+  text-align: center;
+}
+
+.product-page .btn {
+  margin-top: 16px;
 }

@@ -1,0 +1,17 @@
+{
+  "0": "user_repository.py",
+  "1": "Base",
+  "2": "enums.py",
+  "3": "main.py",
+  "4": "catalog_service.py",
+  "5": "routers/auth.py",
+  "6": "test_auth_flows.py",
+  "7": "test_auth_negative.py",
+  "8": "get_by_email",
+  "9": "env.py",
+  "10": "API — baza danych i migracje (Milestone 1)",
+  "11": "db/__init__.py",
+  "12": "app/__init__.py",
+  "13": "scripts/__init__.py",
+  "14": "tests/__init__.py"
+}

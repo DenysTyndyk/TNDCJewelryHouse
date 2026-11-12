@@ -1,5 +1,4 @@
 import pytest
-from sqlalchemy import event
 from fastapi.testclient import TestClient
 
 from app.main import app
@@ -10,17 +9,14 @@ from app.core.limiter import limiter
 
 @pytest.fixture()
 def db_session():
-    """Wrap each test in a transaction + SAVEPOINT so that db.commit() calls
-    made by the code under test do not actually persist anything."""
+    """Wrap each test in an outer transaction that is always rolled back.
+
+    create_savepoint: the code's commit()/rollback() only release/roll back a SAVEPOINT,
+    so a rollback after an IntegrityError does not wipe data created earlier in the test.
+    """
     connection = engine.connect()
     outer_transaction = connection.begin()
-    session = SessionLocal(bind=connection)
-    session.begin_nested()
-
-    @event.listens_for(session, "after_transaction_end")
-    def restart_savepoint(sess, transaction):
-        if transaction.nested and not transaction._parent.nested:
-            sess.begin_nested()
+    session = SessionLocal(bind=connection, join_transaction_mode="create_savepoint")
 
     yield session
 

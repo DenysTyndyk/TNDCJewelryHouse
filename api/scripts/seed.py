@@ -1,14 +1,18 @@
 """Development seed data: catalog + gemstones + shipping + users.
 
-Single market (Ukraine, UAH). Run with DATABASE_URL exported:
+Single market (Ukraine, UAH). Settings read ../.env themselves, so no `source` is needed
+(sourcing it in zsh strips the quotes from JSON values like CORS_ORIGINS):
 
-    cd api && set -a && source ../.env && set +a
-    python -m scripts.seed
+    cd api && python -m scripts.seed
 """
+from datetime import datetime, timezone
 from decimal import Decimal
+from io import BytesIO
+from pathlib import Path
 
 from argon2 import PasswordHasher
 from faker import Faker
+from PIL import Image
 
 from app.db.session import get_session
 from app.models import (
@@ -34,8 +38,32 @@ from app.models.enums import (
     Role,
     UserStatus,
 )
+from app.services.admin_catalog_service import save_image
 
 hasher = PasswordHasher()
+
+# Optional real photos: seed_photos/<product-slug>.jpg|png|webp; otherwise a metal-coloured placeholder
+SEED_PHOTOS = Path(__file__).resolve().parent / "seed_photos"
+PLACEHOLDER_COLORS = {
+    MetalColor.White: "#d9dadc",
+    MetalColor.Yellow: "#e6c46a",
+    MetalColor.Rose: "#e3a99a",
+    MetalColor.Bicolor: "#dccfa0",
+}
+
+
+def seed_image(category_slug: str, slug: str, metal_color: MetalColor | None) -> tuple[str, int, int]:
+    """Run the seed photo through the same WebP pipeline as admin uploads."""
+    photo = next((p for p in sorted(SEED_PHOTOS.glob(f"{slug}.*"))), None)
+    if photo:
+        data = photo.read_bytes()
+    else:
+        buf = BytesIO()
+        Image.new("RGB", (1600, 1600), PLACEHOLDER_COLORS.get(metal_color, "#e8e2d6")).save(buf, "PNG")
+        data = buf.getvalue()
+    key = f"seed/{category_slug}/{slug}"
+    width, height = save_image(key, data)
+    return key, width, height
 faker = Faker("uk_UA")
 
 GEMSTONES = [
@@ -60,6 +88,42 @@ CATEGORIES = [
     ("sets", None, "Набори", "Готові комплекти: сережки + кольє/підвіска в одному стилі."),
 ]
 
+# pl/en translations; uk lives in CATEGORIES above (D8: three locales)
+CATEGORY_TRANSLATIONS = {
+    "rings": {
+        "pl": ("Pierścionki", "Pierścionki ze złota i srebra na co dzień i na wyjątkowe okazje."),
+        "en": ("Rings", "Gold and silver rings for everyday wear and special occasions."),
+    },
+    "wedding-rings": {
+        "pl": ("Obrączki", "Obrączki parowe i pojedyncze w klasycznych i nowoczesnych formach."),
+        "en": ("Wedding rings", "Paired and single wedding bands in classic and modern shapes."),
+    },
+    "earrings": {
+        "pl": ("Kolczyki", "Kolczyki sztyfty, wiszące i koła, z kamieniami i bez."),
+        "en": ("Earrings", "Studs, drop earrings and hoops, with or without stones."),
+    },
+    "necklaces": {
+        "pl": ("Naszyjniki", "Naszyjniki i kolie na wieczorne i codzienne stylizacje."),
+        "en": ("Necklaces", "Necklaces and collars for evening and everyday looks."),
+    },
+    "pendants": {
+        "pl": ("Zawieszki", "Zawieszki i wisiorki do noszenia na łańcuszku."),
+        "en": ("Pendants", "Pendants and charms to wear on a chain."),
+    },
+    "bracelets": {
+        "pl": ("Bransoletki", "Bransoletki łańcuszkowe, sztywne i z zawieszkami."),
+        "en": ("Bracelets", "Chain, bangle and charm bracelets."),
+    },
+    "chains": {
+        "pl": ("Łańcuszki", "Łańcuszki o splocie pancerka, kotwica i snake."),
+        "en": ("Chains", "Curb, anchor and snake chains."),
+    },
+    "sets": {
+        "pl": ("Komplety", "Gotowe komplety: kolczyki + naszyjnik/zawieszka w jednym stylu."),
+        "en": ("Sets", "Matching sets: earrings plus a necklace or pendant in one style."),
+    },
+}
+
 # (slug, category, name, description, is_featured, variants)
 # variant: (sku_suffix, size, length_mm, weight, metal_type, metal_color, fineness,
 #           base_price, stock, gemstone_slug, carat)
@@ -70,6 +134,14 @@ PRODUCTS = [
         [
             ("16", "16", None, Decimal("3.1"), MetalType.Gold, MetalColor.White, 585, Decimal("8900.00"), 4, "cubic_zirconia", Decimal("0.30")),
             ("17", "17", None, Decimal("3.3"), MetalType.Gold, MetalColor.White, 585, Decimal("9200.00"), 3, "cubic_zirconia", Decimal("0.30")),
+        ],
+    ),
+    (
+        "persten-tonkyi-bile-zoloto", "rings", "Тонкий перстень з білого золота",
+        "Тонкий гладкий перстень із білого золота 585 проби, вага до 1 г.", False,
+        [
+            ("15", "15", None, Decimal("0.8"), MetalType.Gold, MetalColor.White, 585, Decimal("2790.00"), 6, None, None),
+            ("16", "16", None, Decimal("0.9"), MetalType.Gold, MetalColor.White, 585, Decimal("2950.00"), 4, None, None),
         ],
     ),
     (
@@ -225,6 +297,102 @@ PRODUCTS = [
     ),
 ]
 
+# pl/en translations; uk lives in PRODUCTS above. Keys must match product slugs exactly.
+PRODUCT_TRANSLATIONS = {
+    "persten-klasyka-bile-zoloto": {
+        "pl": ('Pierścionek "Klasyka" z białego złota', "Minimalistyczny pierścionek z białego złota próby 585 z rzędem cyrkonii."),
+        "en": ('"Classic" white gold ring', "A minimalist 585 white gold ring with a row of cubic zirconia."),
+    },
+    "persten-tonkyi-bile-zoloto": {
+        "pl": ("Cienki pierścionek z białego złota", "Cienki gładki pierścionek z białego złota próby 585, waga do 1 g."),
+        "en": ("Thin white gold ring", "A thin smooth 585 white gold ring weighing under 1 g."),
+    },
+    "persten-solitaire-diamant": {
+        "pl": ('Pierścionek "Solo" z diamentem', "Żółte złoto próby 750, jeden centralny diament w szlifie brylantowym."),
+        "en": ('"Solo" diamond ring', "750 yellow gold with a single round brilliant-cut centre diamond."),
+    },
+    "persten-rozove-zoloto-ametyst": {
+        "pl": ("Pierścionek z różowego złota z ametystem", "Różowe złoto próby 585, owalny ametyst."),
+        "en": ("Rose gold ring with amethyst", "585 rose gold with an oval amethyst."),
+    },
+    "obruchka-klasychna-bicolor": {
+        "pl": ("Obrączka klasyczna dwukolorowa", "Obrączka z żółtego i białego złota próby 585, prosty profil."),
+        "en": ("Classic bicolor wedding band", "585 yellow and white gold wedding band with a straight profile."),
+    },
+    "obruchka-dorizhka-brilianty": {
+        "pl": ("Obrączka z rzędem diamentów", "Białe złoto próby 750, rząd drobnych diamentów dookoła."),
+        "en": ("Diamond eternity wedding band", "750 white gold with a row of small diamonds all around."),
+    },
+    "serezhky-pusety-sribni": {
+        "pl": ("Kolczyki sztyfty srebrne", "Srebro próby 925, minimalistyczne sztyfty z cyrkonią."),
+        "en": ("Silver stud earrings", "925 silver minimalist studs with cubic zirconia."),
+    },
+    "serezhky-visyachi-sapfir": {
+        "pl": ("Kolczyki wiszące z szafirem", "Białe złoto próby 585, wiszące kolczyki z niebieskim szafirem."),
+        "en": ("Sapphire drop earrings", "585 white gold drop earrings with a blue sapphire."),
+    },
+    "serezhky-perlyny-klasyka": {
+        "pl": ("Kolczyki z perłami klasyczne", "Żółte złoto próby 375, okrągłe perły hodowlane."),
+        "en": ("Classic pearl earrings", "375 yellow gold with round cultured pearls."),
+    },
+    "kolie-tonke-zolote": {
+        "pl": ("Naszyjnik cienki złoty", "Żółte złoto próby 585, splot kotwica, zapięcie karabińczyk."),
+        "en": ("Fine gold necklace", "585 yellow gold, anchor link, lobster clasp."),
+    },
+    "kolie-sribne-z-topazom": {
+        "pl": ("Naszyjnik srebrny z topazem", "Srebro próby 925, naszyjnik z niebieskim topazem pośrodku."),
+        "en": ("Silver necklace with topaz", "925 silver necklace with a blue topaz centrepiece."),
+    },
+    "pidviska-serce-zoloto": {
+        "pl": ('Zawieszka "Serce" złota', "Różowe złoto próby 585, gładka zawieszka w kształcie serca."),
+        "en": ('"Heart" gold pendant', "585 rose gold smooth heart-shaped pendant."),
+    },
+    "pidviska-smaragd-bile-zoloto": {
+        "pl": ("Zawieszka ze szmaragdem", 'Białe złoto próby 750, zawieszka z naturalnym szmaragdem w szlifie "kropla".'),
+        "en": ("Emerald pendant", "750 white gold pendant with a natural pear-cut emerald."),
+    },
+    "pidviska-fianit-sribna": {
+        "pl": ("Zawieszka srebrna z cyrkonią", "Srebro próby 925, niewielka zawieszka do codziennego noszenia."),
+        "en": ("Silver pendant with cubic zirconia", "925 silver compact pendant for everyday wear."),
+    },
+    "braslet-lantsyuzhok-zoloto": {
+        "pl": ("Bransoletka łańcuszkowa złota", "Żółte złoto próby 585, splot pancerka, regulowana długość."),
+        "en": ("Gold chain bracelet", "585 yellow gold curb chain with adjustable length."),
+    },
+    "braslet-zhorstkyi-sribnyi": {
+        "pl": ("Bransoletka sztywna srebrna", "Srebro próby 925, sztywna bransoletka typu mankiet."),
+        "en": ("Silver cuff bracelet", "925 silver rigid cuff bracelet."),
+    },
+    "braslet-rubiny-rozove-zoloto": {
+        "pl": ("Bransoletka z rubinami", "Różowe złoto próby 750, bransoletka z rzędem drobnych rubinów."),
+        "en": ("Ruby bracelet", "750 rose gold bracelet with a row of small rubies."),
+    },
+    "lantsyuzhok-yakirne-pletinnya": {
+        "pl": ("Łańcuszek splot kotwica", "Żółte złoto próby 585, klasyczny splot kotwica."),
+        "en": ("Anchor link chain", "585 yellow gold classic anchor link chain."),
+    },
+    "lantsyuzhok-snake-bile-zoloto": {
+        "pl": ("Łańcuszek snake z białego złota", "Białe złoto próby 585, splot snake, cienki profil."),
+        "en": ("White gold snake chain", "585 white gold snake chain with a slim profile."),
+    },
+    "lantsyuzhok-sribny-panceme": {
+        "pl": ("Łańcuszek srebrny pancerka", "Srebro próby 925, gęsty splot pancerka."),
+        "en": ("Silver curb chain", "925 silver chain with a dense curb link."),
+    },
+    "nabir-pusety-pidviska-perlyny": {
+        "pl": ("Komplet z perłami", "Żółte złoto próby 375: kolczyki sztyfty i zawieszka z perłami w komplecie."),
+        "en": ("Pearl set", "375 yellow gold: stud earrings and a pendant with pearls."),
+    },
+    "nabir-sapfiry-bile-zoloto": {
+        "pl": ("Komplet z szafirami", "Białe złoto próby 585: kolczyki i naszyjnik z niebieskimi szafirami."),
+        "en": ("Sapphire set", "585 white gold: earrings and a necklace with blue sapphires."),
+    },
+    "nabir-sribny-fianity": {
+        "pl": ("Srebrny komplet z cyrkoniami", "Srebro próby 925: kolczyki i zawieszka z cyrkoniami, wersja budżetowa."),
+        "en": ("Silver set with cubic zirconia", "925 silver: earrings and a pendant with cubic zirconia, a budget option."),
+    },
+}
+
 SHIPPING_METHODS = [
     (DeliveryProvider.NovaPoshta, "Нова Пошта — відділення", Decimal("70.00"), Decimal("1500.00"), 1, 2),
     (DeliveryProvider.UkrPoshta, "Укрпошта", Decimal("50.00"), Decimal("1500.00"), 2, 5),
@@ -244,7 +412,6 @@ def seed_gemstones(session) -> dict[str, Gemstone]:
 
 def seed_categories(session) -> dict[str, Category]:
     by_slug: dict[str, Category] = {}
-    # First pass: create categories without parent_id (sets it after, slugs are unique keys).
     for slug, _parent_slug, name, description in CATEGORIES:
         category = Category(slug=slug)
         session.add(category)
@@ -254,14 +421,16 @@ def seed_categories(session) -> dict[str, Category]:
     for slug, parent_slug, name, description in CATEGORIES:
         if parent_slug:
             by_slug[slug].parent_id = by_slug[parent_slug].id
-        session.add(
-            CategoryTranslation(
-                category_id=by_slug[slug].id,
-                locale="uk",
-                name=name,
-                description=description,
+        translations = {"uk": (name, description), **CATEGORY_TRANSLATIONS[slug]}
+        for locale, (tr_name, tr_description) in translations.items():
+            session.add(
+                CategoryTranslation(
+                    category_id=by_slug[slug].id,
+                    locale=locale,
+                    name=tr_name,
+                    description=tr_description,
+                )
             )
-        )
     session.flush()
     return by_slug
 
@@ -272,25 +441,31 @@ def seed_products(session, categories: dict[str, Category], gemstones: dict[str,
             category_id=categories[category_slug].id,
             slug=slug,
             is_featured=is_featured,
+            published_at=datetime.now(timezone.utc),
         )
         session.add(product)
         session.flush()
 
-        session.add(
-            ProductTranslation(
-                product_id=product.id,
-                locale="uk",
-                name=name,
-                description=description,
-                meta_title=name,
-                meta_description=description[:320],
+        translations = {"uk": (name, description), **PRODUCT_TRANSLATIONS[slug]}
+        for locale, (tr_name, tr_description) in translations.items():
+            session.add(
+                ProductTranslation(
+                    product_id=product.id,
+                    locale=locale,
+                    name=tr_name,
+                    description=tr_description,
+                    meta_title=tr_name,
+                    meta_description=tr_description[:320],
+                )
             )
-        )
+        storage_key, width, height = seed_image(category_slug, slug, variants[0][5])  # [5] = metal_color
         session.add(
             ProductImage(
                 product_id=product.id,
-                storage_key=f"seed/{category_slug}/{slug}-1.jpg",
+                storage_key=storage_key,
                 alt_text=name,
+                width=width,
+                height=height,
                 is_primary=True,
                 sort_order=0,
             )

@@ -63,6 +63,9 @@ def create_user_profile(db: Session, user_id: int, first_name: str | None, last_
     db.flush()
     return profile
 
+def get_profile(db: Session, user_id: int) -> UserProfile | None:
+    return db.scalar(select(UserProfile).where(UserProfile.user_id == user_id))
+
 def get_by_phone_number(db: Session, phone_number: str) -> UserProfile | None:
     stmt = select(UserProfile).where(UserProfile.phone_number == phone_number)
     return db.scalar(stmt)

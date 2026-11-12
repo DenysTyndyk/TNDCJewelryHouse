@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import {Link} from "react-router-dom"
 import '../styles/site.css';
 import { useCart } from '../context';
@@ -7,12 +6,9 @@ import type { Item,CartContextValue} from '../types';
 import { useLanguage } from '../context/languageContext';
 function Cart() {
   const { t } = useLanguage();
-  const [subtotal, setSubtotal] = useState(0);
   const {cartItems, cartCount} = useCart() as CartContextValue;
-
-  useEffect(() => {
-    setSubtotal(cartItems.reduce((acc: number, item: Item) => acc + item.price, 0))
-  }, [cartItems])
+  const subtotal = cartItems.reduce((acc: number, item: Item) => acc + item.price * (item.quantity ?? 1), 0);
+  const currency = cartItems[0]?.currency ?? 'UAH';
 
     return (
         <main>
@@ -33,8 +29,8 @@ function Cart() {
 
           <aside className="cart-summary">
             <h2>{t('cart.orderSummary')}</h2>
-            <div className="cart-row"><span>{t('cart.subtotal')}</span><span>PLN {subtotal}</span></div>
-            <div className="cart-row cart-row--total"><span>{t('cart.total')}</span><span>PLN {subtotal}</span></div>
+            <div className="cart-row"><span>{t('cart.subtotal')}</span><span>{currency} {subtotal}</span></div>
+            <div className="cart-row cart-row--total"><span>{t('cart.total')}</span><span>{currency} {subtotal}</span></div>
             <button className="btn btn--primary" type="button">{t('cart.checkout')}</button>
             <Link className="btn btn--ghost" to="/categories" style={{marginTop: '0.75rem', width: '100%'}}>{t('cart.continueShopping')}</Link>
           </aside>

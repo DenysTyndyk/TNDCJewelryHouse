@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.core.config import settings
 from app.dependencies import get_current_user, get_db
-from app.schemas.auth import LoginRequest, RegisterRequest, TokenResponse, UserResponse, MessageResponse, ForgotPasswordRequest, ResetPasswordRequest
+from app.schemas.auth import LoginRequest, RegisterRequest, TokenResponse, UserResponse, MessageResponse, ForgotPasswordRequest, ResetPasswordRequest, PreferencesUpdate
 from app.services import auth_service
 from app.services.auth_service import AuthError
 from app.core.limiter import limiter
@@ -62,8 +62,12 @@ def logout(request: Request, response: Response, refresh_token: str | None = Coo
     response.delete_cookie(REFRESH_COOKIE_NAME, path="/auth")
 
 @router.get("/me", response_model=UserResponse)
-def me(user = Depends(get_current_user)):
-    return user
+def me(user = Depends(get_current_user), db: Session = Depends(get_db)):
+    return auth_service.get_me(db, user)
+
+@router.patch("/me/preferences", response_model=UserResponse)
+def update_preferences(payload: PreferencesUpdate, user = Depends(get_current_user), db: Session = Depends(get_db)):
+    return auth_service.set_preferred_language(db, user, payload.preferred_language)
 
 @router.get("/verify-email", response_model=MessageResponse)
 @limiter.limit("10/minute")
