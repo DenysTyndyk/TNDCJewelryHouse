@@ -11,6 +11,7 @@ from app.core.security import (
     hash_password,
     hash_refresh_token,
     verify_password,
+    verify_legacy_password,
 )
 from app.repositories import user_repository as repo
 from app.schemas.auth import UserResponse
@@ -46,16 +47,19 @@ def register(db: Session, email: str, password: str, first_name: str | None, las
 def login(db: Session, email: str, password: str) -> tuple[str, str,int]:
    user = repo.get_by_email(db,email)
    if not user:
-    verify_password(password, DUMMY_PASSWORD_HASH)  
+    verify_password(password, DUMMY_PASSWORD_HASH)
+    verify_legacy_password(password, DUMMY_PASSWORD_HASH)
     raise AuthError("Invalid email or password")
    if user.status in (UserStatus.Suspended, UserStatus.Deactivated):
     raise AuthError("Account is not available")
    if repo.is_locked(user):
     raise AuthError("Account is locked due to too many failed login attempts. Please try again later.")
    if not verify_password(password, user.password_hash):
-    repo.register_failed_login(db, user)
-    db.commit()
-    raise AuthError("Invalid email or password")
+        if not verify_legacy_password(password, user.password_hash):
+            repo.register_failed_login(db, user)
+            db.commit()
+            raise AuthError("Invalid email or password")
+        repo.update_password(db, user, hash_password(password)) 
    repo.register_successful_login(db, user)
    access_token = create_access_token(user.id,user.role.value)
    refresh_token = _issue_refresh_token(db, user.id)

@@ -4,13 +4,14 @@ TNDC Jewelry House — online jewelry store with UX personalization algorithms (
 - **Backend**: Python, FastAPI, SQLAlchemy 2.0, Alembic, in `api/`
 - **Database**: PostgreSQL 16 + pgvector (Docker Compose). The browser never talks to the database; FastAPI is the only DB client.
 - **Environment**: Docker, Docker Compose
-- **Markets**: Ukraine (primary: UAH, `uk`) and Poland (PLN, `pl`); third language `en`. Market logic goes through the `markets` table, never `if country == ...`.
-- **Key Integrations**: NBU/NBP exchange rates, payment sandboxes (LiqPay/Monobank for UA, Przelewy24/PayU for PL), Nova Poshta / InPost, multilingual-e5-small embeddings (384 dims)
-- **Decisions**: `docs/architecture.md` (D1–D5), `docs/schema.dbml` (schema source of truth)
+- **Market**: single market — Ukraine (D3). Prices only in UAH from `variant_prices`, no exchange-rate conversion (D6); there are no `markets` / `exchange_rates` tables.
+- **Languages**: UI and catalog content in `uk` (primary), `pl`, `en` (D8) via `product_translations` / `category_translations`. Language is UI/content only, not a market.
+- **Key Integrations**: payment sandboxes LiqPay / Monobank, Nova Poshta delivery, multilingual-e5-small embeddings (384 dims)
+- **Decisions**: `docs/plans/roadmap.uk.md` (D1–D8, canonical), `docs/architecture.md`, `docs/schema.dbml` (schema source of truth)
 
 ## Architecture & Design Guidelines
 - **API Style**: RESTful endpoints returning consistent JSON structures.
-- **Authentication**: Own implementation in FastAPI (not Supabase Auth): bcrypt password hashing, short-lived access JWT in an Authorization header, rotating refresh token in an httpOnly cookie.
+- **Authentication**: Own implementation in FastAPI (not Supabase Auth, D1): argon2id password hashing, access JWT (15 min) in an Authorization header, rotating refresh token in an httpOnly cookie, account lockout.
 - **API Documentation**: Interactive OpenAPI / Swagger (`/docs`) must stay updated with every new endpoint.
 - **Database Migrations**: Every schema update must include appropriate migration scripts.
 - **Performance Constraint**: Database queries and standard API reads must complete within 500ms.
@@ -25,7 +26,7 @@ TNDC Jewelry House — online jewelry store with UX personalization algorithms (
 
 
 ### 3. Security
-- Never store raw passwords. Always hash credentials using `bcrypt` (cost 12) or an equivalent strong cryptographic standard.
+- Never store raw passwords. Always hash credentials with argon2id (`argon2-cffi`, D1).
 - Never store card data (PCI-DSS): payments go through provider redirect/SDK only, sandbox only.
 - Behaviour tracking requires user consent first (RODO).
 

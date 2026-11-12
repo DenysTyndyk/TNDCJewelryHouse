@@ -96,9 +96,9 @@
     "semantic_hash": ""
   },
   "api/scripts/seed.py": {
-    "mtime": 1794427900.554883,
-    "seen": 1794433596.343491,
-    "ast_hash": "143a4c7217610c937eef9ea0b87924df",
+    "mtime": 1794515403.2609587,
+    "seen": 1794515855.987177,
+    "ast_hash": "482be8b2ca5cfb3e9eba6718ca892bed",
     "semantic_hash": ""
   },
   "docker-compose.yml": {
@@ -126,21 +126,21 @@
     "semantic_hash": ""
   },
   "web/src/components/ItemCard/CartLine.tsx": {
-    "mtime": 1794063924.579825,
-    "seen": 1794243954.068682,
-    "ast_hash": "8e2b23cba01df663f043a25cc7292430",
+    "mtime": 1794507591.8437588,
+    "seen": 1794508670.374528,
+    "ast_hash": "e7c9067d0c7eb77fc1ce402a39186f3a",
     "semantic_hash": ""
   },
   "web/src/components/ItemCard/ImageSliderOnHover.jsx": {
-    "mtime": 1785082685.9215822,
-    "seen": 1793455682.7333891,
-    "ast_hash": "7113f17d1fdd3ae9f73240e23a3af3dc",
+    "mtime": 1794433989.3909101,
+    "seen": 1794508670.3745291,
+    "ast_hash": "69854fc0b3687e008aeee1d2d80eba4a",
     "semantic_hash": ""
   },
   "web/src/components/ItemCard/ItemCard.tsx": {
-    "mtime": 1794412064.2254546,
-    "seen": 1794427349.315414,
-    "ast_hash": "105418b304dcce40be186bc0a7600bc9",
+    "mtime": 1794507755.153493,
+    "seen": 1794508670.37453,
+    "ast_hash": "84818316aebe75d1a8ba44288f7a0403",
     "semantic_hash": ""
   },
   "web/src/components/footer.tsx": {
@@ -162,9 +162,9 @@
     "semantic_hash": ""
   },
   "web/src/context/cartContext.tsx": {
-    "mtime": 1792605198.3726358,
-    "seen": 1793455682.733394,
-    "ast_hash": "fd48a7524e10398e7dbc6fd6322a7291",
+    "mtime": 1794507552.2781675,
+    "seen": 1794508670.374534,
+    "ast_hash": "6d33a3cf18881d6fec59eb840feba8c0",
     "semantic_hash": ""
   },
   "web/src/context/index.ts": {
@@ -198,9 +198,9 @@
     "semantic_hash": ""
   },
   "web/src/pages/Cart.tsx": {
-    "mtime": 1794063699.6003742,
-    "seen": 1794243954.068696,
-    "ast_hash": "0096d454ce12541ac24c9a34e81dfcd6",
+    "mtime": 1794507575.4005125,
+    "seen": 1794508670.374541,
+    "ast_hash": "ff226b7b6c8735d1a5d519563e0d43e4",
     "semantic_hash": ""
   },
   "web/src/pages/Categories.tsx": {
@@ -240,9 +240,9 @@
     "semantic_hash": ""
   },
   "web/src/types/cartContextValue.ts": {
-    "mtime": 1791393561.6540153,
-    "seen": 1793455682.7334049,
-    "ast_hash": "a810d96185044226b4c0d995ccb36905",
+    "mtime": 1794507542.1092095,
+    "seen": 1794508670.374552,
+    "ast_hash": "d209962766f91dfcc9b7dc658625b735",
     "semantic_hash": ""
   },
   "web/src/types/index.ts": {
@@ -252,9 +252,9 @@
     "semantic_hash": ""
   },
   "web/src/types/item.ts": {
-    "mtime": 1794411794.7063935,
-    "seen": 1794427349.3154418,
-    "ast_hash": "e558d86767ee1721221232eb4618fc3a",
+    "mtime": 1794507535.9556255,
+    "seen": 1794508670.3745549,
+    "ast_hash": "82f30bab15ed630c75a990e2332c989a",
     "semantic_hash": ""
   },
   "web/tsconfig.app.json": {
@@ -282,9 +282,9 @@
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1793456248.2621222,
-    "seen": 1793697283.7525492,
-    "ast_hash": "428f8351fd21e4e73fe0e0621399755b",
+    "mtime": 1794512924.8454924,
+    "seen": 1794515855.98723,
+    "ast_hash": "8420e8768163b20413caf8bcd66b6ea8",
     "semantic_hash": ""
   },
   "README.md": {
@@ -426,15 +426,15 @@
     "semantic_hash": ""
   },
   "api/app/core/config.py": {
-    "mtime": 1794425012.372504,
-    "seen": 1794427349.3153658,
-    "ast_hash": "37e422d21a80409b41b944c0c64452ac",
+    "mtime": 1794514021.6897712,
+    "seen": 1794515855.9871502,
+    "ast_hash": "30134329eca828a80ae71d8c6fffaa60",
     "semantic_hash": ""
   },
   "api/app/core/security.py": {
-    "mtime": 1793732627.2762213,
-    "seen": 1794243954.06865,
-    "ast_hash": "4aea546dfa5900806299a1c072206f25",
+    "mtime": 1794515118.8145626,
+    "seen": 1794515855.9871519,
+    "ast_hash": "23b89bbc9a5c627e45f4a8e410caa0a0",
     "semantic_hash": ""
   },
   "api/app/dependencies.py": {
@@ -468,9 +468,9 @@
     "semantic_hash": ""
   },
   "api/app/services/auth_service.py": {
-    "mtime": 1794426487.614819,
-    "seen": 1794427349.315392,
-    "ast_hash": "234e073f7338e70902f9e17ad41b4894",
+    "mtime": 1794515279.6797063,
+    "seen": 1794515855.9871738,
+    "ast_hash": "714d60bfbee7a526d583099077471b00",
     "semantic_hash": ""
   },
   "api/app/core/limiter.py": {
@@ -558,9 +558,9 @@
     "semantic_hash": ""
   },
   "web/src/i18n/translations.json": {
-    "mtime": 1794427944.776539,
-    "seen": 1794433596.343519,
-    "ast_hash": "4bac97b50236f82cb0a11d0e7200a67a",
+    "mtime": 1794507632.4191124,
+    "seen": 1794508670.374537,
+    "ast_hash": "6759b4abc78193deaf6acd893e547db0",
     "semantic_hash": ""
   },
   "web/src/pages/ForgotPassword.tsx": {
@@ -642,9 +642,9 @@
     "semantic_hash": ""
   },
   "web/src/pages/Product.tsx": {
-    "mtime": 1794421080.4026837,
-    "seen": 1794427349.315433,
-    "ast_hash": "cd48a293ca75f1dad2adbc16d8c0b70d",
+    "mtime": 1794507609.863204,
+    "seen": 1794508670.374547,
+    "ast_hash": "ac193497b530bb5f1b0a4c05b9259f3e",
     "semantic_hash": ""
   },
   "web/src/types/catalog.ts": {
@@ -659,10 +659,478 @@
     "ast_hash": "c8391f6288e2e8f23560bd41aa896087",
     "semantic_hash": ""
   },
-  "docs/catalog.md": {
-    "mtime": 1794428099.9115427,
-    "seen": 1794433596.3435478,
-    "ast_hash": "11907ebd3255cb8cf7a577c92ebcdccd",
+  "api/scripts/import_products.py": {
+    "mtime": 1794507636.6287146,
+    "seen": 1794508670.374507,
+    "ast_hash": "8b0f9813d2c3dfdda988d6c4098e2397",
+    "semantic_hash": ""
+  },
+  "api/tests/test_import_products.py": {
+    "mtime": 1794507044.8433065,
+    "seen": 1794508670.374518,
+    "ast_hash": "8672988d0813df0c839e13c481fad4b0",
+    "semantic_hash": ""
+  },
+  "catalog_import/serezhky-heometriia/product.json": {
+    "mtime": 1794507062.638633,
+    "seen": 1794508670.37452,
+    "ast_hash": "d3f3fd3f754dba2691569647532a658c",
+    "semantic_hash": ""
+  },
+  "catalog_import/serezhky-topaz-blakytnyi/product.json": {
+    "mtime": 1794507059.6500678,
+    "seen": 1794508670.374521,
+    "ast_hash": "01da0200c20b721a28eca21748e722b6",
+    "semantic_hash": ""
+  },
+  "api/media/seed/bracelets/braslet-lantsyuzhok-zoloto-1600.webp": {
+    "mtime": 1794513643.5626075,
+    "seen": 1794515855.987242,
+    "ast_hash": "fc35c0ee1a718d5dd0691a24f715a7ce",
+    "semantic_hash": ""
+  },
+  "api/media/seed/bracelets/braslet-lantsyuzhok-zoloto-400.webp": {
+    "mtime": 1794513643.5623984,
+    "seen": 1794515855.987243,
+    "ast_hash": "677655f4ba840602fdff3a2231361fc7",
+    "semantic_hash": ""
+  },
+  "api/media/seed/bracelets/braslet-lantsyuzhok-zoloto-800.webp": {
+    "mtime": 1794513643.5625226,
+    "seen": 1794515855.9872441,
+    "ast_hash": "505601cc991440602cc73e37320e548d",
+    "semantic_hash": ""
+  },
+  "api/media/seed/bracelets/braslet-rubiny-rozove-zoloto-1600.webp": {
+    "mtime": 1794513643.8253853,
+    "seen": 1794515855.987245,
+    "ast_hash": "8fda556826526c87b3457620fca49fca",
+    "semantic_hash": ""
+  },
+  "api/media/seed/bracelets/braslet-rubiny-rozove-zoloto-400.webp": {
+    "mtime": 1794513643.8251944,
+    "seen": 1794515855.987246,
+    "ast_hash": "1c2320459d16a7bb85ede9118b9f6db4",
+    "semantic_hash": ""
+  },
+  "api/media/seed/bracelets/braslet-rubiny-rozove-zoloto-800.webp": {
+    "mtime": 1794513643.8253136,
+    "seen": 1794515855.987247,
+    "ast_hash": "a759207e7f67bf4b92dea344d0b8efc1",
+    "semantic_hash": ""
+  },
+  "api/media/seed/bracelets/braslet-zhorstkyi-sribnyi-1600.webp": {
+    "mtime": 1794513643.695671,
+    "seen": 1794515855.987247,
+    "ast_hash": "0c5c52aeadb0b8324a39888dc47861e2",
+    "semantic_hash": ""
+  },
+  "api/media/seed/bracelets/braslet-zhorstkyi-sribnyi-400.webp": {
+    "mtime": 1794513643.6954687,
+    "seen": 1794515855.9872482,
+    "ast_hash": "3e69bdfa80e305d9aeda20b8f0989827",
+    "semantic_hash": ""
+  },
+  "api/media/seed/bracelets/braslet-zhorstkyi-sribnyi-800.webp": {
+    "mtime": 1794513643.6955936,
+    "seen": 1794515855.987249,
+    "ast_hash": "f8409bda5cb5792ac4fd5a0c36366224",
+    "semantic_hash": ""
+  },
+  "api/media/seed/chains/lantsyuzhok-snake-bile-zoloto-1600.webp": {
+    "mtime": 1794513644.0893092,
+    "seen": 1794515855.9872499,
+    "ast_hash": "0c5c52aeadb0b8324a39888dc47861e2",
+    "semantic_hash": ""
+  },
+  "api/media/seed/chains/lantsyuzhok-snake-bile-zoloto-400.webp": {
+    "mtime": 1794513644.0890863,
+    "seen": 1794515855.987251,
+    "ast_hash": "3e69bdfa80e305d9aeda20b8f0989827",
+    "semantic_hash": ""
+  },
+  "api/media/seed/chains/lantsyuzhok-snake-bile-zoloto-800.webp": {
+    "mtime": 1794513644.0892231,
+    "seen": 1794515855.987252,
+    "ast_hash": "f8409bda5cb5792ac4fd5a0c36366224",
+    "semantic_hash": ""
+  },
+  "api/media/seed/chains/lantsyuzhok-sribny-panceme-1600.webp": {
+    "mtime": 1794513644.2181978,
+    "seen": 1794515855.987253,
+    "ast_hash": "0c5c52aeadb0b8324a39888dc47861e2",
+    "semantic_hash": ""
+  },
+  "api/media/seed/chains/lantsyuzhok-sribny-panceme-400.webp": {
+    "mtime": 1794513644.2180169,
+    "seen": 1794515855.987254,
+    "ast_hash": "3e69bdfa80e305d9aeda20b8f0989827",
+    "semantic_hash": ""
+  },
+  "api/media/seed/chains/lantsyuzhok-sribny-panceme-800.webp": {
+    "mtime": 1794513644.2181249,
+    "seen": 1794515855.987255,
+    "ast_hash": "f8409bda5cb5792ac4fd5a0c36366224",
+    "semantic_hash": ""
+  },
+  "api/media/seed/chains/lantsyuzhok-yakirne-pletinnya-1600.webp": {
+    "mtime": 1794513643.9579659,
+    "seen": 1794515855.987256,
+    "ast_hash": "fc35c0ee1a718d5dd0691a24f715a7ce",
+    "semantic_hash": ""
+  },
+  "api/media/seed/chains/lantsyuzhok-yakirne-pletinnya-400.webp": {
+    "mtime": 1794513643.9571629,
+    "seen": 1794515855.987256,
+    "ast_hash": "677655f4ba840602fdff3a2231361fc7",
+    "semantic_hash": ""
+  },
+  "api/media/seed/chains/lantsyuzhok-yakirne-pletinnya-800.webp": {
+    "mtime": 1794513643.9578824,
+    "seen": 1794515855.987257,
+    "ast_hash": "505601cc991440602cc73e37320e548d",
+    "semantic_hash": ""
+  },
+  "api/media/seed/earrings/serezhky-perlyny-klasyka-1600.webp": {
+    "mtime": 1794513642.7678552,
+    "seen": 1794515855.9872582,
+    "ast_hash": "fc35c0ee1a718d5dd0691a24f715a7ce",
+    "semantic_hash": ""
+  },
+  "api/media/seed/earrings/serezhky-perlyny-klasyka-400.webp": {
+    "mtime": 1794513642.7675204,
+    "seen": 1794515855.987259,
+    "ast_hash": "677655f4ba840602fdff3a2231361fc7",
+    "semantic_hash": ""
+  },
+  "api/media/seed/earrings/serezhky-perlyny-klasyka-800.webp": {
+    "mtime": 1794513642.7676268,
+    "seen": 1794515855.987259,
+    "ast_hash": "505601cc991440602cc73e37320e548d",
+    "semantic_hash": ""
+  },
+  "api/media/seed/earrings/serezhky-pusety-sribni-1600.webp": {
+    "mtime": 1794513642.501905,
+    "seen": 1794515855.9872599,
+    "ast_hash": "0c5c52aeadb0b8324a39888dc47861e2",
+    "semantic_hash": ""
+  },
+  "api/media/seed/earrings/serezhky-pusety-sribni-400.webp": {
+    "mtime": 1794513642.5016632,
+    "seen": 1794515855.9872608,
+    "ast_hash": "3e69bdfa80e305d9aeda20b8f0989827",
+    "semantic_hash": ""
+  },
+  "api/media/seed/earrings/serezhky-pusety-sribni-800.webp": {
+    "mtime": 1794513642.501813,
+    "seen": 1794515855.987262,
+    "ast_hash": "f8409bda5cb5792ac4fd5a0c36366224",
+    "semantic_hash": ""
+  },
+  "api/media/seed/earrings/serezhky-visyachi-sapfir-1600.webp": {
+    "mtime": 1794513642.6341362,
+    "seen": 1794515855.987263,
+    "ast_hash": "0c5c52aeadb0b8324a39888dc47861e2",
+    "semantic_hash": ""
+  },
+  "api/media/seed/earrings/serezhky-visyachi-sapfir-400.webp": {
+    "mtime": 1794513642.633934,
+    "seen": 1794515855.987263,
+    "ast_hash": "3e69bdfa80e305d9aeda20b8f0989827",
+    "semantic_hash": ""
+  },
+  "api/media/seed/earrings/serezhky-visyachi-sapfir-800.webp": {
+    "mtime": 1794513642.6340554,
+    "seen": 1794515855.987264,
+    "ast_hash": "f8409bda5cb5792ac4fd5a0c36366224",
+    "semantic_hash": ""
+  },
+  "api/media/seed/necklaces/kolie-sribne-z-topazom-1600.webp": {
+    "mtime": 1794513643.037755,
+    "seen": 1794515855.987265,
+    "ast_hash": "0c5c52aeadb0b8324a39888dc47861e2",
+    "semantic_hash": ""
+  },
+  "api/media/seed/necklaces/kolie-sribne-z-topazom-400.webp": {
+    "mtime": 1794513643.0375197,
+    "seen": 1794515855.987266,
+    "ast_hash": "3e69bdfa80e305d9aeda20b8f0989827",
+    "semantic_hash": ""
+  },
+  "api/media/seed/necklaces/kolie-sribne-z-topazom-800.webp": {
+    "mtime": 1794513643.0376685,
+    "seen": 1794515855.987267,
+    "ast_hash": "f8409bda5cb5792ac4fd5a0c36366224",
+    "semantic_hash": ""
+  },
+  "api/media/seed/necklaces/kolie-tonke-zolote-1600.webp": {
+    "mtime": 1794513642.8992798,
+    "seen": 1794515855.987267,
+    "ast_hash": "fc35c0ee1a718d5dd0691a24f715a7ce",
+    "semantic_hash": ""
+  },
+  "api/media/seed/necklaces/kolie-tonke-zolote-400.webp": {
+    "mtime": 1794513642.899078,
+    "seen": 1794515855.9872682,
+    "ast_hash": "677655f4ba840602fdff3a2231361fc7",
+    "semantic_hash": ""
+  },
+  "api/media/seed/necklaces/kolie-tonke-zolote-800.webp": {
+    "mtime": 1794513642.8992019,
+    "seen": 1794515855.9872692,
+    "ast_hash": "505601cc991440602cc73e37320e548d",
+    "semantic_hash": ""
+  },
+  "api/media/seed/pendants/pidviska-fianit-sribna-1600.webp": {
+    "mtime": 1794513643.4327743,
+    "seen": 1794515855.9872699,
+    "ast_hash": "0c5c52aeadb0b8324a39888dc47861e2",
+    "semantic_hash": ""
+  },
+  "api/media/seed/pendants/pidviska-fianit-sribna-400.webp": {
+    "mtime": 1794513643.432572,
+    "seen": 1794515855.9872708,
+    "ast_hash": "3e69bdfa80e305d9aeda20b8f0989827",
+    "semantic_hash": ""
+  },
+  "api/media/seed/pendants/pidviska-fianit-sribna-800.webp": {
+    "mtime": 1794513643.4326894,
+    "seen": 1794515855.9872708,
+    "ast_hash": "f8409bda5cb5792ac4fd5a0c36366224",
+    "semantic_hash": ""
+  },
+  "api/media/seed/pendants/pidviska-serce-zoloto-1600.webp": {
+    "mtime": 1794513643.170753,
+    "seen": 1794515855.987272,
+    "ast_hash": "8fda556826526c87b3457620fca49fca",
+    "semantic_hash": ""
+  },
+  "api/media/seed/pendants/pidviska-serce-zoloto-400.webp": {
+    "mtime": 1794513643.1705508,
+    "seen": 1794515855.987273,
+    "ast_hash": "1c2320459d16a7bb85ede9118b9f6db4",
+    "semantic_hash": ""
+  },
+  "api/media/seed/pendants/pidviska-serce-zoloto-800.webp": {
+    "mtime": 1794513643.1706712,
+    "seen": 1794515855.987274,
+    "ast_hash": "a759207e7f67bf4b92dea344d0b8efc1",
+    "semantic_hash": ""
+  },
+  "api/media/seed/pendants/pidviska-smaragd-bile-zoloto-1600.webp": {
+    "mtime": 1794513643.3012435,
+    "seen": 1794515855.987274,
+    "ast_hash": "0c5c52aeadb0b8324a39888dc47861e2",
+    "semantic_hash": ""
+  },
+  "api/media/seed/pendants/pidviska-smaragd-bile-zoloto-400.webp": {
+    "mtime": 1794513643.3010263,
+    "seen": 1794515855.9872751,
+    "ast_hash": "3e69bdfa80e305d9aeda20b8f0989827",
+    "semantic_hash": ""
+  },
+  "api/media/seed/pendants/pidviska-smaragd-bile-zoloto-800.webp": {
+    "mtime": 1794513643.3011658,
+    "seen": 1794515855.987276,
+    "ast_hash": "f8409bda5cb5792ac4fd5a0c36366224",
+    "semantic_hash": ""
+  },
+  "api/media/seed/rings/persten-klasyka-bile-zoloto-1600.webp": {
+    "mtime": 1794513641.6821494,
+    "seen": 1794515855.987277,
+    "ast_hash": "0c5c52aeadb0b8324a39888dc47861e2",
+    "semantic_hash": ""
+  },
+  "api/media/seed/rings/persten-klasyka-bile-zoloto-400.webp": {
+    "mtime": 1794513641.6814518,
+    "seen": 1794515855.987278,
+    "ast_hash": "3e69bdfa80e305d9aeda20b8f0989827",
+    "semantic_hash": ""
+  },
+  "api/media/seed/rings/persten-klasyka-bile-zoloto-800.webp": {
+    "mtime": 1794513641.6815686,
+    "seen": 1794515855.9872792,
+    "ast_hash": "f8409bda5cb5792ac4fd5a0c36366224",
+    "semantic_hash": ""
+  },
+  "api/media/seed/rings/persten-rozove-zoloto-ametyst-1600.webp": {
+    "mtime": 1794513642.0981538,
+    "seen": 1794515855.9872792,
+    "ast_hash": "8fda556826526c87b3457620fca49fca",
+    "semantic_hash": ""
+  },
+  "api/media/seed/rings/persten-rozove-zoloto-ametyst-400.webp": {
+    "mtime": 1794513642.0979304,
+    "seen": 1794515855.98728,
+    "ast_hash": "1c2320459d16a7bb85ede9118b9f6db4",
+    "semantic_hash": ""
+  },
+  "api/media/seed/rings/persten-rozove-zoloto-ametyst-800.webp": {
+    "mtime": 1794513642.0980651,
+    "seen": 1794515855.9872808,
+    "ast_hash": "a759207e7f67bf4b92dea344d0b8efc1",
+    "semantic_hash": ""
+  },
+  "api/media/seed/rings/persten-solitaire-diamant-1600.webp": {
+    "mtime": 1794513641.9629104,
+    "seen": 1794515855.987282,
+    "ast_hash": "fc35c0ee1a718d5dd0691a24f715a7ce",
+    "semantic_hash": ""
+  },
+  "api/media/seed/rings/persten-solitaire-diamant-400.webp": {
+    "mtime": 1794513641.962708,
+    "seen": 1794515855.987282,
+    "ast_hash": "677655f4ba840602fdff3a2231361fc7",
+    "semantic_hash": ""
+  },
+  "api/media/seed/rings/persten-solitaire-diamant-800.webp": {
+    "mtime": 1794513641.9628308,
+    "seen": 1794515855.987283,
+    "ast_hash": "505601cc991440602cc73e37320e548d",
+    "semantic_hash": ""
+  },
+  "api/media/seed/rings/persten-tonkyi-bile-zoloto-1600.webp": {
+    "mtime": 1794513641.8248339,
+    "seen": 1794515855.987284,
+    "ast_hash": "0c5c52aeadb0b8324a39888dc47861e2",
+    "semantic_hash": ""
+  },
+  "api/media/seed/rings/persten-tonkyi-bile-zoloto-400.webp": {
+    "mtime": 1794513641.8246055,
+    "seen": 1794515855.987285,
+    "ast_hash": "3e69bdfa80e305d9aeda20b8f0989827",
+    "semantic_hash": ""
+  },
+  "api/media/seed/rings/persten-tonkyi-bile-zoloto-800.webp": {
+    "mtime": 1794513641.8247461,
+    "seen": 1794515855.987286,
+    "ast_hash": "f8409bda5cb5792ac4fd5a0c36366224",
+    "semantic_hash": ""
+  },
+  "api/media/seed/sets/nabir-pusety-pidviska-perlyny-1600.webp": {
+    "mtime": 1794513644.3536375,
+    "seen": 1794515855.987286,
+    "ast_hash": "fc35c0ee1a718d5dd0691a24f715a7ce",
+    "semantic_hash": ""
+  },
+  "api/media/seed/sets/nabir-pusety-pidviska-perlyny-400.webp": {
+    "mtime": 1794513644.3533797,
+    "seen": 1794515855.987287,
+    "ast_hash": "677655f4ba840602fdff3a2231361fc7",
+    "semantic_hash": ""
+  },
+  "api/media/seed/sets/nabir-pusety-pidviska-perlyny-800.webp": {
+    "mtime": 1794513644.3535392,
+    "seen": 1794515855.987288,
+    "ast_hash": "505601cc991440602cc73e37320e548d",
+    "semantic_hash": ""
+  },
+  "api/media/seed/sets/nabir-sapfiry-bile-zoloto-1600.webp": {
+    "mtime": 1794513644.4864411,
+    "seen": 1794515855.9872892,
+    "ast_hash": "0c5c52aeadb0b8324a39888dc47861e2",
+    "semantic_hash": ""
+  },
+  "api/media/seed/sets/nabir-sapfiry-bile-zoloto-400.webp": {
+    "mtime": 1794513644.4855397,
+    "seen": 1794515855.9872901,
+    "ast_hash": "3e69bdfa80e305d9aeda20b8f0989827",
+    "semantic_hash": ""
+  },
+  "api/media/seed/sets/nabir-sapfiry-bile-zoloto-800.webp": {
+    "mtime": 1794513644.4863372,
+    "seen": 1794515855.9872901,
+    "ast_hash": "f8409bda5cb5792ac4fd5a0c36366224",
+    "semantic_hash": ""
+  },
+  "api/media/seed/sets/nabir-sribny-fianity-1600.webp": {
+    "mtime": 1794513644.6186745,
+    "seen": 1794515855.9872909,
+    "ast_hash": "0c5c52aeadb0b8324a39888dc47861e2",
+    "semantic_hash": ""
+  },
+  "api/media/seed/sets/nabir-sribny-fianity-400.webp": {
+    "mtime": 1794513644.6184533,
+    "seen": 1794515855.9872918,
+    "ast_hash": "3e69bdfa80e305d9aeda20b8f0989827",
+    "semantic_hash": ""
+  },
+  "api/media/seed/sets/nabir-sribny-fianity-800.webp": {
+    "mtime": 1794513644.6185837,
+    "seen": 1794515855.987293,
+    "ast_hash": "f8409bda5cb5792ac4fd5a0c36366224",
+    "semantic_hash": ""
+  },
+  "api/media/seed/wedding-rings/obruchka-dorizhka-brilianty-1600.webp": {
+    "mtime": 1794513642.3692853,
+    "seen": 1794515855.987294,
+    "ast_hash": "0c5c52aeadb0b8324a39888dc47861e2",
+    "semantic_hash": ""
+  },
+  "api/media/seed/wedding-rings/obruchka-dorizhka-brilianty-400.webp": {
+    "mtime": 1794513642.3690803,
+    "seen": 1794515855.987295,
+    "ast_hash": "3e69bdfa80e305d9aeda20b8f0989827",
+    "semantic_hash": ""
+  },
+  "api/media/seed/wedding-rings/obruchka-dorizhka-brilianty-800.webp": {
+    "mtime": 1794513642.3692067,
+    "seen": 1794515855.987295,
+    "ast_hash": "f8409bda5cb5792ac4fd5a0c36366224",
+    "semantic_hash": ""
+  },
+  "api/media/seed/wedding-rings/obruchka-klasychna-bicolor-1600.webp": {
+    "mtime": 1794513642.234674,
+    "seen": 1794515855.987296,
+    "ast_hash": "7d0d6187212f2d7c9c3667a51e20441b",
+    "semantic_hash": ""
+  },
+  "api/media/seed/wedding-rings/obruchka-klasychna-bicolor-400.webp": {
+    "mtime": 1794513642.2344406,
+    "seen": 1794515855.987297,
+    "ast_hash": "4c005b5901a3ea731a9312599d045178",
+    "semantic_hash": ""
+  },
+  "api/media/seed/wedding-rings/obruchka-klasychna-bicolor-800.webp": {
+    "mtime": 1794513642.2345822,
+    "seen": 1794515855.987298,
+    "ast_hash": "6eed7f5bfaeb799cbea7dd1ee57e917f",
+    "semantic_hash": ""
+  },
+  "catalog_import/serezhky-heometriia/1.png": {
+    "mtime": 1794507073.2396615,
+    "seen": 1794508670.3746262,
+    "ast_hash": "d77ad90bda2c9b3dcc29e2cec8a5ff85",
+    "semantic_hash": ""
+  },
+  "catalog_import/serezhky-heometriia/2.png": {
+    "mtime": 1794507073.2424474,
+    "seen": 1794508670.374627,
+    "ast_hash": "64ce51dc576710d35dc832740f9c8aa6",
+    "semantic_hash": ""
+  },
+  "catalog_import/serezhky-topaz-blakytnyi/1.png": {
+    "mtime": 1794507073.2326555,
+    "seen": 1794508670.374628,
+    "ast_hash": "237a2bc3924378889699543956fc870a",
+    "semantic_hash": ""
+  },
+  "catalog_import/serezhky-topaz-blakytnyi/2.png": {
+    "mtime": 1794507073.2362537,
+    "seen": 1794508670.374629,
+    "ast_hash": "1f139af3eb9f31aa0b091a2d65f63696",
+    "semantic_hash": ""
+  },
+  "api/tests/test_password_pepper.py": {
+    "mtime": 1794515449.17209,
+    "seen": 1794515855.9871879,
+    "ast_hash": "63f3dc71dddb122ec8be564763dbb385",
+    "semantic_hash": ""
+  },
+  "docs/plans/m4-tasks.uk.md": {
+    "mtime": 1794513019.1193783,
+    "seen": 1794515855.9872372,
+    "ast_hash": "23a466e44607ca059a39e3fc807078ec",
     "semantic_hash": ""
   },
   "package-lock.json": {

@@ -1,8 +1,7 @@
 from pathlib import Path
-
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-# api/media, resolved from this file so it does not depend on the working directory
 MEDIA_DIR = Path(__file__).resolve().parents[2] / "media"
 
 class Settings(BaseSettings):
@@ -11,6 +10,7 @@ class Settings(BaseSettings):
     database_url: str
     jwt_secret: str
     jwt_algorithm: str = "HS256"
+    password_pepper: str = Field(min_length=32)
     access_token_expire_minutes: int = 15
     refresh_token_expire_days: int = 30
     refresh_reuse_grace_seconds: int = 5

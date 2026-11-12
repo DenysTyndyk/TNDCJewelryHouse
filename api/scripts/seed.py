@@ -1,24 +1,18 @@
-"""Development seed data: catalog + gemstones + shipping + users.
-
-Single market (Ukraine, UAH). Settings read ../.env themselves, so no `source` is needed
-(sourcing it in zsh strips the quotes from JSON values like CORS_ORIGINS):
-
-    cd api && python -m scripts.seed
-"""
 from datetime import datetime, timezone
 from decimal import Decimal
 from io import BytesIO
 from pathlib import Path
 
-from argon2 import PasswordHasher
 from faker import Faker
 from PIL import Image
 
 from app.db.session import get_session
+from app.core.security import hash_password
 from app.models import (
     Category,
     CategoryTranslation,
     Gemstone,
+    PriceHistory,
     Product,
     ProductGemstone,
     ProductImage,
@@ -40,9 +34,7 @@ from app.models.enums import (
 )
 from app.services.admin_catalog_service import save_image
 
-hasher = PasswordHasher()
 
-# Optional real photos: seed_photos/<product-slug>.jpg|png|webp; otherwise a metal-coloured placeholder
 SEED_PHOTOS = Path(__file__).resolve().parent / "seed_photos"
 PLACEHOLDER_COLORS = {
     MetalColor.White: "#d9dadc",
@@ -504,7 +496,12 @@ def seed_products(session, categories: dict[str, Category], gemstones: dict[str,
                     variant_id=variant.id,
                     currency=Currency.UAH,
                     price=base_price,
-                )
+                ), 
+                PriceHistory(
+                    variant_id=variant.id,
+                    currency=Currency.UAH,
+                    price=base_price
+                ),
             )
 
             if gemstone_slug:
@@ -541,7 +538,7 @@ def seed_users(session) -> None:
         email="admin@tndc.ua",
         role=Role.Admin,
         status=UserStatus.Active,
-        password_hash=hasher.hash("Admin123!"),
+        password_hash=hash_password("Admin123!"),
     )
     session.add(admin)
     session.flush()
@@ -563,7 +560,7 @@ def seed_users(session) -> None:
             email=f"test.user{i + 1}@tndc.ua",
             role=Role.User,
             status=UserStatus.Active if i else UserStatus.PendingVerification,
-            password_hash=hasher.hash("Password123!"),
+            password_hash=hash_password("Password123!"),
         )
         session.add(user)
         session.flush()
