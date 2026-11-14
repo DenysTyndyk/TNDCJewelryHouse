@@ -243,7 +243,7 @@ Table product_embeddings {
 
 Table carts {
   id bigint [pk, increment]
-  user_id bigint [null, ref: > users.id]
+  user_id bigint [null, ref: > users.id, note: 'unique where status = Active (one active cart per user)']
   session_token varchar(128) [null, unique]
   status CartStatus [not null, default: 'Active']
   last_activity_at timestamp [null]
@@ -265,7 +265,7 @@ Table cart_items {
 
 Table orders {
   id bigint [pk, increment]
-  order_number varchar(32) [not null, unique, note: 'e.g. TNDC-2026-00145; shown to the customer instead of id']
+  order_number varchar(32) [not null, unique, note: 'e.g. TNDC-2026-00145; shown to the customer instead of id; NNNNN from sequence order_number_seq']
   user_id bigint [null, ref: > users.id]
   shipping_method_id integer [null, ref: > shipping_methods.id]
   status OrderStatus [not null, default: 'Pending']
@@ -320,6 +320,10 @@ Table payments {
   gateway_response jsonb [null, note: 'raw webhook payload for audit; never put card data here']
   created_at timestamp [not null, default: `now()`]
   paid_at timestamp [null]
+
+  indexes {
+    (provider, external_id) [unique, note: 'idempotent provider webhooks']
+  }
   Note: 'Do not store card numbers or CVV'
 }
 

@@ -4,8 +4,8 @@
 
 ## 0. Підготовка
 
-- [ ] **T0.1 — `price_history` у seed.** Адмінський `set_price` ([admin_catalog_service.py:175](../../api/app/services/admin_catalog_service.py#L175)) та імпорт ([import_products.py:104](../../api/scripts/import_products.py#L104)) вже пишуть історію цін. А [seed.py:503](../../api/scripts/seed.py#L503) створює `VariantPrice` напряму, тому після seed таблиця `price_history` порожня. Виправлення: у seed замість прямого `VariantPrice(...)` викликати `svc.set_price(...)` або поруч додати `PriceHistory(...)`.
-- [ ] **T0.2 — backfill для вже засіяної БД** (одноразовий SQL, виконати вручну):
+- [x] **T0.1 — `price_history` у seed.** Адмінський `set_price` ([admin_catalog_service.py:175](../../api/app/services/admin_catalog_service.py#L175)) та імпорт ([import_products.py:104](../../api/scripts/import_products.py#L104)) вже пишуть історію цін. А [seed.py:503](../../api/scripts/seed.py#L503) створює `VariantPrice` напряму, тому після seed таблиця `price_history` порожня. Виправлення: у seed замість прямого `VariantPrice(...)` викликати `svc.set_price(...)` або поруч додати `PriceHistory(...)`.
+- [x] **T0.2 — backfill для вже засіяної БД** (одноразовий SQL, виконати вручну):
   ```sql
   INSERT INTO price_history (variant_id, currency, price)
   SELECT vp.variant_id, vp.currency, vp.price
@@ -15,9 +15,9 @@
     WHERE ph.variant_id = vp.variant_id AND ph.currency = vp.currency
   );
   ```
-- [ ] **T0.3 — тест:** після seed у кожного `variant_prices` є хоча б один рядок у `price_history`.
+- [x] **T0.3 — тест:** після seed у кожного `variant_prices` є хоча б один рядок у `price_history`.
 - [x] **T0.4 — оновити `CLAUDE.md`:** прибрати ринок PL, `markets`, Przelewy24/InPost і bcrypt; узгодити з D1/D3/D6/D8.
-- [ ] **T0.5 — pepper для паролів.** Сіль уже є: `argon2-cffi` генерує випадкову сіль для кожного хеша. Перцю в [security.py](../../api/app/core/security.py) немає.
+- [x] **T0.5 — pepper для паролів.** Сіль уже є: `argon2-cffi` генерує випадкову сіль для кожного хеша. Перцю в [security.py](../../api/app/core/security.py) немає.
   - `Settings.password_pepper` (обов'язковий секрет з env, ≥32 байти); у `.env.example` — лише плейсхолдер. У БД перець не зберігати.
   - `hash_password` / `verify_password`: `argon2(HMAC-SHA256(pepper, password))`; `DUMMY_PASSWORD_HASH` теж рахувати з перцем.
   - Старі хеші без перцю: у `login` спершу перевірити з перцем; якщо не підійшов — перевірити без перцю і при успіху одразу перехешувати з перцем. Альтернатива для dev: перезасіяти БД і нічого не мігрувати.
@@ -25,20 +25,20 @@
 
 ## 1. Міграція
 
-- [ ] **T1.1 — Alembic `0004`:**
+- [x] **T1.1 — Alembic `0004`:**
   - частковий unique `carts(user_id) WHERE status='Active'`;
   - unique `payments(provider, external_id)`;
   - sequence `order_number_seq`.
-- [ ] **T1.2 —** перевірити `upgrade head` → `downgrade -1` → `upgrade head`.
+- [x] **T1.2 —** перевірити `upgrade head` → `downgrade -1` → `upgrade head`.
 
 ## 2. Кошик — бекенд
 
-- [ ] **T2.1 —** `schemas/cart.py`: `CartItemIn {variant_id, quantity}`, `CartOut` (рядки, `subtotal`, `currency`).
-- [ ] **T2.2 —** `repositories/cart_repository.py`: знайти/створити активний кошик за `user_id` або `session_token`; операції з рядками.
-- [ ] **T2.3 —** `services/cart_service.py`: add / update / remove з перевіркою `quantity <= stock - reserved` і ціною з `variant_prices` (`unit_price_at_add`).
-- [ ] **T2.4 —** `routers/cart.py`: `GET /cart`, `POST /cart/items`, `PATCH /cart/items/{id}`, `DELETE /cart/items/{id}`. Гостя визначаємо за заголовком `X-Cart-Session`; якщо його немає, генеруємо `secrets.token_urlsafe` і повертаємо.
-- [ ] **T2.5 —** `cart_service.merge(guest_token, user_id)`: кількості сумуються з обмеженням до stock, гостьовий кошик стає `Converted`. Викликати з `auth_service.login`.
-- [ ] **T2.6 —** тести: CRUD кошика, ліміт stock, merge.
+- [x] **T2.1 —** `schemas/cart.py`: `CartItemIn {variant_id, quantity}`, `CartOut` (рядки, `subtotal`, `currency`).
+- [x] **T2.2 —** `repositories/cart_repository.py`: знайти/створити активний кошик за `user_id` або `session_token`; операції з рядками.
+- [x] **T2.3 —** `services/cart_service.py`: add / update / remove з перевіркою `quantity <= stock - reserved` і ціною з `variant_prices` (`unit_price_at_add`).
+- [x] **T2.4 —** `routers/cart.py`: `GET /cart`, `POST /cart/items`, `PATCH /cart/items/{id}`, `DELETE /cart/items/{id}`. Гостя визначаємо за заголовком `X-Cart-Session`; якщо його немає, генеруємо `secrets.token_urlsafe` і повертаємо.
+- [x] **T2.5 —** `cart_service.merge(guest_token, user_id)`: кількості сумуються з обмеженням до stock, гостьовий кошик стає `Converted`. Викликати з `auth_service.login`.
+- [x] **T2.6 —** тести: CRUD кошика, ліміт stock, merge.
 
 ## 3. Кошик — фронт
 

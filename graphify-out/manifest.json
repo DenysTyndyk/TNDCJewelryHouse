@@ -1,8 +1,8 @@
 {
   "api/alembic/env.py": {
-    "mtime": 1793090172.3806307,
-    "seen": 1793455682.733366,
-    "ast_hash": "ab35064a0d22c853b54f869b6a2c3c67",
+    "mtime": 1794666493.0016317,
+    "seen": 1794692648.893412,
+    "ast_hash": "2a2ad81e62c676ac698bf73fbaf24334",
     "semantic_hash": ""
   },
   "api/alembic/versions/0001_extensions_enums_functions.py": {
@@ -60,9 +60,9 @@
     "semantic_hash": ""
   },
   "api/app/models/commerce.py": {
-    "mtime": 1793199657.67167,
-    "seen": 1793455682.7333791,
-    "ast_hash": "ce4b6094f333e69671618155d786adaa",
+    "mtime": 1794665743.273247,
+    "seen": 1794692648.89343,
+    "ast_hash": "7cbc3dac1bc521fde5555ede4920702f",
     "semantic_hash": ""
   },
   "api/app/models/enums.py": {
@@ -102,9 +102,9 @@
     "semantic_hash": ""
   },
   "docker-compose.yml": {
-    "mtime": 1793729327.0566275,
-    "seen": 1794243954.0686772,
-    "ast_hash": "1c4cfd36bccb8ff4c934d108a5a8c4c9",
+    "mtime": 1794666094.9906666,
+    "seen": 1794692648.893465,
+    "ast_hash": "38e05336ca4856bceec1bf30bb923c3b",
     "semantic_hash": ""
   },
   "web/.oxlintrc.json": {
@@ -438,15 +438,15 @@
     "semantic_hash": ""
   },
   "api/app/dependencies.py": {
-    "mtime": 1793658232.366933,
-    "seen": 1793697283.752506,
-    "ast_hash": "7f5173faf29a4d855e3f995f4839a1cf",
+    "mtime": 1794688818.959995,
+    "seen": 1794692648.893426,
+    "ast_hash": "9a75616b9723e510591fa296bc45d9eb",
     "semantic_hash": ""
   },
   "api/app/main.py": {
-    "mtime": 1794425094.4669256,
-    "seen": 1794427349.3153741,
-    "ast_hash": "0415b7a0b4e6c3a56f4a79dae77e883f",
+    "mtime": 1794689943.1569679,
+    "seen": 1794692648.893427,
+    "ast_hash": "ea9862b39f23d197370f72e4def7d8c9",
     "semantic_hash": ""
   },
   "api/app/repositories/user_repository.py": {
@@ -456,9 +456,9 @@
     "semantic_hash": ""
   },
   "api/app/routers/auth.py": {
-    "mtime": 1794426508.0237997,
-    "seen": 1794427349.315386,
-    "ast_hash": "a7b80d8c878027e4e4774cf4f6208709",
+    "mtime": 1794692593.873471,
+    "seen": 1794692648.893439,
+    "ast_hash": "cca6ec273b3c02b89a8caddbc7caf4ea",
     "semantic_hash": ""
   },
   "api/app/schemas/auth.py": {
@@ -468,9 +468,9 @@
     "semantic_hash": ""
   },
   "api/app/services/auth_service.py": {
-    "mtime": 1794515279.6797063,
-    "seen": 1794515855.9871738,
-    "ast_hash": "714d60bfbee7a526d583099077471b00",
+    "mtime": 1794692225.101656,
+    "seen": 1794692648.893445,
+    "ast_hash": "15842035786e885a45b5b9fa73cedf7d",
     "semantic_hash": ""
   },
   "api/app/core/limiter.py": {
@@ -1128,9 +1128,51 @@
     "semantic_hash": ""
   },
   "docs/plans/m4-tasks.uk.md": {
-    "mtime": 1794513019.1193783,
-    "seen": 1794515855.9872372,
-    "ast_hash": "23a466e44607ca059a39e3fc807078ec",
+    "mtime": 1794692632.8636491,
+    "seen": 1794692648.893507,
+    "ast_hash": "5ddc9d3274f4eabdc94f122387854ac7",
+    "semantic_hash": ""
+  },
+  "api/alembic/versions/0004_checkout_constraints.py": {
+    "mtime": 1794665722.6165023,
+    "seen": 1794692648.893419,
+    "ast_hash": "bb6da2371cfa3690f5a9020975a67211",
+    "semantic_hash": ""
+  },
+  "api/app/repositories/cart_repository.py": {
+    "mtime": 1794673598.6487038,
+    "seen": 1794692648.8934348,
+    "ast_hash": "6ae6a56a74aaca440971bb267ba1dd9e",
+    "semantic_hash": ""
+  },
+  "api/app/routers/cart.py": {
+    "mtime": 1794689559.3991318,
+    "seen": 1794692648.89344,
+    "ast_hash": "ea1d47e4a21a1a3138a0f1c4fbe3e697",
+    "semantic_hash": ""
+  },
+  "api/app/schemas/cart.py": {
+    "mtime": 1794670357.9616544,
+    "seen": 1794692648.893443,
+    "ast_hash": "040b7f47e09b0ab5161d67e53d26ab52",
+    "semantic_hash": ""
+  },
+  "api/app/services/cart_service.py": {
+    "mtime": 1794692508.4076283,
+    "seen": 1794692648.893446,
+    "ast_hash": "b45a518bd1cb108798ef27ee50da876f",
+    "semantic_hash": ""
+  },
+  "api/tests/test_cart.py": {
+    "mtime": 1794692399.048978,
+    "seen": 1794692648.893456,
+    "ast_hash": "297a3532c9699635dd75f731c90176a8",
+    "semantic_hash": ""
+  },
+  "api/tests/test_seed_price_history.py": {
+    "mtime": 1794665794.5692608,
+    "seen": 1794692648.893462,
+    "ast_hash": "72e99e39abd79f97c38f9077157cbd99",
     "semantic_hash": ""
   },
   "package-lock.json": {

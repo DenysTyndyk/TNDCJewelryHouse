@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Cookie, Depends, HTTPException, Request, Response, status
+from fastapi import APIRouter, Cookie, Depends, HTTPException, Request, Response, status,Header
 from sqlalchemy.orm import Session
-
+from app.routers.cart import CART_SESSION_HEADER
 from app.core.config import settings
 from app.dependencies import get_current_user, get_db
 from app.schemas.auth import LoginRequest, RegisterRequest, TokenResponse, UserResponse, MessageResponse, ForgotPasswordRequest, ResetPasswordRequest, PreferencesUpdate
@@ -32,12 +32,20 @@ def register(request: Request, payload: RegisterRequest, db: Session = Depends(g
 
 @router.post("/login", response_model=TokenResponse)
 @limiter.limit("5/minute")
-def login(request: Request, payload: LoginRequest, response: Response, db: Session = Depends(get_db)):
-    try: 
-        access_token, refresh_token, _ = auth_service.login(db, payload.email, payload.password)
+def login(
+    request: Request,
+    payload: LoginRequest,
+    response: Response,
+    x_cart_session: str | None = Header(default=None, alias=CART_SESSION_HEADER, max_length=128),
+    db: Session = Depends(get_db),
+):
+    try:
+        access_token, refresh_token, _ = auth_service.login(
+            db, payload.email, payload.password, cart_session=x_cart_session
+        )
     except AuthError as e:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=str(e))
-    
+
     _set_refresh_cookie(response, refresh_token)
     return TokenResponse(access_token=access_token)
 

@@ -1,4 +1,3 @@
-import os
 from logging.config import fileConfig
 
 from alembic import context
@@ -15,10 +14,9 @@ target_metadata = Base.metadata
 
 
 def _database_url() -> str:
-    url = os.environ.get("DATABASE_URL")
-    if not url:
-        raise RuntimeError("DATABASE_URL is not set (see .env.example)")
-    return url
+    # Same source as the app: env vars first, then ../.env (pydantic validates presence)
+    from app.core.config import settings
+    return settings.database_url
 
 
 def run_migrations_offline() -> None:

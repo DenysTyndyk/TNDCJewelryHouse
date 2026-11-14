@@ -4,6 +4,7 @@ import logging
 from app.models.enums import UserStatus
 from app.models.user import User
 from app.core.config import settings
+from app.services import cart_service
 from app.core.security import (
     DUMMY_PASSWORD_HASH,
     create_access_token,
@@ -18,6 +19,8 @@ from app.schemas.auth import UserResponse
 
 class AuthError(Exception):
     pass
+
+logger = logging.getLogger(__name__)
 
 def get_me(db: Session, user: User) -> UserResponse:
     profile = repo.get_profile(db, user.id)
@@ -44,7 +47,7 @@ def register(db: Session, email: str, password: str, first_name: str | None, las
    _issue_email_verification_token(db,user)
    db.commit()
 
-def login(db: Session, email: str, password: str) -> tuple[str, str,int]:
+def login(db: Session, email: str, password: str,cart_session: str | None = None) -> tuple[str, str,int]:
    user = repo.get_by_email(db,email)
    if not user:
     verify_password(password, DUMMY_PASSWORD_HASH)
@@ -63,6 +66,8 @@ def login(db: Session, email: str, password: str) -> tuple[str, str,int]:
    repo.register_successful_login(db, user)
    access_token = create_access_token(user.id,user.role.value)
    refresh_token = _issue_refresh_token(db, user.id)
+   if cart_session:
+       _merge_guest_cart(db, cart_session, user.id)
    db.commit()
    return access_token, refresh_token, user.id
 
@@ -152,3 +157,10 @@ def _issue_password_reset_token(db: Session, user: User) -> None:
     repo.create_password_reset_token(db, user.id, hash_refresh_token(raw_token), expires_at)
     link = f"{settings.frontend_base_url}/reset-password?token={raw_token}"
     logging.getLogger("app").info("PASSWORD_RESET_LINK user_id=%s link=%s", user.id, link)
+
+def _merge_guest_cart(db: Session, cart_session: str, user_id: int) -> None:
+    try:
+        with db.begin_nested():
+            cart_service.merge(db, cart_session, user_id)
+    except Exception:
+        logger.exception("Guest cart merge failed for user_id=%s", user_id)

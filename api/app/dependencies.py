@@ -44,3 +44,10 @@ def require_role(*allowed: Role):
     
     return checker
 
+def get_optional_user(
+    credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
+    db: Session = Depends(get_db),
+):
+    if credentials is None:
+        return None
+    return get_current_user(credentials, db)

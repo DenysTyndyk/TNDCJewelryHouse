@@ -14,7 +14,7 @@ from slowapi.errors import RateLimitExceeded
 from app.core.config import MEDIA_DIR, settings
 from app.core.limiter import limiter
 from app.db.session import SessionLocal
-from app.routers import admin_catalog, auth, catalog
+from app.routers import admin_catalog, auth, catalog, cart
 from app.services.admin_catalog_service import ConflictError, InvalidImageError, NotFoundError
 
 request_id_context: ContextVar[str] = ContextVar("request_id", default=None)
@@ -41,6 +41,7 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["X-Cart-Session"],
 )
 @app.middleware("http")
 async def request_context(request: Request, call_next):
@@ -100,6 +101,7 @@ def ready():
 app.include_router(auth.router)
 app.include_router(catalog.router)
 app.include_router(admin_catalog.router)
+app.include_router(cart.router)
 
 MEDIA_DIR.mkdir(exist_ok=True)  
 app.mount("/media", StaticFiles(directory=MEDIA_DIR), name="media")

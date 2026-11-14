@@ -30,7 +30,10 @@ class Cart(Base):
     created_at: Mapped[created_at_col]
     updated_at: Mapped[updated_at_col]
 
-    __table_args__ = (Index("ix_carts_user_id_status", "user_id", "status"),)
+    __table_args__ = (
+        Index("ix_carts_user_id_status", "user_id", "status"),
+        Index("uq_carts_user_active", "user_id", unique=True, postgresql_where=text("status = 'Active'")),
+    )
 
 
 class CartItem(Base):
@@ -144,6 +147,7 @@ class Payment(Base):
     __table_args__ = (
         CheckConstraint("amount > 0", name="amount_positive"),
         Index("ix_payments_order_id", "order_id"),
+        Index("uq_payments_provider_external_id", "provider", "external_id", unique=True),
     )
 
 
