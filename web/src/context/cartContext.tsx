@@ -1,57 +1,50 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import type { Item, CartContextValue } from '../types';
+import * as cartApi from '../api/cartApi';
+import type { Cart, CartContextValue } from '../types';
+import { useAuth } from './authContext';
+import { useLanguage } from './languageContext';
+
+const EMPTY_CART: Cart = { id: null, items: [], subtotal: '0.00', currency: 'UAH' };
 
 const CartContext = createContext<CartContextValue | undefined>(undefined);
 
+// The server owns the cart; only the guest session token lives in localStorage (see cartApi).
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
-  const [cartItems, setCartItems] = useState<Item[]>(() => {
-    try {
-      const saved = localStorage.getItem('cartItems');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
+  const { accessToken, loading: authLoading } = useAuth();
+  const { language } = useLanguage();
+  const [cart, setCart] = useState<Cart>(EMPTY_CART);
+  const [error, setError] = useState<string | null>(null);
 
+  // Reload when the owner (guest/user) or the content language changes.
   useEffect(() => {
-    localStorage.setItem('cartItems', JSON.stringify(cartItems));
-  }, [cartItems]);
+    if (authLoading) return; // otherwise a guest cart is fetched before the refresh token resolves
+    let active = true;
+    cartApi.getCart(accessToken, language)
+      .then((c) => { if (active) { setCart(c); setError(null); } })
+      .catch((e: Error) => active && setError(e.message));
+    return () => { active = false; };
+  }, [accessToken, language, authLoading]);
 
-  const isInCart = (id: number) => cartItems.some((item: Item) => item.id === id);
-
-  const toggleCart = (product: Item) => {
-    setCartItems((prevItems: Item[]) => {
-      if (prevItems.some((item: Item) => item.id === product.id)) {
-        return prevItems.filter((item: Item) => item.id !== product.id);
-      } else {
-        return [...prevItems, { ...product, quantity: 1 }];
-      }
-    });
-  };
-
-  const addToCart = (product: Item) => {
-    setCartItems((prevItems: Item[]) =>
-      prevItems.some((item) => item.id === product.id) ? prevItems : [...prevItems, { ...product, quantity: 1 }],
-    );
-  };
-
-  const setQuantity = (id: number, quantity: number) => {
-    setCartItems((prevItems: Item[]) =>
-      quantity < 1
-        ? prevItems.filter((item) => item.id !== id)
-        : prevItems.map((item) => (item.id === id ? { ...item, quantity } : item)),
-    );
-  };
+  async function run(call: Promise<Cart>) {
+    try {
+      setCart(await call);
+      setError(null);
+    } catch (e) {
+      setError((e as Error).message);
+    }
+  }
 
   return (
     <CartContext.Provider
       value={{
-        cartItems,
-        cartCount: cartItems.reduce((sum, item) => sum + (item.quantity ?? 1), 0),
-        isInCart,
-        toggleCart,
-        addToCart,
-        setQuantity,
+        cart,
+        cartCount: cart.items.reduce((sum, line) => sum + line.quantity, 0),
+        error,
+        isInCart: (variantId) => cart.items.some((line) => line.variant_id === variantId),
+        addToCart: (variantId, quantity = 1) => run(cartApi.addCartItem(variantId, quantity, accessToken, language)),
+        setQuantity: (lineId, quantity) => run(cartApi.updateCartItem(lineId, quantity, accessToken, language)),
+        removeFromCart: (lineId) => run(cartApi.removeCartItem(lineId, accessToken, language)),
+        refresh: () => run(cartApi.getCart(accessToken, language)),
       }}
     >
       {children}

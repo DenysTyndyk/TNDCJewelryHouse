@@ -3,6 +3,7 @@ const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
 function extractErrorMessage(data: any, fallback: string): string {
     const detail = data?.detail;
     if (typeof detail === 'string') return detail;
+    if (typeof detail?.message === 'string') return detail.message; 
 
     if (Array.isArray(detail)) {
         return detail.map((d: any) => d?.msg ?? JSON.stringify(d)).join('; ');
@@ -10,12 +11,13 @@ function extractErrorMessage(data: any, fallback: string): string {
     return fallback;
 }
 
-export async function request(path: string, options: RequestInit={}){
+export async function request(path: string, options: RequestInit={}, onResponse?: (res: Response) => void){
     const res = await fetch(`${API_URL}${path}`,{
         ...options,
         credentials: 'include',
         headers: {'Content-Type': 'application/json', ...options.headers},
     });
+    onResponse?.(res);
     const data = await res.json().catch(() => null);
     if (!res.ok){
         throw new Error(extractErrorMessage(data, 'Request failed'))
@@ -30,10 +32,11 @@ export function register(email: string, password: string, firstName?: string, la
     });
 }
 
-export function login(email: string, password: string){
+export function login(email: string, password: string,cartSession?: string | null){
     return request('/auth/login',{
         method: 'POST',
-        body: JSON.stringify({email,password}),
+        headers: cartSession ? {'X-Cart-Session': cartSession} : {},
+        body: JSON.stringify({email,password})
     });
 }
 

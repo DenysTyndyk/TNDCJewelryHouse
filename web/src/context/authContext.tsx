@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import * as authApi from "../api/authApi";
 import type { AuthContextValue, AuthResult, Locale, User } from '../types';
 import { useLanguage } from './languageContext';
+import { getCartSession, clearCartSession } from "../api/cartApi";
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
@@ -38,7 +39,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   async function signIn(email: string, password: string): Promise<AuthResult> {
     try {
-      const { access_token } = await authApi.login(email, password);
+      const { access_token } = await authApi.login(email, password, getCartSession());
+      clearCartSession();    
       setAccessToken(access_token);
       applyUser(await authApi.me(access_token));
       return { error: null };

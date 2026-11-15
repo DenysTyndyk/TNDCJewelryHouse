@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { Home, Categories, Contact, Cart, About , AppLayout, Login,Register,Account, VerifyEmail, ForgotPassword, ResetPassword,Product} from './pages'
+import { Home, Categories, Contact, Cart, About , AppLayout, Login,Register,Account, VerifyEmail, ForgotPassword, ResetPassword,Product, Checkout, OrderDetails} from './pages'
 import {CartProvider,AuthProvider,LanguageProvider} from './context'
 function App() {
   return (
@@ -13,6 +13,8 @@ function App() {
         <Route path="/categories" element={<Categories />} />
         <Route path="/products/:slug" element={<Product />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/orders/:number" element={<OrderDetails />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />

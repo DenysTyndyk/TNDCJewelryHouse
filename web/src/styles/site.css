@@ -11,6 +11,18 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Sticky footer: short pages push the footer to the bottom of the viewport */
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.app-layout > main {
+  flex: 1 0 auto;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
@@ -171,6 +183,55 @@ p {
 .nav__lang option {
   background: var(--color-bg-elevated);
   color: var(--color-text);
+}
+
+/* Animated picker where customizable <select> is supported (Chromium 135+); others keep the native one */
+@supports (appearance: base-select) {
+  .nav__lang,
+  .nav__lang::picker(select) {
+    appearance: base-select;
+  }
+
+  .nav__lang::picker(select) {
+    margin-top: var(--space-2);
+    border: 1px solid var(--color-border-strong);
+    background: var(--color-bg-elevated);
+    opacity: 0;
+    transform: translateY(-6px);
+    transition:
+      opacity 200ms var(--ease-out),
+      transform 200ms var(--ease-out),
+      overlay 200ms allow-discrete,
+      display 200ms allow-discrete;
+  }
+
+  .nav__lang:open::picker(select) {
+    opacity: 1;
+    transform: none;
+  }
+
+  @starting-style {
+    .nav__lang:open::picker(select) {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
+
+  .nav__lang option {
+    padding: var(--space-2) var(--space-4);
+    transition: color var(--transition);
+  }
+
+  .nav__lang option:hover,
+  .nav__lang option:focus-visible {
+    color: var(--color-gold-light);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav__lang::picker(select) {
+      transition: none;
+    }
+  }
 }
 
 .nav-toggle {
@@ -669,6 +730,76 @@ p {
 .cart-summary .btn {
   width: 100%;
   margin-top: var(--space-5);
+}
+
+/* —— Checkout / orders —— */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.shipping-options {
+  display: grid;
+  gap: var(--space-3);
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.shipping-option {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: border-color var(--transition);
+}
+
+.shipping-option.is-active,
+.shipping-option:hover {
+  border-color: var(--color-border-strong);
+}
+
+.shipping-option input {
+  accent-color: var(--color-gold-mid);
+}
+
+.shipping-option__meta {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.order-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--space-6);
+}
+
+.order-list li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-2) var(--space-4);
+  padding-block: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--text-sm);
+}
+
+.order-status {
+  color: var(--color-gold-mid);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  font-size: var(--text-sm);
+}
+
+.order-status--Cancelled,
+.order-status--Returned {
+  color: var(--color-text-muted);
 }
 
 /* —— About / Contact —— */

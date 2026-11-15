@@ -42,27 +42,27 @@
 
 ## 3. Кошик — фронт
 
-- [ ] **T3.1 —** `web/src/api/cartApi.ts` (+ заголовок `X-Cart-Session`).
-- [ ] **T3.2 —** переписати `cartContext.tsx` на API. У localStorage лишається тільки `cartSession`.
-- [ ] **T3.3 —** «Додати в кошик» на сторінці товару передає `variant_id`; узгодити тип `Item` / `CartLine`.
-- [ ] **T3.4 —** перечитувати кошик після login/logout; `/auth/login` надсилає `X-Cart-Session`.
-- [ ] **T3.5 —** ручна перевірка: гість додає товар → вхід → кошик злито.
+- [x] **T3.1 —** `web/src/api/cartApi.ts` (+ заголовок `X-Cart-Session`).
+- [x] **T3.2 —** переписати `cartContext.tsx` на API. У localStorage лишається тільки `cartSession`.
+- [x] **T3.3 —** «Додати в кошик» на сторінці товару передає `variant_id`; узгодити тип `Item` / `CartLine`.
+- [x] **T3.4 —** перечитувати кошик після login/logout; `/auth/login` надсилає `X-Cart-Session`.
+- [x] **T3.5 —** ручна перевірка: гість додає товар → вхід → кошик злито.
 
 ## 4. Замовлення — бекенд
 
-- [ ] **T4.1 —** `GET /shipping-methods`.
-- [ ] **T4.2 —** `schemas/order.py`: `CheckoutIn` (отримувач, телефон, email, `shipping_method_id`, місто, відділення НП, коментар), `OrderOut`.
-- [ ] **T4.3 —** `services/order_service.checkout()` в одній транзакції:
+- [x] **T4.1 —** `GET /shipping-methods`.
+- [x] **T4.2 —** `schemas/order.py`: `CheckoutIn` (отримувач, телефон, email, `shipping_method_id`, місто, відділення НП, коментар), `OrderOut`.
+- [x] **T4.3 —** `services/order_service.checkout()` в одній транзакції:
   1. `FOR UPDATE` на варіанти, відсортовані за id;
   2. перевірка наявності, при нестачі → 409;
   3. snapshot `order_items`;
   4. `reserved_quantity += qty`;
   5. доставка з урахуванням `free_from_amount`;
   6. кошик → `Converted`.
-- [ ] **T4.4 —** `core/email.py: send_email()` — поки що лише лог, як в auth; лист «замовлення створено».
-- [ ] **T4.5 —** `POST /orders`, `GET /orders`, `GET /orders/{order_number}` (гість — за `session_token`).
-- [ ] **T4.6 —** `ALLOWED_TRANSITIONS` (dict статусів) + `POST /orders/{n}/cancel`, який знімає резерв і заповнює `cancelled_at`.
-- [ ] **T4.7 —** тести:
+- [x] **T4.4 —** `core/email.py: send_email()` — поки що лише лог, як в auth; лист «замовлення створено».
+- [x] **T4.5 —** `POST /orders`, `GET /orders`, `GET /orders/{order_number}` (гість — за `session_token`).
+- [x] **T4.6 —** `ALLOWED_TRANSITIONS` (dict статусів) + `POST /orders/{n}/cancel`, який знімає резерв і заповнює `cancelled_at`.
+- [x] **T4.7 —** тести:
   - checkout: snapshot і зростання reserved;
   - 409 при нестачі товару;
   - конкурентна покупка останньої одиниці;
@@ -70,10 +70,10 @@
 
 ## 5. Checkout — фронт (без оплати)
 
-- [ ] **T5.1 —** `web/src/api/orderApi.ts`.
-- [ ] **T5.2 —** сторінка `/checkout`: форма, вибір доставки, підсумок; кнопка Checkout у [Cart.tsx](../../web/src/pages/Cart.tsx) веде на неї.
-- [ ] **T5.3 —** сторінка `/orders/:number` (статус) + список замовлень в `/account`.
-- [ ] **T5.4 —** ключі перекладу uk / pl / en.
+- [x] **T5.1 —** `web/src/api/orderApi.ts`.
+- [x] **T5.2 —** сторінка `/checkout`: форма, вибір доставки, підсумок; кнопка Checkout у [Cart.tsx](../../web/src/pages/Cart.tsx) веде на неї.
+- [x] **T5.3 —** сторінка `/orders/:number` (статус) + список замовлень в `/account`.
+- [x] **T5.4 —** ключі перекладу uk / pl / en.
 
 ## 6. Платежі (sandbox)
 

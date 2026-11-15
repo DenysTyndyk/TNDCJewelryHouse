@@ -2,7 +2,7 @@ import { Header, Footer } from '../components';
 import { Outlet } from 'react-router-dom';
 function AppLayout() {
     return (
-        <div>
+        <div className="app-layout">
             <Header />
             <Outlet />
             <Footer />

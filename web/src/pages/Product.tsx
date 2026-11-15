@@ -29,11 +29,19 @@ function gemstoneName(g: ProductGemstone, t: T): string {
 function Product() {
   const { slug = '' } = useParams();
   const { t, language } = useLanguage();
-  const { addToCart, isInCart } = useCart();
+  const { addToCart, isInCart, error: cartError } = useCart();
   const [product, setProduct] = useState<ProductDetail | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [variantId, setVariantId] = useState<number | null>(null);
-
+  const [adding,setAdding] = useState(false);
+  async function handleAdd(id : number) {
+    setAdding(true);
+    try{
+      await addToCart(id);
+    }finally{
+      setAdding(false)
+    }
+  }
   useEffect(() => {
     let active = true;
     setError(null);
@@ -102,27 +110,19 @@ function Product() {
                 : <>{variant.currency} {variant.price}</>}
             </p>
             {!variant.in_stock && <p>{t('product.outOfStock')}</p>}
-            {isInCart(product.id) ? (
+            {isInCart(variant.id) ? (
               <Link className="btn btn--ghost" to="/cart">{t('product.goToCart')}</Link>
             ) : (
               <button
                 className="btn btn--primary"
                 type="button"
                 disabled={!variant.in_stock}
-                onClick={() => addToCart({
-                  id: product.id,
-                  slug: product.slug,
-                  title: product.name,
-                  price: Number(variant.sale_price ?? variant.price),
-                  currency: variant.currency,
-                  description: '',
-                  category: product.category.slug,
-                  images: images.slice(0, 1),
-                })}
+                onClick={() => handleAdd(variant.id)}
               >
                 {t('product.addToCart')}
               </button>
             )}
+            {cartError && <p role="alert">{cartError}</p>}
                         <h2 className="product-specs__title">{t('product.specs.title')}</h2>
             <dl className="product-specs">
               {specs

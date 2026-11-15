@@ -1,9 +1,11 @@
-import type { Item } from './item';
+import type { Cart } from './cart';
 export type CartContextValue = {
-    cartItems: Item[];
+    cart: Cart;
     cartCount: number;
-    isInCart: (id: number) => boolean;
-    toggleCart: (product: Item) => void;
-    addToCart: (product: Item) => void;
-    setQuantity: (id: number, quantity: number) => void;
+    error: string | null;
+    isInCart: (variantId: number) => boolean;
+    addToCart: (variantId: number, quantity?: number) => Promise<void>;
+    setQuantity: (lineId: number, quantity: number) => Promise<void>;
+    removeFromCart: (lineId: number) => Promise<void>;
+    refresh: () => Promise<void>;
   };

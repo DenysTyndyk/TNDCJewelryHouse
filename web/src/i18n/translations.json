@@ -90,7 +90,38 @@
     "account": {
       "loading": "Завантаження…",
       "title": "Акаунт",
-      "signOut": "Вийти"
+      "signOut": "Вийти",
+      "orders": "Мої замовлення",
+      "noOrders": "Замовлень поки немає"
+    },
+    "checkout": {
+      "eyebrow": "Оформлення",
+      "title": "Оформлення замовлення",
+      "recipient": "Отримувач",
+      "name": "Ім'я та прізвище",
+      "phone": "Телефон",
+      "delivery": "Доставка",
+      "provider": { "NovaPoshta": "Нова Пошта — відділення", "UkrPoshta": "Укрпошта", "Courier": "Курʼєр по Києву" },
+      "days": "дн.",
+      "free": "Безкоштовно",
+      "city": "Місто",
+      "point": "Відділення",
+      "pointPlaceholder": "Номер або адреса відділення",
+      "address": "Адреса доставки",
+      "note": "Коментар до замовлення",
+      "shipping": "Доставка",
+      "submit": "Підтвердити замовлення",
+      "submitting": "Оформлюємо…",
+      "backToCart": "Повернутися до кошика"
+    },
+    "order": {
+      "eyebrow": "Замовлення",
+      "notFound": "Замовлення не знайдено",
+      "items": "Товари",
+      "tracking": "Номер відстеження",
+      "cancel": "Скасувати замовлення",
+      "cancelConfirm": "Скасувати це замовлення?",
+      "status": { "Pending": "Очікує оплати", "Paid": "Оплачено", "Processing": "Обробляється", "Shipped": "Відправлено", "Delivered": "Доставлено", "Cancelled": "Скасовано", "Returned": "Повернено" }
     },
     "auth": {
       "login": {
@@ -264,7 +295,38 @@
     "account": {
       "loading": "Wczytywanie…",
       "title": "Konto",
-      "signOut": "Wyloguj się"
+      "signOut": "Wyloguj się",
+      "orders": "Moje zamówienia",
+      "noOrders": "Nie masz jeszcze zamówień"
+    },
+    "checkout": {
+      "eyebrow": "Zamówienie",
+      "title": "Składanie zamówienia",
+      "recipient": "Odbiorca",
+      "name": "Imię i nazwisko",
+      "phone": "Telefon",
+      "delivery": "Dostawa",
+      "provider": { "NovaPoshta": "Nova Poshta — oddział", "UkrPoshta": "Ukrposhta", "Courier": "Kurier (Kijów)" },
+      "days": "dni",
+      "free": "Bezpłatnie",
+      "city": "Miasto",
+      "point": "Oddział",
+      "pointPlaceholder": "Numer lub adres oddziału",
+      "address": "Adres dostawy",
+      "note": "Komentarz do zamówienia",
+      "shipping": "Dostawa",
+      "submit": "Potwierdź zamówienie",
+      "submitting": "Składamy zamówienie…",
+      "backToCart": "Wróć do koszyka"
+    },
+    "order": {
+      "eyebrow": "Zamówienie",
+      "notFound": "Nie znaleziono zamówienia",
+      "items": "Produkty",
+      "tracking": "Numer przesyłki",
+      "cancel": "Anuluj zamówienie",
+      "cancelConfirm": "Anulować to zamówienie?",
+      "status": { "Pending": "Oczekuje na płatność", "Paid": "Opłacone", "Processing": "W realizacji", "Shipped": "Wysłane", "Delivered": "Dostarczone", "Cancelled": "Anulowane", "Returned": "Zwrócone" }
     },
     "auth": {
       "login": {
@@ -438,7 +500,38 @@
     "account": {
       "loading": "Loading…",
       "title": "Account",
-      "signOut": "Sign out"
+      "signOut": "Sign out",
+      "orders": "My orders",
+      "noOrders": "No orders yet"
+    },
+    "checkout": {
+      "eyebrow": "Checkout",
+      "title": "Place your order",
+      "recipient": "Recipient",
+      "name": "Full name",
+      "phone": "Phone",
+      "delivery": "Delivery",
+      "provider": { "NovaPoshta": "Nova Poshta — branch", "UkrPoshta": "Ukrposhta", "Courier": "Courier (Kyiv)" },
+      "days": "days",
+      "free": "Free",
+      "city": "City",
+      "point": "Branch",
+      "pointPlaceholder": "Branch number or address",
+      "address": "Delivery address",
+      "note": "Order comment",
+      "shipping": "Shipping",
+      "submit": "Confirm order",
+      "submitting": "Placing order…",
+      "backToCart": "Back to cart"
+    },
+    "order": {
+      "eyebrow": "Order",
+      "notFound": "Order not found",
+      "items": "Items",
+      "tracking": "Tracking number",
+      "cancel": "Cancel order",
+      "cancelConfirm": "Cancel this order?",
+      "status": { "Pending": "Awaiting payment", "Paid": "Paid", "Processing": "Processing", "Shipped": "Shipped", "Delivered": "Delivered", "Cancelled": "Cancelled", "Returned": "Returned" }
     },
     "auth": {
       "login": {
