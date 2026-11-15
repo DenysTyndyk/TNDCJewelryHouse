@@ -2,6 +2,7 @@
 export type CartLine = {
     id: number;
     variant_id: number;
+    product_id: number;
     product_slug: string;
     name: string;
     sku: string;

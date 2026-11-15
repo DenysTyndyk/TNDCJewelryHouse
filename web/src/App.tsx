@@ -1,10 +1,12 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Home, Categories, Contact, Cart, About , AppLayout, Login,Register,Account, VerifyEmail, ForgotPassword, ResetPassword,Product, Checkout, OrderDetails} from './pages'
-import {CartProvider,AuthProvider,LanguageProvider} from './context'
+import {CartProvider,AuthProvider,LanguageProvider,TrackingProvider} from './context'
 function App() {
   return (
     <LanguageProvider>
     <AuthProvider>
+      {/* Tracking needs auth (consent, token); the cart needs tracking (AddToCart events). */}
+      <TrackingProvider>
         <CartProvider>
     <BrowserRouter>
       <Routes>
@@ -27,6 +29,7 @@ function App() {
       </Routes>
     </BrowserRouter>
         </CartProvider>
+      </TrackingProvider>
     </AuthProvider>
     </LanguageProvider>
   )

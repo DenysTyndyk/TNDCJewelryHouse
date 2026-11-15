@@ -75,7 +75,9 @@
 - [x] **T5.3 —** сторінка `/orders/:number` (статус) + список замовлень в `/account`.
 - [x] **T5.4 —** ключі перекладу uk / pl / en.
 
-## 6. Платежі (sandbox)
+## 6. Платежі (sandbox) — ⏸ перенесено
+
+> Бекенд і тести (T6.1–T6.4, T6.6) — у M8, до тестів/аудиту M9. Фронт і живий sandbox (T6.5, T6.7) — у M10 на задеплоєному API (без ngrok). Protocol називається `PaymentGateway`, бо enum `PaymentProvider` уже є. До того часу `Purchase` у M5 пишеться при створенні замовлення.
 
 - [ ] **T6.1 —** `services/payments/base.py`: Protocol `PaymentProvider` (`create_checkout`, `verify_webhook`).
 - [ ] **T6.2 —** `services/payments/liqpay.py` (sandbox) + `LIQPAY_PUBLIC_KEY` / `LIQPAY_PRIVATE_KEY` у `.env.example`.

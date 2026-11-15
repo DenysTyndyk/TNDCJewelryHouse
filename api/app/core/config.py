@@ -22,5 +22,6 @@ class Settings(BaseSettings):
     frontend_base_url: str = "http://localhost:5173"
     media_base_url: str = "http://localhost:8000/media"
     cors_origins: list[str] = ["http://localhost:5173"]
+    event_retention_days: int = Field(default=365, ge=1)
 
 settings = Settings()

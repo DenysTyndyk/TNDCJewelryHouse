@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth, useCart } from '../context';
+import { useAuth, useCart, useTracking } from '../context';
 import { useLanguage } from '../context/languageContext';
 import { createOrder, listShippingMethods } from '../api/orderApi';
 import type { ShippingMethod } from '../types';
@@ -21,6 +21,7 @@ function Checkout() {
   const { t, language } = useLanguage();
   const { user, accessToken } = useAuth();
   const { cart, cartCount, refresh } = useCart();
+  const { canTrack } = useTracking();
   const navigate = useNavigate();
 
   const [methods, setMethods] = useState<ShippingMethod[]>([]);
@@ -74,6 +75,7 @@ function Checkout() {
         },
         accessToken,
         language,
+        canTrack,
       );
       navigate(`/orders/${order.order_number}`);
       void refresh(); // the server cart is now empty

@@ -5,16 +5,15 @@ from sqlalchemy.orm import Session
 from sqlalchemy import and_, func, select
 
 from app.models.commerce import Order, OrderItem
-from app.models.enums import CartStatus, DeliveryProvider, OrderStatus
+from app.models.enums import CartStatus, DeliveryProvider, OrderStatus,EventType
 from app.models.logistics import ShippingMethod
-from app.repositories import cart_repository
+from app.repositories import cart_repository,telemetry_repository
 from app.repositories import order_repository as repo
 from app.schemas.order import CheckoutIn, OrderItemOut, OrderOut
 from app.services.catalog_service import CURRENCY
 from app.core.config import settings
 from app.core.email import send_email
 from datetime import datetime, timezone
-
 SHIPPING_COUNTRY = "UA"  
 ORDERS_PAGE_LIMIT = 50
 ALLOWED_TRANSITIONS: dict[OrderStatus, frozenset[OrderStatus]] = {
@@ -98,6 +97,7 @@ def checkout(
     user_id: int | None,
     session_token: str | None,
     locale: str,
+    track_purchase: bool = False,
 ) -> OrderOut:
     cart = cart_repository.get_active_cart(db, user_id=user_id, session_token=session_token)
     if cart is None:
@@ -180,6 +180,18 @@ def checkout(
         db.add(item)
         items.append(item)
         variant.reserved_quantity += line.quantity
+    if track_purchase:
+        telemetry_repository.bulk_insert_events(db, [
+            {
+                "user_id": user_id,
+                "session_token": session_token,
+                "event_type": EventType.Purchase,
+                "product_id": item.product_id,
+                "variant_id": item.variant_id,
+                "event_metadata": {"quantity": item.quantity},
+            }
+            for item in items
+        ])
 
     cart.session_token = None
     cart_repository.set_cart_status(db, cart, CartStatus.Converted)

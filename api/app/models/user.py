@@ -51,6 +51,7 @@ class UserProfile(Base):
     preferred_language: Mapped[str] = mapped_column(String(10), server_default="uk")
     consent_personal_data: Mapped[bool] = mapped_column(server_default=text("false"))
     consent_marketing: Mapped[bool] = mapped_column(server_default=text("false"))
+    consent_analytics: Mapped[bool] = mapped_column(server_default=text("false"))
     consent_updated_at: Mapped[Optional[datetime]]
     created_at: Mapped[created_at_col]
     updated_at: Mapped[updated_at_col]

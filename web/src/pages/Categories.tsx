@@ -5,6 +5,7 @@ import ItemCard from '../components/ItemCard/ItemCard';
 import { listCategories, listProducts, toItem } from '../api/catalogApi';
 import type { CategoryNode, Item, MetalColor, MetalType, ProductFilters, SortOrder } from '../types';
 import { useLanguage } from '../context/languageContext';
+import { useTracking } from '../context/trackingContext';
 
 type PanelFilters = Pick<ProductFilters, 'metal' | 'color' | 'fineness' | 'gemstone' | 'price_max' | 'in_stock' | 'sort'>;
 
@@ -18,6 +19,7 @@ const EMPTY_FILTERS: PanelFilters = { sort: 'newest' };
 
 function Categories() {
   const { t, language } = useLanguage();
+  const { track, canTrack } = useTracking();
   const location = useLocation();
   const [selectedCategory, setSelectedCategory] = useState<string>(location.state?.category || 'all');
   const [filters, setFilters] = useState<PanelFilters>(EMPTY_FILTERS);
@@ -47,6 +49,25 @@ function Categories() {
       .finally(() => active && setLoading(false));
     return () => { active = false; };
   }, [selectedCategory, filters, language]);
+
+  // CategoryView: once a concrete category is selected and the category list (with ids) has loaded.
+  useEffect(() => {
+    if (!canTrack || selectedCategory === 'all') return;
+    const category = categories.flatMap((c) => [c, ...c.children]).find((c) => c.slug === selectedCategory);
+    if (category) track({ event_type: 'CategoryView', category_id: category.id });
+  }, [selectedCategory, categories, canTrack]);
+
+  // FilterApply: debounced, so typing "1500" in the price field is one event, not four.
+  useEffect(() => {
+    if (!canTrack || filters === EMPTY_FILTERS) return;
+    const timer = setTimeout(() => {
+      const metadata = Object.fromEntries(
+        Object.entries(filters).filter(([, v]) => v !== undefined),
+      ) as Record<string, string | number | boolean>;
+      track({ event_type: 'FilterApply', metadata });
+    }, 800);
+    return () => clearTimeout(timer);
+  }, [filters, canTrack]);
 
   const loadMore = () => {
     if (!nextCursor) return;

@@ -68,6 +68,14 @@ export function updatePreferences(accessToken: string, preferredLanguage: string
   });
 }
 
+export function updateConsents(accessToken: string, analytics: boolean) {
+  return request('/auth/me/consents', {
+    method: 'PATCH',
+    headers: { Authorization: `Bearer ${accessToken}` },
+    body: JSON.stringify({ analytics }),
+  });
+}
+
 export function verifyEmail(token: string) {
   return request(`/auth/verify-email?token=${encodeURIComponent(token)}`);
 }

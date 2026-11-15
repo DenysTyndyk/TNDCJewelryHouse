@@ -4,7 +4,7 @@ import logging
 from app.models.enums import UserStatus
 from app.models.user import User
 from app.core.config import settings
-from app.services import cart_service
+from app.services import cart_service,telemetry_service
 from app.core.security import (
     DUMMY_PASSWORD_HASH,
     create_access_token,
@@ -16,6 +16,7 @@ from app.core.security import (
 )
 from app.repositories import user_repository as repo
 from app.schemas.auth import UserResponse
+from app.repositories import telemetry_repository
 
 class AuthError(Exception):
     pass
@@ -27,7 +28,30 @@ def get_me(db: Session, user: User) -> UserResponse:
     me = UserResponse.model_validate(user)
     if profile is not None:
         me.preferred_language = profile.preferred_language
+        me.consent_analytics = profile.consent_analytics
+        me.consent_updated_at = profile.consent_updated_at
     return me
+
+def set_analytics_consent(db: Session, user: User, granted: bool) -> UserResponse:
+    profile = repo.get_profile(db, user.id)
+    if profile is None:
+        profile = repo.create_user_profile(db, user.id, None, None)
+    if profile.consent_analytics != granted:
+        profile.consent_analytics = granted
+        profile.consent_updated_at = datetime.now(timezone.utc)
+        if not granted:
+            telemetry_repository.anonymize_user_events(db, user.id)
+    db.commit()
+    return get_me(db, user)
+
+def delete_account(db: Session, user: User, password: str) -> None:
+    if not (verify_password(password, user.password_hash)
+            or verify_legacy_password(password, user.password_hash)):
+        raise AuthError("Invalid password")
+    telemetry_repository.anonymize_user_events(db, user.id)
+    db.delete(user)
+    db.commit()
+
 
 def set_preferred_language(db: Session, user: User, language: str) -> UserResponse:
     profile = repo.get_profile(db, user.id)
@@ -68,6 +92,8 @@ def login(db: Session, email: str, password: str,cart_session: str | None = None
    refresh_token = _issue_refresh_token(db, user.id)
    if cart_session:
        _merge_guest_cart(db, cart_session, user.id)
+       _link_guest_events(db, cart_session, user.id)
+
    db.commit()
    return access_token, refresh_token, user.id
 
@@ -164,3 +190,12 @@ def _merge_guest_cart(db: Session, cart_session: str, user_id: int) -> None:
             cart_service.merge(db, cart_session, user_id)
     except Exception:
         logger.exception("Guest cart merge failed for user_id=%s", user_id)
+
+def _link_guest_events(db: Session, cart_session: str, user_id: int) -> None:
+    if not telemetry_service.tracking_allowed(db, user_id, None):
+        return
+    try:
+        with db.begin_nested():
+            telemetry_repository.link_guest_events(db, cart_session, user_id)
+    except Exception:
+        logger.exception("Guest events link failed for user_id=%s", user_id)

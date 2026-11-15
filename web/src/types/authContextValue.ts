@@ -6,6 +6,8 @@ export type User = {
   role: string;
   status: string;
   preferred_language: Locale;
+  consent_analytics: boolean;
+  consent_updated_at: string | null; // null = the account never decided on tracking
 };
 
 export type AuthResult = { error: string | null };
@@ -24,4 +26,5 @@ export type AuthContextValue = {
   ) => Promise<AuthResult>;
   signOut: () => Promise<void>;
   changeLanguage: (lang: Locale) => void;
+  setAnalyticsConsent: (granted: boolean) => Promise<void>;
 };

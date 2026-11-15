@@ -5,6 +5,7 @@ import ImageSliderOnHover from '../components/ItemCard/ImageSliderOnHover.jsx';
 import { getProductBySlug } from '../api/catalogApi';
 import { useLanguage } from '../context/languageContext';
 import { useCart } from '../context/cartContext';
+import { useTracking } from '../context/trackingContext';
 import type { ProductDetail, ProductVariant,ProductGemstone } from '../types';
 
 type T = (key: string) => string;
@@ -30,6 +31,7 @@ function Product() {
   const { slug = '' } = useParams();
   const { t, language } = useLanguage();
   const { addToCart, isInCart, error: cartError } = useCart();
+  const { track, canTrack } = useTracking();
   const [product, setProduct] = useState<ProductDetail | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [variantId, setVariantId] = useState<number | null>(null);
@@ -56,6 +58,13 @@ function Product() {
       .catch((e: Error) => active && setError(e.message));
     return () => { active = false; };
   }, [slug, language]);
+
+  // One view per product page; language or variant changes are not new views.
+  // canTrack in deps: a view still counts if consent is given (or auth resolves) while on the page.
+  useEffect(() => {
+    if (!product || !canTrack) return;
+    track({ event_type: 'ProductView', product_id: product.id, category_id: product.category.id });
+  }, [product?.id, canTrack]);
 
   if (error) {
     return (

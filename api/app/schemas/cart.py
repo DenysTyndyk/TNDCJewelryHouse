@@ -18,6 +18,7 @@ class CartItemUpdate(BaseModel):
 class CartLineOut(BaseModel):
     id: int
     variant_id: int
+    product_id: int
     product_slug: str
     name: str
     sku: str

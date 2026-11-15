@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from app.routers.cart import CART_SESSION_HEADER
 from app.core.config import settings
 from app.dependencies import get_current_user, get_db
-from app.schemas.auth import LoginRequest, RegisterRequest, TokenResponse, UserResponse, MessageResponse, ForgotPasswordRequest, ResetPasswordRequest, PreferencesUpdate
+from app.schemas.auth import LoginRequest, RegisterRequest, TokenResponse, UserResponse, MessageResponse, ForgotPasswordRequest, ResetPasswordRequest, PreferencesUpdate,ConsentsUpdate,DeleteAccountRequest
 from app.services import auth_service
 from app.services.auth_service import AuthError
 from app.core.limiter import limiter
@@ -77,6 +77,10 @@ def me(user = Depends(get_current_user), db: Session = Depends(get_db)):
 def update_preferences(payload: PreferencesUpdate, user = Depends(get_current_user), db: Session = Depends(get_db)):
     return auth_service.set_preferred_language(db, user, payload.preferred_language)
 
+@router.patch("/me/consents", response_model=UserResponse)
+def update_consents(payload: ConsentsUpdate, user = Depends(get_current_user), db: Session = Depends(get_db)):
+    return auth_service.set_analytics_consent(db, user, payload.analytics)
+
 @router.get("/verify-email", response_model=MessageResponse)
 @limiter.limit("10/minute")
 def verify_email(request: Request, token: str, db: Session = Depends(get_db)):
@@ -100,3 +104,19 @@ def reset_password(request: Request, payload: ResetPasswordRequest, db: Session 
     except AuthError as e: 
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
     return MessageResponse(message="Password has been reset")
+
+@router.delete("/me", status_code=status.HTTP_204_NO_CONTENT, response_class=Response)
+@limiter.limit("5/minute")
+def delete_me(
+    request: Request,
+    payload: DeleteAccountRequest,
+    user = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    try:
+        auth_service.delete_account(db, user, payload.password)
+    except AuthError as e:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=str(e))
+    out = Response(status_code=status.HTTP_204_NO_CONTENT)
+    out.delete_cookie(REFRESH_COOKIE_NAME, path="/auth")
+    return out

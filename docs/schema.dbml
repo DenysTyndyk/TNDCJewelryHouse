@@ -72,6 +72,7 @@ Table user_profiles {
   preferred_language varchar(10) [not null, default: 'uk']
   consent_personal_data boolean [not null, default: false]
   consent_marketing boolean [not null, default: false]
+  consent_analytics boolean [not null, default: false, note: 'opt-in for behaviour tracking (M5), separate purpose from consent_personal_data']
   consent_updated_at timestamp [null]
   created_at timestamp [not null, default: `now()`]
   updated_at timestamp [not null, default: `now()`]

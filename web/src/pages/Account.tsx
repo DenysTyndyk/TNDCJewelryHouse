@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useAuth } from '../context';
 import { useLanguage } from '../context/languageContext';
+import { useTracking } from '../context/trackingContext';
 import { listOrders } from '../api/orderApi';
 import type { Order } from '../types';
 import '../styles/site.css';
@@ -9,7 +10,19 @@ import '../styles/site.css';
 function Account() {
   const { user, loading, signOut, accessToken } = useAuth();
   const { t, language } = useLanguage();
+  const { consent, setConsent } = useTracking();
   const [orders, setOrders] = useState<Order[] | null>(null);
+  const [consentError, setConsentError] = useState<string | null>(null);
+
+  // Withdrawing must be as easy as granting (RODO art. 7(3)): one checkbox, no confirmation.
+  async function toggleConsent(granted: boolean) {
+    setConsentError(null);
+    try {
+      await setConsent(granted ? 'granted' : 'denied');
+    } catch {
+      setConsentError(t('consent.saveError'));
+    }
+  }
 
   useEffect(() => {
     if (!accessToken) return;
@@ -57,6 +70,18 @@ function Account() {
               ))}
             </ul>
           )}
+
+          <h2>{t('consent.title')}</h2>
+          <label className="catalog-filters__check">
+            <input
+              type="checkbox"
+              checked={consent === 'granted'}
+              onChange={(e) => toggleConsent(e.target.checked)}
+            />
+            {t('consent.accountToggle')}
+          </label>
+          <p className="auth-card__subtitle">{t('consent.withdrawNote')}</p>
+          {consentError && <p role="alert">{consentError}</p>}
 
           <button className="btn btn--ghost" style={{ width: '100%' }} onClick={signOut}>
             {t('account.signOut')}

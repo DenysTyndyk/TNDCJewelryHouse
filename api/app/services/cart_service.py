@@ -64,6 +64,7 @@ def _build_cart_out(db: Session, cart: Cart | None, locale: str) -> CartOut:
             CartLineOut(
                 id=r.id,
                 variant_id=r.variant_id,
+                product_id=r.product_id,
                 product_slug=r.product_slug,
                 name=r.name,
                 sku=r.sku,

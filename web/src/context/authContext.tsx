@@ -26,6 +26,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       .catch(() => { /* the UI already switched; saving is best effort */ });
   }
 
+  // Unlike the language, consent is not best effort: on failure the UI keeps the old state.
+  async function setAnalyticsConsent(granted: boolean) {
+    if (!accessToken) return;
+    setUser(await authApi.updateConsents(accessToken, granted));
+  }
+
   useEffect(() => {
     authApi.refresh().then(({ access_token }) => {
       setAccessToken(access_token);
@@ -70,7 +76,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, accessToken, loading, signIn, signUp, signOut, changeLanguage }}>
+    <AuthContext.Provider value={{ user, accessToken, loading, signIn, signUp, signOut, changeLanguage, setAnalyticsConsent }}>
       {children}
     </AuthContext.Provider>
   );

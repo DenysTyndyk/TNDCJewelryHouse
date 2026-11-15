@@ -23,9 +23,9 @@ export function clearCartSession() {
     try { localStorage.removeItem(SESSION_KEY); } catch { /* ignore */ }
 }
 
-// Logged-in users are identified by the bearer token; guests by X-Cart-Session (cart and orders).
+// Logged-in users are identified by the bearer token; guests by X-Cart-Session (cart, orders, events).
 export function ownerRequest(path: string, accessToken: string | null, options: RequestInit = {}) {
-    const headers: Record<string, string> = {};
+    const headers: Record<string, string> = { ...(options.headers as Record<string, string> | undefined) };
     if (accessToken) headers.Authorization = `Bearer ${accessToken}`;
     const session = readSession();
     if (session) headers[SESSION_HEADER] = session;

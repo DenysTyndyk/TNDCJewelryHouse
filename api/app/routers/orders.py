@@ -1,12 +1,13 @@
 import logging
 
-from fastapi import APIRouter, Depends, HTTPException, Path, status
+from fastapi import APIRouter, Depends, Header,HTTPException, Path, status
 from sqlalchemy.orm import Session
 
 from app.dependencies import get_db
 from app.routers.cart import CartOwner, get_cart_owner
 from app.schemas.order import CheckoutIn, OrderOut, ShippingMethodOut
-from app.services import order_service
+from app.services import order_service,telemetry_service
+from app.services.telemetry_service import TRACKING_CONSENT_HEADER
 from app.services.order_service import (
     DeliveryDetailsError,
     EmptyCartError,
@@ -32,12 +33,14 @@ def list_shipping_methods(db: Session = Depends(get_db)):
 def create_order(
     data: CheckoutIn,
     owner: CartOwner = Depends(get_cart_owner),
+    x_tracking_consent: str | None = Header(default=None, alias=TRACKING_CONSENT_HEADER, max_length=16),
     db: Session = Depends(get_db),
 ):
-    """Check out the caller's cart. Guests send X-Cart-Session."""
+    """Check out the caller's cart. Guests send X-Cart-Session (and X-Tracking-Consent if they agreed)."""
     try:
         out = order_service.checkout(
-            db, data, user_id=owner.user_id, session_token=owner.session_token, locale=owner.locale
+            db, data, user_id=owner.user_id, session_token=owner.session_token, locale=owner.locale,
+            track_purchase=telemetry_service.tracking_allowed(db, owner.user_id, x_tracking_consent),
         )
     except EmptyCartError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))

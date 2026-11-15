@@ -87,6 +87,16 @@
       "checkout": "Оформити замовлення",
       "continueShopping": "Продовжити покупки"
     },
+    "consent": {
+      "title": "Персоналізація",
+      "text": "Ми можемо запам'ятовувати, які прикраси ви переглядаєте, щоб показувати схожі. Без вашої згоди ми цього не робимо.",
+      "privacyLink": "Політика конфіденційності",
+      "accept": "Погоджуюсь",
+      "decline": "Відмовитись",
+      "accountToggle": "Дозволити збирати дані про перегляди для персональних рекомендацій",
+      "withdrawNote": "Згоду можна відкликати будь-коли; вже зібрані дані буде знеособлено.",
+      "saveError": "Не вдалося зберегти. Спробуйте ще раз."
+    },
     "account": {
       "loading": "Завантаження…",
       "title": "Акаунт",
@@ -292,6 +302,16 @@
       "checkout": "Przejdź do kasy",
       "continueShopping": "Kontynuuj zakupy"
     },
+    "consent": {
+      "title": "Personalizacja",
+      "text": "Możemy zapamiętywać, jaką biżuterię przeglądasz, aby pokazywać podobne produkty. Bez Twojej zgody tego nie robimy.",
+      "privacyLink": "Polityka prywatności",
+      "accept": "Zgadzam się",
+      "decline": "Odmawiam",
+      "accountToggle": "Zezwalaj na zbieranie danych o przeglądaniu w celu personalizowanych rekomendacji",
+      "withdrawNote": "Zgodę można wycofać w każdej chwili; zebrane dane zostaną zanonimizowane.",
+      "saveError": "Nie udało się zapisać. Spróbuj ponownie."
+    },
     "account": {
       "loading": "Wczytywanie…",
       "title": "Konto",
@@ -496,6 +516,16 @@
       "total": "Total",
       "checkout": "Proceed to checkout",
       "continueShopping": "Continue shopping"
+    },
+    "consent": {
+      "title": "Personalisation",
+      "text": "We can remember which jewellery you view to show you similar pieces. We don't do this without your consent.",
+      "privacyLink": "Privacy policy",
+      "accept": "I agree",
+      "decline": "Decline",
+      "accountToggle": "Allow collecting browsing data for personal recommendations",
+      "withdrawNote": "You can withdraw consent at any time; data already collected will be anonymised.",
+      "saveError": "Could not save. Please try again."
     },
     "account": {
       "loading": "Loading…",
