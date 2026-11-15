@@ -1,0 +1,31 @@
+{
+  "category": "earrings",
+  "published": true,
+  "is_featured": false,
+  "translations": {
+    "uk": {
+      "name": "Сережки «Геометрія»",
+      "description": "Висячі сережки з жовтого золота 585 з круглим підвісом і геометричним орнаментом. Англійський замок."
+    },
+    "pl": {
+      "name": "Kolczyki „Geometria”",
+      "description": "Wiszące kolczyki z żółtego złota próby 585 z okrągłą zawieszką i geometrycznym ornamentem. Zapięcie angielskie."
+    },
+    "en": {
+      "name": "\"Geometry\" earrings",
+      "description": "585 yellow gold drop earrings with a round pendant and a geometric pattern. Lever-back closure."
+    }
+  },
+  "variants": [
+    {
+      "sku": "ER-GEOM-Y585",
+      "metal_type": "Gold",
+      "metal_color": "Yellow",
+      "fineness": 585,
+      "weight": "3.2",
+      "base_price": "12500",
+      "stock_quantity": 2
+    }
+  ],
+  "gemstones": []
+}

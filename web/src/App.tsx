@@ -1,26 +1,37 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { Home, Categories, Contact, Cart, About , AppLayout, Login,Register,Account} from './pages'
-import {CartProvider,AuthProvider} from './context'
+import { Home, Categories, Contact, Cart, About , AppLayout, Login,Register,Account, VerifyEmail, ForgotPassword, ResetPassword,Product, Checkout, OrderDetails} from './pages'
+import {CartProvider,AuthProvider,LanguageProvider,TrackingProvider} from './context'
 function App() {
   return (
+    <LanguageProvider>
     <AuthProvider>
+      {/* Tracking needs auth (consent, token); the cart needs tracking (AddToCart events). */}
+      <TrackingProvider>
         <CartProvider>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<AppLayout />}>
         <Route index element={<Home />} />
         <Route path="/categories" element={<Categories />} />
+        <Route path="/products/:slug" element={<Product />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/orders/:number" element={<OrderDetails />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/account" element={<Account />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         </Route>
       </Routes>
     </BrowserRouter>
         </CartProvider>
+      </TrackingProvider>
     </AuthProvider>
+    </LanguageProvider>
   )
 }
 

@@ -15,7 +15,16 @@ dist-ssr/
 .vscode/*
 !.vscode/extensions.json
 
+api/media/products/
+
 __pycache__/
 *.py[cod]
 .venv/
 venv/
+
+graphify-out/cache/
+graphify-out/.graphify_*
+graphify-out/*.lock
+
+api/media/*
+!api/media/seed/

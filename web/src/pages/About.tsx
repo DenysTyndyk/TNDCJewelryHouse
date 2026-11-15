@@ -1,60 +1,61 @@
 import '../styles/site.css';
+import { useLanguage } from '../context/languageContext';
 function About() {
+    const { t } = useLanguage();
     return (
         <main>
       <section className="page-hero">
         <div className="container">
-          <p className="section__eyebrow">Our story</p>
-          <h1>About us</h1>
-          <p>A family atelier where gold, stone, and careful hands meet.</p>
+          <p className="section__eyebrow">{t('about.eyebrow')}</p>
+          <h1>{t('about.title')}</h1>
+          <p>{t('about.lead')}</p>
         </div>
       </section>
 
       <section className="section">
         <div className="container split">
           <div className="prose">
+            <p style={{ whiteSpace: 'pre-line' }}>
+              {t('about.paragraph1')}
+            </p>
+            <hr className="divider" />
             <p>
-            Ювелірний дім TNDC JEWELRY HOUSE був заснований у 2009 році вінничанкою Наталією Тиндик. Понад 12 років ми створюємо справжні витвори мистецтва з унікальним та впізнаваним дизайном.
-Вироби зі срібла та золота, інкрустовані діамантами, рубінами, смарагдами та іншим дорогоцінним камінням, підкорили серця українців своєю вишуканістю й елегантністю.
-</p>
-<hr className="divider" />
-<p>
-Наш асортимент та послуги<br/><br/>
-Ми постійно оновлюємо колекції, реагуючи на світові тенденції ювелірної моди та зберігаючи найвищі стандарти якості. У нашому каталозі ви знайдете широкий вибір оригінальних прикрас:<br/>
-· Класичні та дизайнерські вироби: каблучки, сережки, кольє, підвіски, ланцюжки, браслети.<br/>
-· Індивідуальне виготовлення: створення ексклюзивних прикрас під замовлення за вашими побажаннями або навіть за власним ескізом чи малюнком.<br/>
-· Сервіс: повний спектр ювелірних послуг та обслуговування.
-</p>
-<hr className="divider" />
-<p>
-Філософія бренду <br/><br/>
-«Я можу з впевненістю сказати, що за роки роботи мені вдалося зібрати команду справжніх професіоналів, які здатні виготовити прикрасу будь-якої складності. Наша головна мета — втілювати в життя мрії українців.»<br/>
-— Наталія ТИНДИК, засновниця бренду
-</p>
-<p>
-Чому обирають нас?<br/><br/>
-Індивідуальний підхід: Ми підбираємо прикраси з урахуванням побажань та фінансових можливостей кожного клієнта.<br/>
-Гарантія якості: Багаторічний досвід майстрів у поєднанні з сучасними технологіями дозволяє нам давати офіційну гарантію на всі вироби.<br/>
-Визнання та досвід: TNDC JEWELRY HOUSE — постійний учасник і лауреат міжнародних виставок, таких як «Ювелірний світ», «Ювелір Престиж», «Ювелір Еліт» та «Ювелірний салон».<br/>
-У 2019 році засновниця бренду Наталія Дмитрівна стала лауреаткою конкурсу «Жінка Вінниччини», успішно поєднуючи розбудову ювелірного дому, громадську діяльність та виховання сина.<br/>
-Подаруйте своєму образу довершений та сяючий штрих разом із колекцією від TNDC JEWELRY HOUSE!
-</p>
-            
+              {t('about.assortmentTitle')}<br/><br/>
+              {t('about.assortmentText')}<br/>
+              · {t('about.assortmentList1')}<br/>
+              · {t('about.assortmentList2')}<br/>
+              · {t('about.assortmentList3')}
+            </p>
+            <hr className="divider" />
+            <p>
+              {t('about.philosophyTitle')} <br/><br/>
+              {t('about.philosophyQuote')}<br/>
+              {t('about.philosophyAuthor')}
+            </p>
+            <p>
+              {t('about.whyUsTitle')}<br/><br/>
+              {t('about.whyUs1')}<br/>
+              {t('about.whyUs2')}<br/>
+              {t('about.whyUs3')}<br/>
+              {t('about.whyUs4')}<br/>
+              {t('about.whyUs5')}
+            </p>
+
             <hr className="divider" />
           </div>
 
           <dl className="stat-list">
             <div>
-              <dt>Craft</dt>
-              <dd>Вироби зі срібла і золота, інкрустовані діамантами, рубінами, смарагдами та іншим дорогоцінним камінням</dd>
+              <dt>{t('about.statCraftLabel')}</dt>
+              <dd>{t('about.statCraftValue')}</dd>
             </div>
             <div>
-              <dt>Languages</dt>
+              <dt>{t('about.statLanguagesLabel')}</dt>
               <dd>Polski · English · Українська</dd>
             </div>
             <div>
-              <dt>Promise</dt>
-              <dd>Real photos from our atelier</dd>
+              <dt>{t('about.statPromiseLabel')}</dt>
+              <dd>{t('about.statPromiseValue')}</dd>
             </div>
           </dl>
         </div>
