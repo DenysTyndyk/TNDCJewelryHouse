@@ -1,6 +1,7 @@
 from pathlib import Path
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from typing import Literal
 
 MEDIA_DIR = Path(__file__).resolve().parents[2] / "media"
 
@@ -22,6 +23,10 @@ class Settings(BaseSettings):
     frontend_base_url: str = "http://localhost:5173"
     media_base_url: str = "http://localhost:8000/media"
     cors_origins: list[str] = ["http://localhost:5173"]
+    app_env: Literal["dev", "prod"] = "prod"
+    pending_order_ttl_minutes: int = 30
+    refresh_cookie_samesite: Literal["lax", "strict", "none"] = "lax"
+    seed_admin_password: str | None = Field(default=None, min_length=12)
     event_retention_days: int = Field(default=365, ge=1)
     # Recommendations (M6). Hybrid score = a·behavior + b·content + c·popularity + d·novelty.
     # Components are normalised to [0, 1] first, so only the ratio between weights matters.

@@ -1,6 +1,7 @@
 import logging
 
-from fastapi import APIRouter, Depends, Header,HTTPException, Path, status
+from fastapi import APIRouter, Depends, Header, HTTPException, Path, Request, status
+from app.core.limiter import limiter
 from sqlalchemy.orm import Session
 
 from app.dependencies import get_db
@@ -30,7 +31,9 @@ def list_shipping_methods(db: Session = Depends(get_db)):
 
 
 @router.post("/orders", response_model=OrderOut, status_code=status.HTTP_201_CREATED)
+@limiter.limit("5/minute")
 def create_order(
+    request: Request,
     data: CheckoutIn,
     owner: CartOwner = Depends(get_cart_owner),
     x_tracking_consent: str | None = Header(default=None, alias=TRACKING_CONSENT_HEADER, max_length=16),

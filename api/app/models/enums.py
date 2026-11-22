@@ -16,6 +16,7 @@ class UserStatus(str, enum.Enum):
     Suspended = "Suspended"
     Deactivated = "Deactivated"
 
+BLOCKED_STATUSES = (UserStatus.Suspended, UserStatus.Deactivated)
 
 class Currency(str, enum.Enum):
     UAH = "UAH"

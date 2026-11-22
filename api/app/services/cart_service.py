@@ -87,6 +87,9 @@ def add_item(db: Session, data: CartItemIn, *, user_id: int | None, session_toke
     _require_identity(user_id, session_token)
     variant = _get_variant(db,data.variant_id)
     cart = repo.get_or_create_cart(db,user_id=user_id, session_token=session_token)
+    db.refresh(cart, with_for_update=True)
+    if cart.status != CartStatus.Active:
+        cart = repo.get_or_create_cart(db, user_id=user_id, session_token=session_token)
 
     item = repo.get_item_by_variant(db,cart.id,data.variant_id)
     if item is None:
@@ -121,35 +124,49 @@ def remove_item(
 
 def _get_own_item(db: Session, item_id: int, user_id: int | None, session_token: str | None):
     cart = repo.get_active_cart(db, user_id=user_id, session_token=session_token)
+    if cart is not None:
+        db.refresh(cart, with_for_update=True)
+        if cart.status != CartStatus.Active:
+            cart = None  
     item = repo.get_item(db, cart.id, item_id) if cart else None
     if item is None:
         raise CartItemNotFoundError(f"Cart item {item_id} not found")
     return cart, item
 
-def merge(db: Session, guest_token: str, user_id: int) -> None:
-    guest = repo.get_active_cart(db,session_token=guest_token)
+def merge(db: Session, guest_token: str, user_id: int) -> list[int]:
+    """Move guest lines into the user's cart. Returns variant_ids dropped or reduced."""
+    guest = repo.get_active_cart(db, session_token=guest_token)
     if guest is None:
-        return 
-    guest_items = repo.list_items(db,guest.id)
+        return []
+    db.refresh(guest, with_for_update=True)
+    if guest.status != CartStatus.Active:
+        return []  
+    dropped: list[int] = []
+    guest_items = repo.list_items(db, guest.id)
     if guest_items:
-        user_cart = repo.get_or_create_cart(db,user_id=user_id)
-        user_items = {i.variant_id: i for i in repo.list_items(db,user_cart.id)}
+        user_cart = repo.get_or_create_cart(db, user_id=user_id)
+        user_items = {i.variant_id: i for i in repo.list_items(db, user_cart.id)}
         for g in guest_items:
             variant = repo.get_purchasable_variant(db, g.variant_id, CURRENCY)
             if variant is None:
+                dropped.append(g.variant_id)
                 continue
-            limit = min(max(variant.available,0), MAX_LINE_QUANTITY)
+            limit = min(max(variant.available, 0), MAX_LINE_QUANTITY)
             existing = user_items.get(g.variant_id)
             if existing is not None:
-                new_quantity = min(existing.quantity + g.quantity,limit)
+                wanted = existing.quantity + g.quantity
+                new_quantity = min(wanted, limit)
                 if new_quantity > existing.quantity:
-                    repo.set_item_quantity(db,existing,new_quantity)
+                    repo.set_item_quantity(db, existing, new_quantity)
             else:
-                quantity = min(g.quantity,limit)
-                if quantity > 0:
-                    repo.add_item(db,user_cart.id,g.variant_id,quantity,
-                                  g.unit_price_at_add or variant.unit_price,
-                                  )
-        repo.touch_cart(db,user_cart)
+                wanted = g.quantity
+                new_quantity = min(wanted, limit)
+                if new_quantity > 0:
+                    repo.add_item(db, user_cart.id, g.variant_id, new_quantity,
+                                  g.unit_price_at_add or variant.unit_price)
+            if new_quantity < wanted:
+                dropped.append(g.variant_id)
+        repo.touch_cart(db, user_cart)
     guest.session_token = None
     repo.set_cart_status(db, guest, CartStatus.Converted)
+    return dropped

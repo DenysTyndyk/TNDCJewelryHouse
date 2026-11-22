@@ -73,21 +73,12 @@ def _image_out(img: ProductImage) -> ImageOut:
         variant_id=img.variant_id,
     )
 
-def list_products(db: Session, filters: ProductFilter, accept_language: str | None) -> ProductPage:
-    locale = resolve_locale(filters.locale, accept_language)
-    filters = filters.model_copy(update={"locale": locale})
-
-    try:
-        rows, next_cursor = repo.list_products(db, filters, CURRENCY)
-    except ValueError as exc:  
-        raise InvalidCursorError("Invalid cursor") from exc
-
+def _cards(db: Session, rows) -> list[ProductListItem]:
     images = {
         img.product_id: _image_out(img)
         for img in repo.list_primary_images(db, [r.id for r in rows])
     }
-
-    items = [
+    return [
         ProductListItem(
             id=r.id,
             slug=r.slug,
@@ -102,7 +93,24 @@ def list_products(db: Session, filters: ProductFilter, accept_language: str | No
         )
         for r in rows
     ]
-    return ProductPage(items=items, next_cursor=next_cursor)
+
+def list_products(db: Session, filters: ProductFilter, accept_language: str | None) -> ProductPage:
+    locale = resolve_locale(filters.locale, accept_language)
+    filters = filters.model_copy(update={"locale": locale})
+
+    try:
+        rows, next_cursor = repo.list_products(db, filters, CURRENCY)
+    except ValueError as exc:  
+        raise InvalidCursorError("Invalid cursor") from exc
+    return ProductPage(items=_cards(db, rows), next_cursor=next_cursor)
+
+def product_cards(db: Session, ids: list[int], locale: str) -> list[ProductListItem]:
+    """Catalog cards for the given ids, in the given (ranked) order."""
+    if not ids:
+        return []
+    rows, _ = repo.list_products(db, ProductFilter(locale=locale), CURRENCY, ids=ids)
+    by_id = {card.id: card for card in _cards(db, rows)}
+    return [by_id[i] for i in ids if i in by_id]
 
 def get_product(db: Session, slug: str, locale: str) -> ProductDetail:
     row = repo.get_product_by_slug(db, slug, locale)

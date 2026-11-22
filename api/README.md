@@ -49,3 +49,20 @@ alembic downgrade -1 && alembic upgrade head
 - D6: `variant_prices.is_manual_override` — ręczna cena nie jest nadpisywana przez przeliczanie walutowe.
 - D8: tłumaczenia `uk`/`pl`/`en` w `*_translations`; klucz `product_embeddings (product_id, locale, model_name)`.
 - ON DELETE: `CASCADE` dla danych podrzędnych katalogu/koszyka, `RESTRICT` dla `orders`/`order_items`/`payments`, `SET NULL` dla `user_events` (anonimizacja RODO) i `orders.user_id`.
+- Usuwanie konta: fizyczne (hard delete), zdarzenia anonimizowane. Kolumnę `users.deleted_at` usunięto w `0007`; `ix_users_email_active` to zwykły indeks unikalny na `lower(email)`.
+
+## Zadania okresowe (serwis `jobs`)
+
+Serwis `jobs` w `docker-compose.yml` co 5 minut uruchamia:
+
+- `scripts.expire_pending_orders` — anuluje zamówienia `Pending` starsze niż `PENDING_ORDER_TTL_MINUTES` (domyślnie 30) i zwalnia rezerwę magazynową;
+- `scripts.anonymize_events` — retencja RODO: odłącza od osób zdarzenia i wyszukiwania starsze niż `EVENT_RETENTION_DAYS` (domyślnie 365). Skrypt jest idempotentny.
+
+```bash
+docker compose up -d --build jobs
+docker compose logs -f jobs
+
+# ręczne uruchomienie (z katalogu api/)
+python -m scripts.expire_pending_orders
+python -m scripts.anonymize_events
+```

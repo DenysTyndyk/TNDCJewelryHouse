@@ -37,7 +37,9 @@ class UserEvent(Base):
         Index("ix_user_events_user_created", "user_id", "created_at"),
         Index("ix_user_events_session_created", "session_token", "created_at"),
         Index("ix_user_events_product_type", "product_id", "event_type"),
+        Index("ix_user_events_created_at", "created_at"),
     )
+
 
 
 class SearchQuery(Base):
@@ -56,4 +58,8 @@ class SearchQuery(Base):
     query_embedding = mapped_column(Vector(EMBEDDING_DIM), nullable=True)  # cache for frequent queries
     created_at: Mapped[created_at_col]
 
-    __table_args__ = (Index("ix_search_queries_query_text", "query_text"),)
+    __table_args__ = (
+        Index("ix_search_queries_query_text", "query_text"),
+        Index("ix_search_queries_session_token", "session_token"),
+        Index("ix_search_queries_user_id", "user_id"),
+    )

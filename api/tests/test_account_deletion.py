@@ -32,7 +32,7 @@ def test_wrong_password_keeps_account(client, db_session):
 
 def test_delete_removes_user_anonymises_events_keeps_orders(client, db_session):
     user, h = _user(db_session)
-    db_session.add(UserEvent(user_id=user.id, session_token=TOKEN, event_type=EventType.CategoryView))
+    db_session.add(UserEvent(user_id=None, session_token=GUEST, event_type=EventType.ProductView))
     _, method, _ = _setup(db_session)
     out = order_service.checkout(db_session, _form(method.id), user_id=None, session_token=GUEST, locale="uk")
     order = db_session.query(Order).filter_by(order_number=out.order_number).one()
@@ -46,8 +46,10 @@ def test_delete_removes_user_anonymises_events_keeps_orders(client, db_session):
     assert repo.get_profile(db_session, user.id) is None
     assert db_session.query(UserEvent).filter_by(session_token=TOKEN).count() == 0
     assert db_session.query(UserEvent).filter_by(user_id=user.id).count() == 0
+    assert db_session.query(UserEvent).filter_by(session_token=GUEST).count() == 0
     kept = db_session.get(Order, order.id)
     assert kept is not None and kept.user_id is None
+
 
 
 def test_token_rejected_after_deletion(client, db_session):
@@ -72,3 +74,4 @@ def test_retention_anonymises_only_old_events(db_session):
     assert fresh.session_token == "new-" + TOKEN
     # Re-run is a no-op
     assert telemetry_repository.anonymize_older_than(db_session, now - timedelta(days=365))["user_events"] == 0
+    assert counts["user_events"] >= 1

@@ -112,6 +112,7 @@ class ProductVariant(Base):
     __table_args__ = (
         CheckConstraint("stock_quantity >= 0", name="stock_non_negative"),
         CheckConstraint("reserved_quantity >= 0", name="reserved_non_negative"),
+        CheckConstraint("reserved_quantity <= stock_quantity", name="reserved_le_stock"),
         CheckConstraint("base_price > 0", name="base_price_positive"),
         CheckConstraint(
             "fineness IS NULL OR fineness IN (375, 500, 585, 750, 875, 925, 958, 999)",
@@ -141,6 +142,7 @@ class VariantPrice(Base):
         Index("uq_variant_prices_variant_currency", "variant_id", "currency", unique=True),
         CheckConstraint("price > 0", name="price_positive"),
         CheckConstraint("sale_price IS NULL OR sale_price > 0", name="sale_price_positive"),
+        CheckConstraint("sale_price IS NULL OR sale_price < price", name="sale_below_price"),
     )
 
 

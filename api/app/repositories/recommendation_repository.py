@@ -4,7 +4,7 @@ from sqlalchemy import String, and_, cast, func, null, select
 from sqlalchemy.orm import Session
 
 from app.models.catalog import Product, ProductGemstone, ProductVariant, VariantPrice
-from app.models.commerce import Order, OrderItem
+from app.models.commerce import Cart, CartItem, Order, OrderItem , CartStatus
 from app.models.enums import Currency, EventType, OrderStatus
 from app.models.telemetry import UserEvent
 from app.repositories.catalog_repository import AVAILABLE, EFFECTIVE_PRICE, IS_PUBLISHED
@@ -114,5 +114,17 @@ def purchased_product_ids(
         .distinct()
         .join(Order, Order.id == OrderItem.order_id)
         .where(_owner(Order, user_id, session_token), Order.status != OrderStatus.Cancelled)
+    )
+    return set(db.scalars(stmt))
+
+def cart_product_ids(db: Session, *, user_id: int | None, session_token: str | None) -> set[int]:
+    if user_id is None and not session_token:
+        return set()
+    stmt = (
+        select(ProductVariant.product_id)
+        .distinct()
+        .join(CartItem, CartItem.variant_id == ProductVariant.id)
+        .join(Cart, Cart.id == CartItem.cart_id)
+        .where(_owner(Cart, user_id, session_token), Cart.status == CartStatus.Active)
     )
     return set(db.scalars(stmt))

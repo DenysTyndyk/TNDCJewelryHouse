@@ -4,7 +4,7 @@ from app.core.config import settings
 from app.core.security import hash_refresh_token
 from app.core.limiter import limiter
 from app.repositories import user_repository as repo
-
+from app.models.enums import UserStatus
 
 def _register(client, email="negative.test@example.com", password="supersecret123"):
     response = client.post(
@@ -118,3 +118,16 @@ def test_register_sqli_payload_does_not_break_request(client):
     # first_name has no format restriction, so it is accepted and stored as a literal
     # string via a parameterized query -- it must never reach the DB as raw SQL.
     assert response.status_code == 201
+
+def test_suspended_user_loses_access_and_refresh(client, db_session):
+    email, password = _register(client, email="suspended.test@example.com")
+    login_response = _login(client, email, password)
+    access_token = login_response.json()["access_token"]
+    raw_token = login_response.cookies.get("refresh_token")
+
+    user = repo.get_by_email(db_session, email)
+    user.status = UserStatus.Suspended
+    db_session.flush()
+
+    assert client.get("/auth/me", headers={"Authorization": f"Bearer {access_token}"}).status_code == 401
+    assert client.post("/auth/refresh", cookies={"refresh_token": raw_token}).status_code == 401
