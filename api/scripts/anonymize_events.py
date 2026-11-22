@@ -1,19 +1,17 @@
-from datetime import datetime, timedelta, timezone
-
-from app.core.config import settings
 from app.db.session import get_session
-from app.repositories import telemetry_repository
+from app.services import order_service
 
 
 def main() -> None:
-    cutoff = datetime.now(timezone.utc) - timedelta(days=settings.event_retention_days)
     session = get_session()
+    total = 0
     try:
-        counts = telemetry_repository.anonymize_older_than(session, cutoff)
-        session.commit()
+        while n := order_service.expire_stale_orders(session):
+            session.commit()
+            total += n
     finally:
         session.close()
-    print(f"Anonymised before {cutoff:%Y-%m-%d}: {counts}")
+    print(f"Expired pending orders: {total}")
 
 
 if __name__ == "__main__":

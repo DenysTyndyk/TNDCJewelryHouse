@@ -77,14 +77,16 @@ def test_purchase_recorded_only_with_consent(db_session):
     variant, method, _ = _setup(db_session, stock=3, quantity=2)
     order_service.checkout(db_session, _form(method.id), user_id=None, session_token=GUEST,
                            locale="uk", track_purchase=True)
-    [event] = _events(db_session, event_type=EventType.Purchase)
+    [event] = _events(db_session, event_type=EventType.Purchase, session_token=GUEST)
     assert event.variant_id == variant.id and event.event_metadata == {"quantity": 2}
+
 
 
 def test_purchase_not_recorded_without_consent(db_session):
     _, method, _ = _setup(db_session)
     order_service.checkout(db_session, _form(method.id), user_id=None, session_token=GUEST, locale="uk")
-    assert _events(db_session, event_type=EventType.Purchase) == []
+    assert _events(db_session, event_type=EventType.Purchase, session_token=GUEST) == []
+
 
 
 def test_link_guest_events(db_session):

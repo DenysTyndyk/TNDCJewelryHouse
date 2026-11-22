@@ -6,7 +6,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from app.core.security import decode_access_token
 from app.db.session import SessionLocal
-from app.models.enums import Role
+from app.models.enums import BLOCKED_STATUSES, Role
 from app.repositories import user_repository as repo
 
 bearer_scheme = HTTPBearer(auto_error=False)
@@ -31,8 +31,8 @@ def get_current_user(
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid or expired token")
 
     user = repo.get_by_id(db, int(payload["sub"]))
-    if user is None:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")
+    if user is None or user.status in BLOCKED_STATUSES:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found or inactivate")
 
     return user
 

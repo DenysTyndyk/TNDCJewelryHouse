@@ -1,7 +1,8 @@
 from datetime import datetime, timedelta, timezone
 from sqlalchemy.orm import Session
 import logging
-from app.models.enums import UserStatus
+from app.repositories import order_repository
+from app.models.enums import BLOCKED_STATUSES, UserStatus
 from app.models.user import User
 from app.core.config import settings
 from app.services import cart_service,telemetry_service
@@ -22,6 +23,7 @@ class AuthError(Exception):
     pass
 
 logger = logging.getLogger(__name__)
+LOGIN_FAILED = "Invalid email or password, or the account is temporarily locked"
 
 def get_me(db: Session, user: User) -> UserResponse:
     profile = repo.get_profile(db, user.id)
@@ -48,7 +50,8 @@ def delete_account(db: Session, user: User, password: str) -> None:
     if not (verify_password(password, user.password_hash)
             or verify_legacy_password(password, user.password_hash)):
         raise AuthError("Invalid password")
-    telemetry_repository.anonymize_user_events(db, user.id)
+    tokens = order_repository.session_tokens_of_user(db, user.id)
+    telemetry_repository.anonymize_user_events(db, user.id, tokens)
     db.delete(user)
     db.commit()
 
@@ -71,35 +74,32 @@ def register(db: Session, email: str, password: str, first_name: str | None, las
    _issue_email_verification_token(db,user)
    db.commit()
 
-def login(db: Session, email: str, password: str,cart_session: str | None = None) -> tuple[str, str,int]:
-   user = repo.get_by_email(db,email)
-   if not user:
-    verify_password(password, DUMMY_PASSWORD_HASH)
-    verify_legacy_password(password, DUMMY_PASSWORD_HASH)
-    raise AuthError("Invalid email or password")
-   if user.status in (UserStatus.Suspended, UserStatus.Deactivated):
-    raise AuthError("Account is not available")
-   if repo.is_locked(user):
-    raise AuthError("Account is locked due to too many failed login attempts. Please try again later.")
-   if not verify_password(password, user.password_hash):
+def login(db: Session, email: str, password: str, cart_session: str | None = None) -> tuple[str, str, int]:
+    user = repo.get_by_email(db, email, for_update=True)
+    if user is None or user.status in BLOCKED_STATUSES or repo.is_locked(user):
+        verify_password(password, DUMMY_PASSWORD_HASH)
+        verify_legacy_password(password, DUMMY_PASSWORD_HASH)
+        raise AuthError(LOGIN_FAILED)
+    if not verify_password(password, user.password_hash):
         if not verify_legacy_password(password, user.password_hash):
             repo.register_failed_login(db, user)
             db.commit()
-            raise AuthError("Invalid email or password")
-        repo.update_password(db, user, hash_password(password)) 
-   repo.register_successful_login(db, user)
-   access_token = create_access_token(user.id,user.role.value)
-   refresh_token = _issue_refresh_token(db, user.id)
-   if cart_session:
-       _merge_guest_cart(db, cart_session, user.id)
-       _link_guest_events(db, cart_session, user.id)
+            raise AuthError(LOGIN_FAILED)
+        repo.update_password(db, user, hash_password(password))
+    
+    repo.register_successful_login(db, user)
+    access_token = create_access_token(user.id, user.role.value)
+    refresh_token = _issue_refresh_token(db, user.id)
+    if cart_session:
+        _merge_guest_cart(db, cart_session, user.id)
+        _link_guest_events(db, cart_session, user.id)
 
-   db.commit()
-   return access_token, refresh_token, user.id
+    db.commit()
+    return access_token, refresh_token, user.id
 
 def refresh(db: Session, raw_refresh_token: str) -> tuple[str, str]:
     token_hash = hash_refresh_token(raw_refresh_token)
-    token = repo.get_refresh_token(db, token_hash)
+    token = repo.get_refresh_token(db, token_hash, for_update=True)
     if token is None:
         raise AuthError("Invalid refresh token")
     if token.revoked_at is not None:
@@ -108,19 +108,21 @@ def refresh(db: Session, raw_refresh_token: str) -> tuple[str, str]:
             repo.revoke_all_for_user(db, token.user_id)
             db.commit()
             raise AuthError("refresh token reuse detected")
-        
         raise AuthError("Invalid refresh token")
     if token.expires_at < datetime.now(timezone.utc):
         raise AuthError("Refresh token has expired")
 
-    repo.revoke_refresh_token(db, token)
     user = repo.get_by_id(db, token.user_id)
-    if user is None:
+    if user is None or user.status in BLOCKED_STATUSES:
+        repo.revoke_all_for_user(db, token.user_id)
+        db.commit()
         raise AuthError("Invalid refresh token")
+    repo.revoke_refresh_token(db, token)
     access_token = create_access_token(user.id, user.role.value)
     new_refresh_token = _issue_refresh_token(db, user.id)
     db.commit()
     return access_token, new_refresh_token
+
 
 def logout(db: Session, raw_refresh_token: str) -> None:
     token_hash = hash_refresh_token(raw_refresh_token)
@@ -174,7 +176,9 @@ def _issue_email_verification_token(db: Session, user:User) ->  None:
     expires_at = datetime.now(timezone.utc) + timedelta(hours = settings.email_verification_token_expire_hours)
     repo.create_email_verification_token(db,user.id,hash_refresh_token(raw_token), expires_at)
     link = f"{settings.frontend_base_url}/verify-email?token={raw_token}"
-    logging.getLogger("app").info("EMAIL_VERIFICATION_LINK user_id=%s link=%s", user.id, link)
+    if settings.app_env == "dev":
+        logging.getLogger("app").info("EMAIL_VERIFICATION_LINK user_id=%s link=%s", user.id, link)
+
 
 def _issue_password_reset_token(db: Session, user: User) -> None:
     repo.invalidate_active_password_reset_tokens(db, user.id)
@@ -182,12 +186,16 @@ def _issue_password_reset_token(db: Session, user: User) -> None:
     expires_at = datetime.now(timezone.utc) + timedelta(minutes=settings.password_reset_token_expire_minutes)
     repo.create_password_reset_token(db, user.id, hash_refresh_token(raw_token), expires_at)
     link = f"{settings.frontend_base_url}/reset-password?token={raw_token}"
-    logging.getLogger("app").info("PASSWORD_RESET_LINK user_id=%s link=%s", user.id, link)
+    if settings.app_env == "dev":
+        logging.getLogger("app").info("PASSWORD_RESET_LINK user_id=%s link=%s", user.id, link)
+
 
 def _merge_guest_cart(db: Session, cart_session: str, user_id: int) -> None:
     try:
         with db.begin_nested():
-            cart_service.merge(db, cart_session, user_id)
+            dropped = cart_service.merge(db, cart_session, user_id)
+        if dropped:
+            logger.info("Guest cart merge dropped/reduced variants %s for user_id=%s", dropped, user_id)
     except Exception:
         logger.exception("Guest cart merge failed for user_id=%s", user_id)
 

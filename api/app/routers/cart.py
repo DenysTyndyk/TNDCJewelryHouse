@@ -16,9 +16,7 @@ from app.services.cart_service import (
 )
 
 CART_SESSION_HEADER = "X-Cart-Session"
-x_cart_session: str | None = Header(
-    default=None, alias=CART_SESSION_HEADER, min_length=16, max_length=128
-),
+
 router = APIRouter(prefix="/cart", tags=["cart"])
 
 

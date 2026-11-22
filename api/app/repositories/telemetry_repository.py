@@ -33,14 +33,12 @@ def link_guest_events(db: Session, session_token: str, user_id: int) -> None:
         )
 
 
-def anonymize_user_events(db: Session, user_id: int) -> None:
-    """Detach all behaviour data from a user (RODO). Rows stay for aggregate stats (popularity)."""
+def anonymize_user_events(db: Session, user_id: int, session_tokens: set[str] = frozenset()) -> None:
     for model in (UserEvent, SearchQuery):
-        db.execute(
-            update(model)
-            .where(model.user_id == user_id)
-            .values(user_id=None, session_token=None)
-        )
+        owned = model.user_id == user_id
+        if session_tokens:
+            owned = owned | model.session_token.in_(session_tokens)
+        db.execute(update(model).where(owned).values(user_id=None, session_token=None))
 
 def anonymize_older_than(db: Session, cutoff: datetime) -> dict[str, int]:
     """Detach events/searches created before cutoff from people. Returns affected rows per table."""

@@ -8,6 +8,7 @@ from PIL import Image
 
 from app.db.session import get_session
 from app.core.security import hash_password
+from app.core.config import settings
 from app.models import (
     Category,
     CategoryTranslation,
@@ -491,7 +492,7 @@ def seed_products(session, categories: dict[str, Category], gemstones: dict[str,
             session.add(variant)
             session.flush()
 
-            session.add(
+            session.add_all([
                 VariantPrice(
                     variant_id=variant.id,
                     currency=Currency.UAH,
@@ -502,7 +503,7 @@ def seed_products(session, categories: dict[str, Category], gemstones: dict[str,
                     currency=Currency.UAH,
                     price=base_price
                 ),
-            )
+            ])
 
             if gemstone_slug:
                 session.add(
@@ -538,7 +539,7 @@ def seed_users(session) -> None:
         email="admin@tndc.ua",
         role=Role.Admin,
         status=UserStatus.Active,
-        password_hash=hash_password("Admin123!"),
+        password_hash=hash_password(settings.seed_admin_password),
     )
     session.add(admin)
     session.flush()
@@ -580,6 +581,8 @@ def seed_users(session) -> None:
 def main() -> None:
     session = get_session()
     try:
+        if not settings.seed_admin_password:
+            raise SystemExit("Set SEED_ADMIN_PASSWORD in .env before running the seed.")
         if session.query(Category).first() is not None:
             print("Seed skipped: categories already exist.")
             return

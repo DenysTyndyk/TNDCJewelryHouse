@@ -3,7 +3,10 @@ from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 
 from app.models.catalog import Category, Product, ProductTranslation, ProductVariant, VariantPrice
-from app.models.enums import Currency, MetalType
+
+from app.models.enums import Currency, EventType, MetalType
+from app.models.telemetry import UserEvent
+from app.repositories import catalog_repository
 
 
 def _now():
@@ -142,3 +145,18 @@ def test_unpublished_product_returns_404(client, db_session):
     assert client.get("/products/t-scheduled").status_code == 404
     assert client.get("/products/t-does-not-exist").status_code == 404
     assert _slugs(client.get("/products?category=t-hidden")) == []
+
+def test_refresh_view_counts_counts_only_recent_product_views(db_session):
+    product = _product(db_session, _category(db_session, "t-popular"), "t-popular-ring")
+    now = _now()
+    db_session.add_all([
+        UserEvent(event_type=EventType.ProductView, product_id=product.id, created_at=now),
+        UserEvent(event_type=EventType.ProductView, product_id=product.id, created_at=now - timedelta(days=60)),
+        UserEvent(event_type=EventType.AddToCart, product_id=product.id, created_at=now),
+    ])
+    db_session.flush()
+
+    catalog_repository.refresh_view_counts(db_session, since=now - timedelta(days=30))
+
+    db_session.refresh(product)
+    assert product.view_count == 1  # old view and non-view event are ignored

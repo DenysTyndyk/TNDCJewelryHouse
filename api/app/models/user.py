@@ -24,16 +24,10 @@ class User(Base):
     last_login_at: Mapped[Optional[datetime]]
     created_at: Mapped[created_at_col]
     updated_at: Mapped[updated_at_col]
-    deleted_at: Mapped[Optional[datetime]]
 
     __table_args__ = (
-        # Partial + case-insensitive: a soft-deleted user can register again.
-        Index(
-            "ix_users_email_active",
-            text("lower(email)"),
-            unique=True,
-            postgresql_where=text("deleted_at IS NULL"),
-        ),
+        # Case-insensitive unique email. Accounts are hard-deleted (RODO), so no soft-delete filter.
+        Index("ix_users_email_active", text("lower(email)"), unique=True),
     )
 
 

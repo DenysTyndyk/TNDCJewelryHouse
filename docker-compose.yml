@@ -22,7 +22,7 @@ services:
     build: ./api
     container_name: tndc-api
     restart: unless-stopped
-    environment:
+    environment: &api-env
       DATABASE_URL: postgresql+psycopg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
       JWT_SECRET: ${JWT_SECRET}
       PASSWORD_PEPPER: ${PASSWORD_PEPPER:?PASSWORD_PEPPER must be set in .env}
@@ -37,6 +37,25 @@ services:
         condition: service_healthy
     volumes:
       - ./api:/app
+
+  # Periodic jobs: expire stale Pending orders (stock reserve TTL) and RODO event retention.
+  jobs:
+    build: ./api
+    container_name: tndc-jobs
+    restart: unless-stopped
+    environment: *api-env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./api:/app
+    # shortcut: shell loop instead of cron, one 5-min cadence for both; move to a scheduler if cadences diverge
+    command: >
+      sh -c 'while true;
+             do python -m scripts.expire_pending_orders;
+                python -m scripts.anonymize_events;
+                sleep 300; done'
+
   web:
     build:
       context: ./web

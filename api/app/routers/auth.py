@@ -19,7 +19,7 @@ def _set_refresh_cookie(response: Response, refresh_token: str)-> None:
         value=refresh_token,
         httponly=True,
         secure=True,
-        samesite="lax",
+        samesite=settings.refresh_cookie_samesite,
         max_age=settings.refresh_token_expire_days * 24 * 60 * 60,
         path="/auth"
     )
@@ -36,7 +36,7 @@ def login(
     request: Request,
     payload: LoginRequest,
     response: Response,
-    x_cart_session: str | None = Header(default=None, alias=CART_SESSION_HEADER, max_length=128),
+    x_cart_session: str | None = Header(default=None, alias=CART_SESSION_HEADER, min_length=16, max_length=128),
     db: Session = Depends(get_db),
 ):
     try:

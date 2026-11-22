@@ -2,7 +2,6 @@
 from decimal import Decimal
 
 from sqlalchemy.orm import Session
-from sqlalchemy import and_, func, select
 
 from app.models.commerce import Order, OrderItem
 from app.models.enums import CartStatus, DeliveryProvider, OrderStatus,EventType
@@ -13,7 +12,7 @@ from app.schemas.order import CheckoutIn, OrderItemOut, OrderOut
 from app.services.catalog_service import CURRENCY
 from app.core.config import settings
 from app.core.email import send_email
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 SHIPPING_COUNTRY = "UA"  
 ORDERS_PAGE_LIMIT = 50
 ALLOWED_TRANSITIONS: dict[OrderStatus, frozenset[OrderStatus]] = {
@@ -218,30 +217,6 @@ def send_order_created_email(order: OrderOut, locale: str) -> None:
     ])
     send_email(order.customer_email, text["subject"].format(number=order.order_number), body)
 
-def _owned_by(user_id: int | None, session_token: str | None):
-    if user_id is not None:
-        return Order.user_id == user_id
-    return and_(Order.user_id.is_(None), Order.session_token == session_token)
-
-
-def list_orders(db: Session, *, user_id: int | None, session_token: str | None, limit: int) -> list[Order]:
-    stmt = (
-        select(Order)
-        .where(_owned_by(user_id, session_token))
-        .order_by(Order.created_at.desc(), Order.id.desc())
-        .limit(limit)
-    )
-    return list(db.scalars(stmt))
-
-
-def get_order(db: Session, order_number: str, *, user_id: int | None, session_token: str | None) -> Order | None:
-    return db.scalar(
-        select(Order).where(Order.order_number == order_number, _owned_by(user_id, session_token))
-    )
-
-
-def list_order_items(db: Session, order_id: int) -> list[OrderItem]:
-    return list(db.scalars(select(OrderItem).where(OrderItem.order_id == order_id).order_by(OrderItem.id)))
 
 def list_orders(db: Session, *, user_id: int | None, session_token: str | None) -> list[OrderOut]:
     orders = repo.list_orders(db, user_id=user_id, session_token=session_token, limit=ORDERS_PAGE_LIMIT)
@@ -260,6 +235,18 @@ def get_order(db: Session, order_number: str, *, user_id: int | None, session_to
         raise OrderNotFoundError(order_number)
     return _order_out(db, order)
 
+def _release(db: Session, orders: list[Order]) -> None:
+    items = [i for o in orders for i in repo.list_order_items(db, o.id)]
+    variants = repo.lock_variants(db, sorted({i.variant_id for i in items if i.variant_id is not None}))
+    for item in items:
+        variant = variants.get(item.variant_id)
+        if variant is not None:
+            variant.reserved_quantity = max(variant.reserved_quantity - item.quantity, 0)
+    now = datetime.now(timezone.utc)
+    for order in orders:
+        order.cancelled_at = now
+    db.flush()
+
 def cancel(db: Session, order_number: str, *, user_id: int | None, session_token: str | None) -> OrderOut:
     order = repo.get_order(
         db, order_number, user_id=user_id, session_token=session_token, for_update=True
@@ -267,15 +254,13 @@ def cancel(db: Session, order_number: str, *, user_id: int | None, session_token
     if order is None:
         raise OrderNotFoundError(order_number)
     _transition(order, OrderStatus.Cancelled)
-
-    items = repo.list_order_items(db, order.id)
-    variant_ids = sorted({i.variant_id for i in items if i.variant_id is not None})
-    variants = repo.lock_variants(db, variant_ids)
-    for item in items:
-        variant = variants.get(item.variant_id)
-        if variant is not None:
-            variant.reserved_quantity -= item.quantity
-
-    order.cancelled_at = datetime.now(timezone.utc)
-    db.flush()
+    _release(db, [order])
     return _order_out(db, order)
+
+def expire_stale_orders(db: Session) -> int:
+    cutoff = datetime.now(timezone.utc) - timedelta(minutes=settings.pending_order_ttl_minutes)
+    orders = repo.lock_stale_pending_orders(db, cutoff)
+    for order in orders:
+        _transition(order, OrderStatus.Cancelled)
+    _release(db, orders)
+    return len(orders)

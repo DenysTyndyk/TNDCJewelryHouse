@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Annotated
 
-from sqlalchemy import BigInteger, DateTime, Integer, MetaData, func
+from sqlalchemy import BigInteger, DateTime, Integer, MetaData, func,FetchedValue
 from sqlalchemy.orm import DeclarativeBase, mapped_column
 
 NAMING_CONVENTION = {
@@ -21,4 +21,4 @@ class Base(DeclarativeBase):
 bigint_pk = Annotated[int, mapped_column(BigInteger, primary_key=True)]
 int_pk = Annotated[int, mapped_column(Integer, primary_key=True)]
 created_at_col = Annotated[datetime, mapped_column(server_default=func.now())]
-updated_at_col = Annotated[datetime, mapped_column(server_default=func.now())]
+updated_at_col = Annotated[datetime, mapped_column(server_default=func.now(), server_onupdate=FetchedValue())]

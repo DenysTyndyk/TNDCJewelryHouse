@@ -14,7 +14,7 @@ from slowapi.errors import RateLimitExceeded
 from app.core.config import MEDIA_DIR, settings
 from app.core.limiter import limiter
 from app.db.session import SessionLocal
-from app.routers import admin_analytics, admin_catalog, auth, catalog, cart, orders, telemetry
+from app.routers import admin_analytics, admin_catalog, auth, catalog, cart, orders, recommendations, telemetry
 from app.services.admin_catalog_service import ConflictError, InvalidImageError, NotFoundError
 
 request_id_context: ContextVar[str] = ContextVar("request_id", default=None)
@@ -65,7 +65,8 @@ async def request_context(request: Request, call_next):
 
 @app.exception_handler(Exception)
 async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONResponse:
-    log_event(logging.ERROR, event="unhandled_exception", path=request.url.path, error=str(exc))
+    error = str(exc) if settings.app_env == "dev" else type(exc).__name__
+    log_event(logging.ERROR, event="unhandled_exception", path=request.url.path, error=error)
     return JSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         content={"detail": "Internal server error"},
@@ -105,6 +106,7 @@ app.include_router(admin_analytics.router)
 app.include_router(cart.router)
 app.include_router(orders.router)
 app.include_router(telemetry.router)
+app.include_router(recommendations.router)
 
 MEDIA_DIR.mkdir(exist_ok=True)  
 app.mount("/media", StaticFiles(directory=MEDIA_DIR), name="media")

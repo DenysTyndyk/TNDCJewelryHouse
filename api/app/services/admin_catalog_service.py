@@ -3,6 +3,7 @@ import uuid
 from contextlib import contextmanager
 from io import BytesIO
 from pathlib import Path
+import logging
 
 from PIL import Image, ImageOps, UnidentifiedImageError
 from sqlalchemy.exc import IntegrityError
@@ -31,7 +32,7 @@ from app.schemas.admin_catalog import (
     VariantCreate,
     VariantUpdate,
 )
-
+logger = logging.getLogger(__name__)
 IMAGE_WIDTHS = (400, 800, 1600)
 MAX_UPLOAD_BYTES = 10 * 1024 * 1024
 MAX_PIXELS = 40_000_000  # ~6300×6300; stops "decompression bomb" uploads before decoding
@@ -58,7 +59,8 @@ def _tx(db: Session):
         db.commit()
     except IntegrityError as exc:
         db.rollback()
-        raise ConflictError(str(exc.orig).split("\n")[0]) from exc
+        logger.warning("Integrity error: %s", str(exc.orig).split("/n")[0])
+        raise ConflictError("Conflicts with existing data (duplicate value or invalid reference)") from exc
 
 
 def _get(db: Session, model, obj_id: int):

@@ -6,13 +6,14 @@ from sqlalchemy.orm import Session
 from app.models.user import User, RefreshToken,UserProfile,EmailVerificationToken, PasswordResetToken
 from app.core.config import settings
 
-def get_by_email(db: Session, email: str) -> User | None:
-    stmt = select(User).where(func.lower(User.email) == email.lower(), User.deleted_at.is_(None))
+def get_by_email(db: Session, email: str ,for_update: bool = False) -> User | None:
+    stmt = select(User).where(func.lower(User.email) == email.lower())
+    if for_update:
+        stmt = stmt.with_for_update()
     return db.scalar(stmt)
 
 def get_by_id(db: Session, user_id: int) -> User | None:
-    stmt = select(User).where(User.id == user_id, User.deleted_at.is_(None))
-    return db.scalar(stmt)
+    return db.get(User, user_id)
 
 def create_user(db: Session, email: str, password_hash: str) -> User:
     user = User(email=email, password_hash=password_hash)
@@ -23,10 +24,12 @@ def create_user(db: Session, email: str, password_hash: str) -> User:
 def register_failed_login(db: Session, user: User) -> None:
     if user.locked_until is not None and user.locked_until <= datetime.now(timezone.utc):
         user.failed_login_attempts = 0
+        user.locked_until = None
     user.failed_login_attempts += 1
     if user.failed_login_attempts >= settings.max_failed_attempts:
         user.locked_until = datetime.now(timezone.utc) + timedelta(minutes=settings.lockout_duration)
     db.flush()
+
 
 def register_successful_login(db: Session, user: User) -> None:
     user.failed_login_attempts = 0
@@ -43,8 +46,10 @@ def store_refresh_token(db: Session, user_id: int, token_hash: str, expires_at: 
     db.flush()
     return token
 
-def get_refresh_token(db: Session, token_hash: str) -> RefreshToken | None:
+def get_refresh_token(db: Session, token_hash: str, for_update: bool = False) -> RefreshToken | None:
     stmt = select(RefreshToken).where(RefreshToken.token_hash == token_hash)
+    if for_update:
+        stmt = stmt.with_for_update()
     return db.scalar(stmt)
 
 def revoke_refresh_token(db : Session, token: RefreshToken) -> None:

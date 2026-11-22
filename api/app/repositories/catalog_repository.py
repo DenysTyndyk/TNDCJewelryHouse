@@ -3,8 +3,10 @@ import json
 from datetime import datetime
 from decimal import Decimal, InvalidOperation
 
-from sqlalchemy import and_, case, func, or_, select, tuple_
+from sqlalchemy import and_, case, func, or_, select, tuple_, update
+from sqlalchemy.engine import CursorResult
 from sqlalchemy.orm import Session, aliased
+from app.schemas.catalog import ProductFilter
 
 from app.models.catalog import (
     Category,
@@ -17,8 +19,9 @@ from app.models.catalog import (
     ProductVariant,
     VariantPrice,
 )
-from app.models.enums import Currency
-from app.schemas.catalog import ProductFilter
+from app.models.enums import Currency, EventType
+from app.models.telemetry import UserEvent
+
 
 DEFAULT_LOCALE = "uk"  
 
@@ -70,7 +73,7 @@ def _decode_cursor(cursor: str, sort: str):
     except (ValueError, TypeError, KeyError, InvalidOperation) as exc:
         raise ValueError("invalid cursor") from exc
 
-def list_products(db: Session, filters: ProductFilter, currency: Currency):
+def list_products(db: Session, filters: ProductFilter, currency: Currency,ids: list[int] | None = None):
     offers = (
         select(
             ProductVariant.product_id,
@@ -124,22 +127,24 @@ def list_products(db: Session, filters: ProductFilter, currency: Currency):
         .join(Category, Category.id == Product.category_id)
         .outerjoin(tr, and_(tr.product_id == Product.id, tr.locale == filters.locale))
         .outerjoin(tr_default, and_(tr_default.product_id == Product.id, tr_default.locale == DEFAULT_LOCALE))
-        .where(IS_PUBLISHED)
+        .where(IS_PUBLISHED, Category.is_active)
     )
 
     if filters.price_min is not None:
         stmt = stmt.where(offers.c.price_from >= filters.price_min)
     if filters.price_max is not None:
         stmt = stmt.where(offers.c.price_from <= filters.price_max)
+    if ids is not None:
+        stmt = stmt.where(Product.id.in_(ids))
 
     if filters.category:
         tree = (
             select(Category.id)
-            .where(Category.slug == filters.category)
+            .where(Category.slug == filters.category,Category.is_active)
             .cte("category_tree", recursive=True)
         )
         child = aliased(Category)
-        tree = tree.union_all(select(child.id).where(child.parent_id == tree.c.id))
+        tree = tree.union_all(select(child.id).where(child.parent_id == tree.c.id, child.is_active))
         stmt = stmt.where(Product.category_id.in_(select(tree.c.id)))
 
     if filters.gemstone:
@@ -156,11 +161,12 @@ def list_products(db: Session, filters: ProductFilter, currency: Currency):
         stmt = stmt.where(key > after if ascending else key < after)
 
     order = (sort_col.asc(), Product.id.asc()) if ascending else (sort_col.desc(), Product.id.desc())
-    rows = db.execute(stmt.order_by(*order).limit(filters.limit + 1)).all()
+    limit = len(ids) if ids is not None else filters.limit
+    rows = db.execute(stmt.order_by(*order).limit(limit + 1)).all()
 
     next_cursor = None
-    if len(rows) > filters.limit:
-        rows = rows[: filters.limit]
+    if len(rows) > limit:
+        rows = rows[:limit]
         next_cursor = _encode_cursor(rows[-1].sort_value, rows[-1].id)
     return rows, next_cursor
 
@@ -198,7 +204,7 @@ def get_product_by_slug(db: Session, slug: str, locale: str):
         .outerjoin(tr_default, and_(tr_default.product_id == Product.id, tr_default.locale == DEFAULT_LOCALE))
         .outerjoin(ctr, and_(ctr.category_id == Category.id, ctr.locale == locale))
         .outerjoin(ctr_default, and_(ctr_default.category_id == Category.id, ctr_default.locale == DEFAULT_LOCALE))
-        .where(Product.slug == slug, IS_PUBLISHED)
+        .where(Product.slug == slug, IS_PUBLISHED, Category.is_active)
     )
     return db.execute(stmt).one_or_none()
 
@@ -241,3 +247,20 @@ def list_gemstones(db: Session, product_id: int):
         .order_by(ProductGemstone.is_center_stone.desc(), ProductGemstone.id)
     )
     return db.execute(stmt).all()
+
+def refresh_view_counts(db: Session, since: datetime) -> int:
+    views=(
+        select(func.count())
+        .where(UserEvent.product_id == Product.id,
+               UserEvent.event_type == EventType.ProductView,
+               UserEvent.created_at >= since
+        )
+        .scalar_subquery()
+    )
+    result: CursorResult = db.execute( 
+        update(Product)
+        .where(Product.view_count.is_distinct_from(views))
+        .values(view_count=views)
+        .execution_options(synchronize_session=False)
+    )
+    return result.rowcount

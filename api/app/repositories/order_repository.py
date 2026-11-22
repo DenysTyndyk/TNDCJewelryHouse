@@ -7,7 +7,7 @@ from app.models.catalog import Product, ProductVariant
 from app.models.commerce import Order, OrderItem
 from app.models.logistics import ShippingMethod
 from app.repositories.catalog_repository import IS_PUBLISHED
-
+from app.models.enums import OrderStatus
 
 def list_active_shipping_methods(db: Session) -> list[ShippingMethod]:
     stmt = (
@@ -82,3 +82,18 @@ def lock_variants(db: Session, variant_ids: list[int]) -> dict[int, ProductVaria
         .execution_options(populate_existing=True)
     )
     return {v.id: v for v in db.scalars(stmt)}
+
+def lock_stale_pending_orders(db: Session, cutoff: datetime, limit: int = 100) -> list[Order]:
+    stmt = (
+        select(Order)
+        .where(Order.status == OrderStatus.Pending, Order.created_at < cutoff)
+        .order_by(Order.id)
+        .limit(limit)
+        .with_for_update(skip_locked=True)
+    )
+    return list(db.scalars(stmt))
+
+def session_tokens_of_user(db: Session, user_id: int) -> set[str]:
+    return set(db.scalars(
+        select(Order.session_token).where(Order.user_id == user_id, Order.session_token.is_not(None))
+    ))
