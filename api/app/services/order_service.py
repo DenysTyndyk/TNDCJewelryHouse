@@ -12,6 +12,8 @@ from app.schemas.order import CheckoutIn, OrderItemOut, OrderOut
 from app.services.catalog_service import CURRENCY
 from app.core.config import settings
 from app.core.email import send_email
+from app.repositories import recommendation_repository as reco_repo
+from app.services.recommendation import engine
 from datetime import datetime, timedelta, timezone
 SHIPPING_COUNTRY = "UA"  
 ORDERS_PAGE_LIMIT = 50
@@ -194,6 +196,7 @@ def checkout(
 
     cart.session_token = None
     cart_repository.set_cart_status(db, cart, CartStatus.Converted)
+    reco_repo.cache_drop_owner(db, engine.owner_key(user_id, session_token))
 
     out = OrderOut.model_validate(order)
     out.items = [OrderItemOut.model_validate(i) for i in items]

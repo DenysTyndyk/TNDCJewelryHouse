@@ -100,7 +100,7 @@ M7 залежить лише від M3 і може йти паралельно �
 - **Deliverable**: «Wyszukiwanie semantyczne i podobieństwo wektorowe».
 
 ### M8 — Персоналізація в UI (2 тижні)
-Секції «Polecane dla Ciebie», «Podobne produkty», «Ostatnio przeglądane», «Inni oglądali też»; персоналізований порядок у категоріях; пошук у хедері з autocomplete; `recommendation_cache` з TTL; прапорець `algorithm=cbf|vector|hybrid`; `click_recommendation` з ідентифікатором алгоритму; skeleton-стани.
+Секції «Polecane dla Ciebie», «Podobne produkty», «Ostatnio przeglądane», «Inni oglądali też»; персоналізований порядок у категоріях; autocomplete назв товарів у пошуку каталогу; `recommendation_cache` з TTL; прапорець `algorithm=cbf|vector|hybrid`; `click_recommendation` з ідентифікатором алгоритму; skeleton-стани.
 - **DoD**: гість і користувач з історією бачать різну головну; кожен клік має algorithm id; без layout shift.
 - **Deliverable**: інтеграція в UX + скріншоти до/після.
 

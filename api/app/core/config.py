@@ -48,7 +48,7 @@ class Settings(BaseSettings):
     embedding_model: str = "intfloat/multilingual-e5-small"
     embedding_version: int = Field(default=1, ge=1)
     semantic_search_enabled: bool = True
-    similar_source: Literal["cbf", "vector"] = "cbf"
+    similar_source: Literal["cbf", "vector", "hybrid"] = "cbf"
     search_rrf_k: int = Field(default=60, ge=1)
-
+    reco_cache_ttl_seconds: int = Field(default=600, ge=0)
 settings = Settings()

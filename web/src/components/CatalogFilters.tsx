@@ -1,4 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react';
+import { Link } from 'react-router-dom';
+import { suggestProducts, type Suggestion } from '../api/recoApi';
 import { useLanguage } from '../context/languageContext';
 import type { MetalColor, MetalType, ProductFilters, SortOrder } from '../types';
 
@@ -9,7 +11,7 @@ const COLORS: MetalColor[] = ['White', 'Yellow', 'Rose', 'Bicolor'];
 const FINENESS = [375, 500, 585, 750, 875, 925, 958, 999]; // same list as the DB check constraint
 // shortcut: same slugs as the seed and the `gemstones.*` i18n keys; switch to a /gemstones endpoint if admins add stones
 const GEMSTONES = ['diamond', 'sapphire', 'ruby', 'emerald', 'amethyst', 'topaz', 'pearl', 'cubic_zirconia'];
-const SORTS: SortOrder[] = ['newest', 'price_asc', 'price_desc', 'popular'];
+const SORTS: SortOrder[] = ['recommended', 'newest', 'price_asc', 'price_desc', 'popular'];
 
 type Props = {
   filters: PanelFilters;
@@ -21,10 +23,24 @@ type Props = {
 };
 
 const SEARCH_DEBOUNCE_MS = 500;
+const SUGGEST_DEBOUNCE_MS = 250; // shorter than the grid search: suggestions should appear while typing
+const SUGGEST_MIN_CHARS = 2;     // the API rejects shorter queries
 
 function CatalogFilters({ filters, onChange, onReset, showSort = true, query, onSearch }: Props) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [text, setText] = useState(query);
+  const [hits, setHits] = useState<Suggestion[]>([]);
+
+  // Name suggestions: abort keeps a slow, stale answer from overwriting a fresh one.
+  useEffect(() => {
+    const q = text.trim();
+    if (q.length < SUGGEST_MIN_CHARS) { setHits([]); return; }
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => {
+      suggestProducts(q, language, ctrl.signal).then(setHits).catch(() => { /* suggestions are optional */ });
+    }, SUGGEST_DEBOUNCE_MS);
+    return () => { clearTimeout(timer); ctrl.abort(); };
+  }, [text, language]);
 
   // Live search: fire once typing pauses, so "каблучка" is one request (and one search_queries row), not eight.
   // A single character is skipped: it matches nothing lexically and only costs an embedder call.
@@ -39,21 +55,33 @@ function CatalogFilters({ filters, onChange, onReset, showSort = true, query, on
   const submit = (e: FormEvent) => {
     e.preventDefault();
     const q = text.trim();
+    setHits([]);
     if (q !== query) onSearch(q);
   };
 
   return (
     <form className="catalog-filters" aria-label="Product filters" role="search" onSubmit={submit}>
-      <label className="catalog-filters__search">
-        {t('search.label')}
-        <input
-          type="search"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder={t('search.placeholder')}
-          maxLength={200}
-        />
-      </label>
+      <div className="catalog-filters__search">
+        <label>
+          {t('search.label')}
+          <input
+            type="search"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Escape') setHits([]); }}
+            placeholder={t('search.placeholder')}
+            maxLength={200}
+            autoComplete="off"
+          />
+        </label>
+        {hits.length > 0 && (
+          <ul className="catalog-filters__suggestions">
+            {hits.map((h) => (
+              <li key={h.slug}><Link to={`/products/${h.slug}`}>{h.name}</Link></li>
+            ))}
+          </ul>
+        )}
+      </div>
       <label>
         {t('product.specs.metal')}
         <select value={filters.metal ?? ''} onChange={(e) => onChange({ metal: (e.target.value || undefined) as MetalType | undefined })}>

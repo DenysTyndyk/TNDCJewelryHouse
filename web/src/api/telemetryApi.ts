@@ -4,7 +4,7 @@ export const TRACKING_HEADER = 'X-Tracking-Consent';
 
 // Only the types a client may send; Purchase is recorded by the backend at checkout.
 export type EventType =
-  | 'ProductView' | 'CategoryView' | 'AddToCart' | 'RemoveFromCart' | 'FilterApply' | 'Search';
+  | 'ProductView' | 'CategoryView' | 'AddToCart' | 'RemoveFromCart' | 'FilterApply' | 'Search' | 'ClickRecommendation';
 
 export type TrackEvent = {
   event_type: EventType;
@@ -12,6 +12,7 @@ export type TrackEvent = {
   variant_id?: number;
   category_id?: number;
   metadata?: Record<string, string | number | boolean | null>;
+  source?: string; // algorithm that showed the item; required by the API for ClickRecommendation
 };
 
 // Events are only ever queued after consent, so the header is always "granted" here.

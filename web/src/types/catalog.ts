@@ -1,5 +1,5 @@
 export type Locale = 'uk' | 'pl' | 'en';
-export type SortOrder = 'newest' | 'price_asc' | 'price_desc' | 'popular';
+export type SortOrder = 'newest' | 'price_asc' | 'price_desc' | 'popular' | 'recommended';
 export type Currency = 'UAH' | 'PLN' | 'USD';
 export type MetalType = 'Gold' | 'Silver' | 'Platinum';
 export type MetalColor = 'White' | 'Yellow' | 'Rose' | 'Bicolor';

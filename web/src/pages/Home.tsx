@@ -5,8 +5,11 @@ import { listProducts, toItem } from '../api/catalogApi';
 import {Link} from 'react-router-dom'
 import type { Item } from '../types';
 import { useLanguage } from '../context/languageContext';
+import { useTracking } from '../context/trackingContext';
+import RecoSection from '../components/RecoSection';
 function Home() {
   const { t, language } = useLanguage();
+  const { canTrack } = useTracking();
   const [newArrivals, setNewArrivals] = useState<Item[]>([]);
   useEffect(() => {
     let active = true; // ignore a stale response if the language switches mid-request
@@ -64,6 +67,10 @@ function Home() {
           </div>
         </div>
       </section>
+
+      <RecoSection title={t('reco.forYou')} path="for-you" section="home_for_you" />
+      {/* Without consent there is no view history, so the section is not even requested (no skeleton flash). */}
+      {canTrack && <RecoSection title={t('reco.recent')} path="recently-viewed" section="home_recent" />}
     </main>
     )
 }

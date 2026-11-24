@@ -3,7 +3,8 @@ import json
 from datetime import datetime
 from decimal import Decimal, InvalidOperation
 
-from sqlalchemy import and_, case, func, or_, select, tuple_, update
+from sqlalchemy import BigInteger, and_, case, func, literal, or_, select, tuple_, update
+from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.engine import CursorResult
 from sqlalchemy.orm import Session, aliased
 from app.schemas.catalog import ProductFilter
@@ -59,6 +60,7 @@ _SORT_PARSERS = {
     "price_asc": Decimal,
     "price_desc": Decimal,
     "popular": int,
+    "recommended": int,
 }
 
 def _encode_cursor(sort_value, last_id: int) -> str:
@@ -73,7 +75,13 @@ def _decode_cursor(cursor: str, sort: str):
     except (ValueError, TypeError, KeyError, InvalidOperation) as exc:
         raise ValueError("invalid cursor") from exc
 
-def list_products(db: Session, filters: ProductFilter, currency: Currency,ids: list[int] | None = None):
+def list_products(
+    db: Session,
+    filters: ProductFilter,
+    currency: Currency,
+    ids: list[int] | None = None,
+    ranked: list[int] | None = None,
+):
     offers = (
         select(
             ProductVariant.product_id,
@@ -103,13 +111,19 @@ def list_products(db: Session, filters: ProductFilter, currency: Currency,ids: l
 
     tr = aliased(ProductTranslation)
     tr_default = aliased(ProductTranslation)
+    ranked = ranked or []
     sort_col = {
         "newest": Product.published_at,
         "price_asc": offers.c.price_from,
         "price_desc": offers.c.price_from,
         "popular": Product.view_count,
+        # Position in the personal ranking as a plain int, so keyset pagination works unchanged;
+        # unranked products go last, ties broken by id.
+        "recommended": func.coalesce(
+            func.array_position(literal(ranked, ARRAY(BigInteger)), Product.id), len(ranked) + 1
+        ),
     }[filters.sort]
-    ascending = filters.sort == "price_asc"
+    ascending = filters.sort in ("price_asc", "recommended")
 
     stmt = (
         select(

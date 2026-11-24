@@ -8,7 +8,8 @@ from app.models.catalog import Category, Product, ProductVariant
 from app.models.enums import EventType
 from app.repositories import telemetry_repository, user_repository
 from app.schemas.telemetry import EventIn
-
+from app.repositories import recommendation_repository as reco_repo
+from app.services.recommendation import engine
 TRACKING_CONSENT_HEADER = "X-Tracking-Consent"
 CONSENT_GRANTED = "granted"
 
@@ -46,6 +47,7 @@ def record_events(db: Session, events: list[EventIn], *, user_id: int | None, se
         if all(getattr(e, field) is None or getattr(e, field) in known[field] for field in _REFERENCES)
     ]
     telemetry_repository.bulk_insert_events(db, rows)
+    reco_repo.cache_drop_owner(db, engine.owner_key(user_id, session_token))
 
 
 def _since(days: int) -> datetime:

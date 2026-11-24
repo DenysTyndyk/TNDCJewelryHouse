@@ -537,6 +537,45 @@ p {
   transform: scale(1.04);
 }
 
+.product__photo-link {
+  cursor: pointer;
+}
+
+/* Recommendation placeholder: same box as a real card, only the content shimmers. */
+.product--skeleton .product__media::before {
+  display: none;
+}
+
+.product--skeleton .product__media,
+.product--skeleton .product__cat,
+.product--skeleton .product__name,
+.product--skeleton .product__price {
+  background: linear-gradient(
+    90deg,
+    var(--color-bg-elevated) 25%,
+    color-mix(in srgb, var(--color-bg-elevated) 70%, var(--color-border)) 50%,
+    var(--color-bg-elevated) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s linear infinite;
+}
+
+.product--skeleton .product__cat,
+.product--skeleton .product__name,
+.product--skeleton .product__price {
+  width: 60%;
+}
+
+@keyframes skeleton-shimmer {
+  to { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product--skeleton * {
+    animation: none;
+  }
+}
+
 .product__meta {
   display: flex;
   flex-direction: column;
@@ -1026,8 +1065,28 @@ p {
 }
 
 /* —— Search —— */
-.catalog-filters label.catalog-filters__search {
+.catalog-filters__search {
+  position: relative;
   flex: 1 1 14rem;
+}
+
+/* Absolutely positioned, so the suggestion list never pushes the filters or the grid. */
+.catalog-filters__suggestions {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  left: 0;
+  right: 0;
+  z-index: 20;
+  margin: 0;
+  padding: var(--space-2) 0;
+  list-style: none;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+}
+
+.catalog-filters__suggestions a {
+  display: block;
+  padding: var(--space-2) var(--space-3);
 }
 
 .catalog-filters input[type="search"] {

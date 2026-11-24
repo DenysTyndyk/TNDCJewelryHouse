@@ -100,7 +100,7 @@ M7 zależy tylko od katalogu (M3) i może iść równolegle z M4/M6.
 - **Deliverable**: „Wyszukiwanie semantyczne i podobieństwo wektorowe".
 
 ### M8 — Personalizacja w UI (2 tygodnie)
-Sekcje „Polecane dla Ciebie", „Podobne produkty", „Ostatnio przeglądane", „Inni oglądali też"; spersonalizowana kolejność w kategoriach; wyszukiwarka w nagłówku z autocomplete; `recommendation_cache` z TTL; flaga `algorithm=cbf|vector|hybrid`; `click_recommendation` z identyfikatorem algorytmu; stany skeleton.
+Sekcje „Polecane dla Ciebie", „Podobne produkty", „Ostatnio przeglądane", „Inni oglądali też"; spersonalizowana kolejność w kategoriach; autocomplete nazw produktów w wyszukiwarce katalogu; `recommendation_cache` z TTL; flaga `algorithm=cbf|vector|hybrid`; `click_recommendation` z identyfikatorem algorytmu; stany skeleton.
 - **DoD**: gość i użytkownik z historią widzą różną stronę główną; każde kliknięcie ma id algorytmu; brak przeskoków layoutu.
 - **Deliverable**: integracja w UX + zrzuty „przed/po".
 

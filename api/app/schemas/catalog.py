@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 from app.models.enums import Currency, GemstoneType, MetalColor, MetalType
 
 Locale = Literal["uk", "pl", "en"]
-SortOrder = Literal["newest","price_asc","price_desc", "popular"]
+SortOrder = Literal["newest","price_asc","price_desc", "popular", "recommended"]
 
 class ImageOut(BaseModel):
     id: int

@@ -94,12 +94,14 @@ def _cards(db: Session, rows) -> list[ProductListItem]:
         for r in rows
     ]
 
-def list_products(db: Session, filters: ProductFilter, accept_language: str | None) -> ProductPage:
+def list_products(
+    db: Session, filters: ProductFilter, accept_language: str | None, ranked: list[int] | None = None
+) -> ProductPage:
     locale = resolve_locale(filters.locale, accept_language)
     filters = filters.model_copy(update={"locale": locale})
 
     try:
-        rows, next_cursor = repo.list_products(db, filters, CURRENCY)
+        rows, next_cursor = repo.list_products(db, filters, CURRENCY, ranked=ranked)
     except ValueError as exc:  
         raise InvalidCursorError("Invalid cursor") from exc
     return ProductPage(items=_cards(db, rows), next_cursor=next_cursor)

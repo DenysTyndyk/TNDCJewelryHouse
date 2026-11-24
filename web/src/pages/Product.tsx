@@ -2,6 +2,7 @@ import '../styles/site.css';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import ImageSliderOnHover from '../components/ItemCard/ImageSliderOnHover.jsx';
+import RecoSection from '../components/RecoSection';
 import { getProductBySlug } from '../api/catalogApi';
 import { useLanguage } from '../context/languageContext';
 import { useCart } from '../context/cartContext';
@@ -167,6 +168,12 @@ function Product() {
           </>
         )}
       </div>
+
+      <RecoSection key={`similar-${product.id}`} title={t('reco.similar')} path={`similar/${product.id}`} section="pdp_similar" />
+      <RecoSection key={`also-${product.id}`} title={t('reco.alsoViewed')} path={`also-viewed/${product.id}`} section="pdp_also_viewed" />
+      {canTrack && (
+        <RecoSection key={`recent-${product.id}`} title={t('reco.recent')} path="recently-viewed" section="pdp_recent" exclude={product.id} />
+      )}
     </main>
   );
 }

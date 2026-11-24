@@ -5,12 +5,13 @@ import ItemCard from '../components/ItemCard/ItemCard';
 import CatalogFilters, { type PanelFilters } from '../components/CatalogFilters';
 import { listCategories, listProducts, toItem } from '../api/catalogApi';
 import { searchProducts } from '../api/searchApi';
-import type { CategoryNode, Item, ProductPage } from '../types';
+import { listRecommendedProducts } from '../api/recoApi';
+import type { CategoryNode, Item, ProductFilters, ProductPage } from '../types';
 import { useAuth } from '../context/authContext';
 import { useLanguage } from '../context/languageContext';
 import { useTracking } from '../context/trackingContext';
 
-const EMPTY_FILTERS: PanelFilters = { sort: 'newest' };
+const EMPTY_FILTERS: PanelFilters = { sort: 'recommended' };
 
 function Categories() {
   const { t, language } = useLanguage();
@@ -31,6 +32,9 @@ function Categories() {
   }, [language]);
 
   const query = { ...filters, category: selectedCategory === 'all' ? undefined : selectedCategory, locale: language };
+  // The personal order needs the user/session and consent; the other sorts stay a plain public request.
+  const fetchPage = (f: ProductFilters) =>
+    f.sort === 'recommended' ? listRecommendedProducts(f, accessToken, canTrack) : listProducts(f);
 
   useEffect(() => {
     let active = true; // ignore responses that arrive after the filters changed again
@@ -39,7 +43,7 @@ function Categories() {
     // With a query the grid shows ranked search results (same filters and category); sort/cursor do not apply.
     const request: Promise<ProductPage> = q
       ? searchProducts({ ...query, q, limit: 100 }, accessToken, canTrack).then((res) => ({ items: res.items, next_cursor: null }))
-      : listProducts(query);
+      : fetchPage(query);
     request
       .then((page) => {
         if (!active) return;
@@ -49,7 +53,7 @@ function Categories() {
       .catch(() => active && setError(t('product.loadError')))
       .finally(() => active && setLoading(false));
     return () => { active = false; };
-  }, [selectedCategory, filters, language, q]);
+  }, [selectedCategory, filters, language, q, accessToken, canTrack]);
 
   // CategoryView: once a concrete category is selected and the category list (with ids) has loaded.
   useEffect(() => {
@@ -73,7 +77,7 @@ function Categories() {
   const loadMore = () => {
     if (!nextCursor) return;
     setLoading(true);
-    listProducts({ ...query, cursor: nextCursor })
+    fetchPage({ ...query, cursor: nextCursor })
       .then((page) => {
         setItems((prev) => [...prev, ...page.items.map(toItem)]);
         setNextCursor(page.next_cursor ?? null);

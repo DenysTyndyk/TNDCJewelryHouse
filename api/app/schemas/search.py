@@ -13,6 +13,11 @@ class SearchParams(ProductFilter):
     offset: int = Field(default=0, ge=0, le=1000)
 
 
+class SuggestOut(BaseModel):
+    slug: str
+    name: str
+
+
 class SearchOut(BaseModel):
     mode_used: SearchMode
     total: int

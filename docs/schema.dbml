@@ -413,7 +413,15 @@ Table search_queries {
     user_id
   }
 }
-
+Table recommendation_cache {
+  cache_key varchar(200) [pk, note: '"<context>|<owner>", e.g. "for_you:1|u42"']
+  owner_key varchar(140) [not null]
+  algorithm varchar(20) [not null]
+  product_ids "bigint[]" [not null]
+  expires_at timestamptz [not null]
+  indexes { owner_key
+            expires_at }
+}
 Enum EventType {
   ProductView
   CategoryView

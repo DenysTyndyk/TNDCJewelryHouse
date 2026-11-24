@@ -1,13 +1,13 @@
 import json
 from datetime import date
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 from app.models.enums import EventType
 
 MAX_BATCH_SIZE = 50
 MAX_METADATA_BYTES = 1024
-# Purchase is written by the backend at checkout; a client must not be able to fake it.
+
 SERVER_ONLY_EVENTS = frozenset({EventType.Purchase})
 
 MetadataValue = str | int | float | bool | None
@@ -40,6 +40,12 @@ class EventIn(BaseModel):
         if len(encoded) > MAX_METADATA_BYTES:
             raise ValueError(f"metadata must be at most {MAX_METADATA_BYTES} bytes")
         return value
+    
+    @model_validator(mode="after")
+    def _click_has_algorithm(self) -> "EventIn":
+        if self.event_type == EventType.ClickRecommendation and not (self.product_id and self.source):
+            raise ValueError("ClickRecommendation needs product_id and source")
+        return self
 
 
 class EventBatchIn(BaseModel):

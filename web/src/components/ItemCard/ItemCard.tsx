@@ -3,7 +3,8 @@ import ImageSliderOnHover from "./ImageSliderOnHover.jsx";
 import { useCart } from '../../context/cartContext';
 import { useLanguage } from '../../context/languageContext';
 import type { Item } from '../../types'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import type { MouseEvent } from 'react';
 
 const activeCart_svg = <svg
 xmlns="http://www.w3.org/2000/svg"
@@ -28,10 +29,22 @@ aria-hidden="true"
 function ItemCard({ item, onOpen }: { item: Item; onOpen?: () => void }) {
     const { cart } = useCart();
     const { t } = useLanguage();
+    const navigate = useNavigate();
     const isInCart = cart.items.some((line) => line.product_slug === item.slug);
+    const productUrl = `/products/${item.slug}`;
+
+    // Not a <Link>: the slider has indicator <button>s, and buttons inside a link are invalid HTML.
+    // Mouse-only shortcut; keyboard and screen-reader users open the product via the name link.
+    const openFromPhoto = (e: MouseEvent) => {
+      if ((e.target as HTMLElement).closest('button')) return; // indicator click switches the photo
+      onOpen?.();
+      navigate(productUrl);
+    };
   return (
     <article className="product">
-      <ImageSliderOnHover images = {item.images} alt={item.title}/>
+      <div className="product__photo-link" onClick={openFromPhoto}>
+        <ImageSliderOnHover images = {item.images} alt={item.title}/>
+      </div>
       <div className="product__meta">
         <span className="product__cat">{item.category}</span>
 <h3 className="product__name"><Link to={`/products/${item.slug}`} onClick={onOpen}>{item.title}</Link></h3>

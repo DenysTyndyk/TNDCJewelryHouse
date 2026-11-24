@@ -14,6 +14,12 @@
       "openMenu": "Відкрити меню",
       "closeMenu": "Закрити меню"
     },
+    "reco": {
+      "forYou": "Рекомендовано для вас",
+      "similar": "Схожі товари",
+      "recent": "Нещодавно переглянуті",
+      "alsoViewed": "Інші також переглядали"
+    },
     "search": {
       "eyebrow": "Пошук",
       "title": "Пошук",
@@ -44,7 +50,7 @@
       "filterAll": "Всі",
       "filters": { "Earrings": "Сережки", "Necklaces": "Кольє", "Rings": "Каблучки", "Bracelets": "Браслети" },
       "panel": { "any": "Будь-який", "priceMax": "Ціна до, грн", "inStock": "В наявності", "sort": "Сортування", "reset": "Скинути", "empty": "За цими фільтрами нічого не знайдено", "more": "Показати ще" },
-      "sort": { "newest": "Новинки", "price_asc": "Спочатку дешевші", "price_desc": "Спочатку дорожчі", "popular": "Популярні" }
+      "sort": { "newest": "Новинки", "price_asc": "Спочатку дешевші", "price_desc": "Спочатку дорожчі", "popular": "Популярні", "recommended": "Для вас" }
     },
     "about": {
       "eyebrow": "Наша історія",
@@ -240,6 +246,12 @@
       "openMenu": "Otwórz menu",
       "closeMenu": "Zamknij menu"
     },
+    "reco": {
+      "forYou": "Polecane dla Ciebie",
+      "similar": "Podobne produkty",
+      "recent": "Ostatnio przeglądane",
+      "alsoViewed": "Inni oglądali też"
+    },
     "search": {
       "eyebrow": "Wyszukiwanie",
       "title": "Wyszukiwanie",
@@ -270,7 +282,7 @@
       "filterAll": "Wszystkie",
       "filters": { "Earrings": "Kolczyki", "Necklaces": "Naszyjniki", "Rings": "Pierścionki", "Bracelets": "Bransoletki" },
       "panel": { "any": "Dowolny", "priceMax": "Cena do, UAH", "inStock": "Dostępne", "sort": "Sortowanie", "reset": "Wyczyść", "empty": "Brak produktów dla wybranych filtrów", "more": "Pokaż więcej" },
-      "sort": { "newest": "Nowości", "price_asc": "Od najtańszych", "price_desc": "Od najdroższych", "popular": "Popularne" }
+      "sort": { "newest": "Nowości", "price_asc": "Od najtańszych", "price_desc": "Od najdroższych", "popular": "Popularne", "recommended": "Dla Ciebie" }
     },
     "about": {
       "eyebrow": "Nasza historia",
@@ -466,6 +478,12 @@
       "openMenu": "Open menu",
       "closeMenu": "Close menu"
     },
+    "reco": {
+      "forYou": "Recommended for you",
+      "similar": "Similar products",
+      "recent": "Recently viewed",
+      "alsoViewed": "Others also viewed"
+    },
     "search": {
       "eyebrow": "Search",
       "title": "Search",
@@ -496,7 +514,7 @@
       "filterAll": "All",
       "filters": { "Earrings": "Earrings", "Necklaces": "Necklaces", "Rings": "Rings", "Bracelets": "Bracelets" },
       "panel": { "any": "Any", "priceMax": "Price up to, UAH", "inStock": "In stock", "sort": "Sort by", "reset": "Reset", "empty": "No products match these filters", "more": "Show more" },
-      "sort": { "newest": "Newest", "price_asc": "Price: low to high", "price_desc": "Price: high to low", "popular": "Popular" }
+      "sort": { "newest": "Newest", "price_asc": "Price: low to high", "price_desc": "Price: high to low", "popular": "Popular", "recommended": "For you" }
     },
     "about": {
       "eyebrow": "Our story",

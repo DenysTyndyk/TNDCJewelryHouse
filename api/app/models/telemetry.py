@@ -1,14 +1,24 @@
 from typing import Optional
 
 from pgvector.sqlalchemy import Vector
-from sqlalchemy import ForeignKey, Index, String
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy import ForeignKey, Index, String,BigInteger, DateTime 
+from sqlalchemy.dialects.postgresql import JSONB,ARRAY
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base, bigint_pk, created_at_col
 from app.models.catalog import EMBEDDING_DIM
 from app.models.enums import EventType, SearchType, pg_enum
+from datetime import datetime
+from typing import Optional
 
+class RecommendationCache(Base):
+    __tablename__ = "recommendation_cache"
+
+    cache_key: Mapped[str] = mapped_column(String(200), primary_key=True)
+    owner_key: Mapped[str] = mapped_column(String(140), index=True)
+    algorithm: Mapped[str] = mapped_column(String(20))
+    product_ids: Mapped[list[int]] = mapped_column(ARRAY(BigInteger))
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
 
 class UserEvent(Base):
     """Behaviour telemetry (M5). user_id is nulled on account deletion (RODO anonymisation)."""
@@ -28,9 +38,8 @@ class UserEvent(Base):
     category_id: Mapped[Optional[int]] = mapped_column(
         ForeignKey("categories.id", ondelete="SET NULL")
     )
-    # "metadata" is reserved by SQLAlchemy's declarative API, hence the attribute alias.
     event_metadata: Mapped[Optional[dict]] = mapped_column("metadata", JSONB)
-    source: Mapped[Optional[str]] = mapped_column(String(50))  # algorithm that showed the item
+    source: Mapped[Optional[str]] = mapped_column(String(50))  
     created_at: Mapped[created_at_col]
 
     __table_args__ = (
@@ -55,7 +64,7 @@ class SearchQuery(Base):
         ForeignKey("products.id", ondelete="SET NULL")
     )
     search_type: Mapped[SearchType] = mapped_column(pg_enum(SearchType, "search_type"))
-    query_embedding = mapped_column(Vector(EMBEDDING_DIM), nullable=True)  # cache for frequent queries
+    query_embedding = mapped_column(Vector(EMBEDDING_DIM), nullable=True)  
     created_at: Mapped[created_at_col]
 
     __table_args__ = (

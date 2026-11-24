@@ -8,6 +8,14 @@ from app.repositories.catalog_repository import list_primary_images
 from app.schemas.cart import MAX_LINE_QUANTITY, CartItemIn, CartLineOut, CartOut
 from app.services.catalog_service import CURRENCY, _image_out
 from app.models.enums import CartStatus
+from app.repositories import recommendation_repository as reco_repo
+from app.services.recommendation import engine
+
+
+def _drop_reco_cache(db: Session, user_id: int | None, session_token: str | None) -> None:
+    # for-you excludes cart products, so a cart change makes the owner's cached lists stale
+    # (also without tracking consent, when no AddToCart event would reset it).
+    reco_repo.cache_drop_owner(db, engine.owner_key(user_id, session_token))
 
 
 class CartError(Exception):
@@ -100,6 +108,7 @@ def add_item(db: Session, data: CartItemIn, *, user_id: int | None, session_toke
         _check_quantity(new_quantity, variant.available)
         repo.set_item_quantity(db,item,new_quantity)
     repo.touch_cart(db,cart)
+    _drop_reco_cache(db, user_id, session_token)
     return _build_cart_out(db,cart,locale)
 
 def update_item(
@@ -119,6 +128,7 @@ def remove_item(
     cart, item = _get_own_item(db, item_id, user_id, session_token)
     repo.delete_item(db, item)
     repo.touch_cart(db, cart)
+    _drop_reco_cache(db, user_id, session_token)
     return _build_cart_out(db, cart, locale)
 
 
@@ -167,6 +177,7 @@ def merge(db: Session, guest_token: str, user_id: int) -> list[int]:
             if new_quantity < wanted:
                 dropped.append(g.variant_id)
         repo.touch_cart(db, user_cart)
+        _drop_reco_cache(db, user_id, None)
     guest.session_token = None
     repo.set_cart_status(db, guest, CartStatus.Converted)
     return dropped

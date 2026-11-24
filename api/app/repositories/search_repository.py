@@ -1,9 +1,10 @@
-from sqlalchemy import select, text
+from sqlalchemy import and_, func, select, text
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
 from app.models.telemetry import SearchQuery
-from app.models.catalog import ProductEmbedding
+from app.models.catalog import Product, ProductEmbedding, ProductTranslation
+from app.repositories.catalog_repository import IS_PUBLISHED
 
 SEMANTIC_POOL = 300
 
@@ -70,3 +71,16 @@ def similar_by_vector(db: Session, product_id: int, limit: int = 100) -> list[in
         return []
     ranked = semantic(db, [float(x) for x in source], limit + 1)
     return [pid for pid in ranked if pid != product_id][:limit]
+
+
+def suggest(db: Session, q: str, locale: str, limit: int) -> list:
+    """Header autocomplete: product names containing q. Not logged to search_queries."""
+    # shortcut: ILIKE '%q%' is a seq scan; add a pg_trgm GIN index if the catalog grows past a few thousand rows.
+    stmt = (
+        select(Product.slug, ProductTranslation.name)
+        .join(ProductTranslation, and_(ProductTranslation.product_id == Product.id, ProductTranslation.locale == locale))
+        .where(IS_PUBLISHED, ProductTranslation.name.icontains(q, autoescape=True))
+        .order_by(func.length(ProductTranslation.name), Product.id)
+        .limit(limit)
+    )
+    return db.execute(stmt).all()
