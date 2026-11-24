@@ -1,0 +1,28 @@
+[
+  {"q": "перстень з діамантом", "locale": "uk", "kind": "keyword", "relevant": ["persten-solitaire-diamant", "obruchka-dorizhka-brilianty"]},
+  {"q": "сережки з сапфіром", "locale": "uk", "kind": "keyword", "relevant": ["serezhky-visyachi-sapfir", "nabir-sapfiry-bile-zoloto"]},
+  {"q": "срібний ланцюжок", "locale": "uk", "kind": "keyword", "relevant": ["lantsyuzhok-sribny-panceme"]},
+  {"q": "підвіска зі смарагдом", "locale": "uk", "kind": "keyword", "relevant": ["pidviska-smaragd-bile-zoloto"]},
+  {"q": "браслет з рубінами", "locale": "uk", "kind": "keyword", "relevant": ["braslet-rubiny-rozove-zoloto"]},
+  {"q": "обручка", "locale": "uk", "kind": "keyword", "relevant": ["obruchka-klasychna-bicolor", "obruchka-dorizhka-brilianty"]},
+  {"q": "перлини", "locale": "uk", "kind": "keyword", "relevant": ["serezhky-perlyny-klasyka", "nabir-pusety-pidviska-perlyny"]},
+  {"q": "аметист", "locale": "uk", "kind": "keyword", "relevant": ["persten-rozove-zoloto-ametyst"]},
+
+  {"q": "подарунок мамі на ювілей", "locale": "uk", "kind": "descriptive", "relevant": ["serezhky-perlyny-klasyka", "nabir-pusety-pidviska-perlyny", "pidviska-serce-zoloto", "serezhky-visyachi-sapfir"]},
+  {"q": "щось легке на кожен день", "locale": "uk", "kind": "descriptive", "relevant": ["persten-tonkyi-bile-zoloto", "pidviska-fianit-sribna", "serezhky-pusety-sribni"]},
+  {"q": "прикраса для заручин", "locale": "uk", "kind": "descriptive", "relevant": ["persten-solitaire-diamant", "persten-klasyka-bile-zoloto"]},
+  {"q": "для весілля", "locale": "uk", "kind": "descriptive", "relevant": ["obruchka-klasychna-bicolor", "obruchka-dorizhka-brilianty"]},
+  {"q": "недорогий подарунок дівчині", "locale": "uk", "kind": "descriptive", "relevant": ["serezhky-pusety-sribni", "pidviska-fianit-sribna", "nabir-sribny-fianity", "kolie-sribne-z-topazom"]},
+  {"q": "масивна прикраса на руку", "locale": "uk", "kind": "descriptive", "relevant": ["braslet-zhorstkyi-sribnyi", "braslet-lantsyuzhok-zoloto"]},
+  {"q": "щось романтичне", "locale": "uk", "kind": "descriptive", "relevant": ["pidviska-serce-zoloto", "persten-rozove-zoloto-ametyst"]},
+  {"q": "зелений камінь", "locale": "uk", "kind": "descriptive", "relevant": ["pidviska-smaragd-bile-zoloto"]},
+  {"q": "синій камінь у вухах", "locale": "uk", "kind": "descriptive", "relevant": ["serezhky-visyachi-sapfir"]},
+  {"q": "комплект прикрас", "locale": "uk", "kind": "descriptive", "relevant": ["nabir-pusety-pidviska-perlyny", "nabir-sapfiry-bile-zoloto", "nabir-sribny-fianity"]},
+
+  {"q": "pierścionek z brylantem", "locale": "pl", "kind": "crosslingual", "relevant": ["persten-solitaire-diamant", "obruchka-dorizhka-brilianty"]},
+  {"q": "kolczyki z perłami", "locale": "pl", "kind": "crosslingual", "relevant": ["serezhky-perlyny-klasyka", "nabir-pusety-pidviska-perlyny"]},
+  {"q": "prezent dla mamy", "locale": "pl", "kind": "crosslingual", "relevant": ["serezhky-perlyny-klasyka", "nabir-pusety-pidviska-perlyny", "pidviska-serce-zoloto", "serezhky-visyachi-sapfir"]},
+  {"q": "something light for every day", "locale": "en", "kind": "crosslingual", "relevant": ["persten-tonkyi-bile-zoloto", "pidviska-fianit-sribna", "serezhky-pusety-sribni"]},
+  {"q": "green stone pendant", "locale": "en", "kind": "crosslingual", "relevant": ["pidviska-smaragd-bile-zoloto"]},
+  {"q": "wedding band", "locale": "en", "kind": "crosslingual", "relevant": ["obruchka-klasychna-bicolor", "obruchka-dorizhka-brilianty"]}
+]

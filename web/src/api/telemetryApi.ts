@@ -4,7 +4,7 @@ export const TRACKING_HEADER = 'X-Tracking-Consent';
 
 // Only the types a client may send; Purchase is recorded by the backend at checkout.
 export type EventType =
-  | 'ProductView' | 'CategoryView' | 'AddToCart' | 'RemoveFromCart' | 'FilterApply';
+  | 'ProductView' | 'CategoryView' | 'AddToCart' | 'RemoveFromCart' | 'FilterApply' | 'Search';
 
 export type TrackEvent = {
   event_type: EventType;

@@ -12,10 +12,10 @@ router = APIRouter(prefix="/recommendations", tags=["recommendations"])
 @router.get("/similar/{product_id}", response_model=RecommendationOut)
 def similar(product_id: int, owner: CartOwner = Depends(get_cart_owner), db: Session = Depends(get_db)):
     try:
-        ids = engine.similar(db, product_id, user_id=owner.user_id, session_token=owner.session_token)
+        algorithm, ids = engine.similar(db, product_id, user_id=owner.user_id, session_token=owner.session_token)
     except engine.ProductNotFoundError:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found") from None
-    return RecommendationOut(algorithm="content", items=catalog_service.product_cards(db,ids,owner.locale))
+    return RecommendationOut(algorithm=algorithm, items=catalog_service.product_cards(db, ids, owner.locale))
 
 @router.get("/for-you", response_model=RecommendationOut)
 def for_you(

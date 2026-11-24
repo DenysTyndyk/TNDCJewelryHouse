@@ -10,6 +10,8 @@ Project tndc_jewelry_house {
     every timestamp column is timestamptz;
     users.email is a unique index on lower(email), not a column UNIQUE; accounts are hard-deleted (RODO);
     child catalog/cart rows ON DELETE CASCADE, orders/order_items/payments ON DELETE RESTRICT.
+    full-text search uses config tndc_search (COPY = simple + unaccent on word/hword/hword_part, migration 0008); search_vector is built with it.
+
   '''
 }
 

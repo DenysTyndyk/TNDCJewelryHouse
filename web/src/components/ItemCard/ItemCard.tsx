@@ -24,7 +24,8 @@ aria-hidden="true"
 <line x1="10" y1="16" x2="14" y2="16" />
 </svg>
 // The list has no variant_id, so the card links to the product page to pick a variant.
-function ItemCard({ item }: { item: Item }) {
+// onOpen: optional hook for pages that log which result was opened (search clicks).
+function ItemCard({ item, onOpen }: { item: Item; onOpen?: () => void }) {
     const { cart } = useCart();
     const { t } = useLanguage();
     const isInCart = cart.items.some((line) => line.product_slug === item.slug);
@@ -33,11 +34,11 @@ function ItemCard({ item }: { item: Item }) {
       <ImageSliderOnHover images = {item.images} alt={item.title}/>
       <div className="product__meta">
         <span className="product__cat">{item.category}</span>
-<h3 className="product__name"><Link to={`/products/${item.slug}`}>{item.title}</Link></h3>
+<h3 className="product__name"><Link to={`/products/${item.slug}`} onClick={onOpen}>{item.title}</Link></h3>
         {item.description && <p className="product__description">{item.description}</p>}
         <div className="product__price-row">
 <span className="product__price">{item.currency ?? 'UAH'} {item.price}</span>
-          <Link to={isInCart ? '/cart' : `/products/${item.slug}`} className="add-to-cart-btn" aria-label={isInCart ? t('product.goToCart') : t('product.addToCart')}>
+          <Link to={isInCart ? '/cart' : `/products/${item.slug}`} className="add-to-cart-btn" onClick={onOpen} aria-label={isInCart ? t('product.goToCart') : t('product.addToCart')}>
             {activeCart_svg}
           </Link>
         </div>

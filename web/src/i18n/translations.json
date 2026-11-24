@@ -14,6 +14,17 @@
       "openMenu": "Відкрити меню",
       "closeMenu": "Закрити меню"
     },
+    "search": {
+      "eyebrow": "Пошук",
+      "title": "Пошук",
+      "label": "Пошук",
+      "placeholder": "Наприклад, подарунок мамі",
+      "prompt": "Введіть запит у полі пошуку",
+      "empty": "За цим запитом нічого не знайдено",
+      "found": "Знайдено",
+      "mode": "Режим",
+      "modes": { "hybrid": "гібридний", "semantic": "семантичний", "lexical": "за словами" }
+    },
     "footer": {
       "copyright": "© TNDC Jewelry House",
       "visit": "Відвідати майстерню"
@@ -229,6 +240,17 @@
       "openMenu": "Otwórz menu",
       "closeMenu": "Zamknij menu"
     },
+    "search": {
+      "eyebrow": "Wyszukiwanie",
+      "title": "Wyszukiwanie",
+      "label": "Szukaj",
+      "placeholder": "Np. prezent dla mamy",
+      "prompt": "Wpisz zapytanie w polu wyszukiwania",
+      "empty": "Brak wyników dla tego zapytania",
+      "found": "Znaleziono",
+      "mode": "Tryb",
+      "modes": { "hybrid": "hybrydowy", "semantic": "semantyczny", "lexical": "po słowach" }
+    },
     "footer": {
       "copyright": "© TNDC Jewelry House",
       "visit": "Odwiedź pracownię"
@@ -443,6 +465,17 @@
       "close": "Close",
       "openMenu": "Open menu",
       "closeMenu": "Close menu"
+    },
+    "search": {
+      "eyebrow": "Search",
+      "title": "Search",
+      "label": "Search",
+      "placeholder": "E.g. a gift for mom",
+      "prompt": "Type a query in the search field",
+      "empty": "Nothing found for this query",
+      "found": "Found",
+      "mode": "Mode",
+      "modes": { "hybrid": "hybrid", "semantic": "semantic", "lexical": "keyword" }
     },
     "footer": {
       "copyright": "© TNDC Jewelry House",

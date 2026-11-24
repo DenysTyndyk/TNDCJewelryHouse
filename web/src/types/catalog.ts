@@ -97,3 +97,11 @@ export interface ProductFilters {
   limit?: number;
   locale?: Locale;
 }
+
+export type SearchMode = 'lexical' | 'semantic' | 'hybrid';
+
+export interface SearchResponse {
+  mode_used: SearchMode;
+  total: number;
+  items: ProductListItem[];
+}

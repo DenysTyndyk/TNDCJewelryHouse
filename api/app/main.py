@@ -14,7 +14,7 @@ from slowapi.errors import RateLimitExceeded
 from app.core.config import MEDIA_DIR, settings
 from app.core.limiter import limiter
 from app.db.session import SessionLocal
-from app.routers import admin_analytics, admin_catalog, auth, catalog, cart, orders, recommendations, telemetry
+from app.routers import admin_analytics, admin_catalog, auth, catalog, cart, orders, recommendations, search, telemetry
 from app.services.admin_catalog_service import ConflictError, InvalidImageError, NotFoundError
 
 request_id_context: ContextVar[str] = ContextVar("request_id", default=None)
@@ -107,6 +107,6 @@ app.include_router(cart.router)
 app.include_router(orders.router)
 app.include_router(telemetry.router)
 app.include_router(recommendations.router)
-
+app.include_router(search.router)
 MEDIA_DIR.mkdir(exist_ok=True)  
 app.mount("/media", StaticFiles(directory=MEDIA_DIR), name="media")

@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from app.core.config import settings
 from app.repositories import recommendation_repository as repo
 from app.services.recommendation import behavior, content_based, hybrid, popularity, rules
+from app.repositories import search_repository
 
 EVENT_TYPES = list(behavior.EVENT_WEIGHTS)
 
@@ -23,13 +24,22 @@ def _popularity(db:Session, published_at: dict, now: datetime) -> dict [int,floa
     ) 
     return popularity.score(counts, published_at, now, short_days, long_days)
 
-def similar(db: Session, product_id: int, *, user_id: int | None, session_token: str | None) -> list[int]:
+def similar(
+    db: Session, product_id: int, *, user_id: int | None, session_token: str | None
+) -> tuple[str, list[int]]:
     features = repo.load_product_features(db)
     categories = {f.id: f.category_id for f in features}
     if product_id not in categories:
         raise ProductNotFoundError(product_id)
-    vectors = content_based.build_vectors(features)
-    ranked = content_based.similar(vectors, categories, product_id, k=len(vectors))
+
+    ranked: list[tuple[int, float]] = []
+    if settings.similar_source == "vector":
+        ranked = [(pid, 0.0) for pid in search_repository.similar_by_vector(db, product_id)]
+    algorithm = "vector" if ranked else "content"
+    if not ranked: 
+        vectors = content_based.build_vectors(features)
+        ranked = content_based.similar(vectors, categories, product_id, k=len(vectors))
+
     purchased = repo.purchased_product_ids(db, user_id=user_id, session_token=session_token)
     picked = rules.apply_rules(
         ranked,
@@ -39,7 +49,7 @@ def similar(db: Session, product_id: int, *, user_id: int | None, session_token:
         limit=settings.reco_limit,
         max_per_category=settings.reco_limit,
     )
-    return [pid for pid, _ in picked]
+    return algorithm, [pid for pid, _ in picked]
 
 def for_you(
     db: Session, *, user_id: int | None, session_token: str | None, tracking: bool

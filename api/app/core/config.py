@@ -43,4 +43,12 @@ class Settings(BaseSettings):
     reco_limit: int = Field(default=12, ge=1, le=50)
     # Diversity rule: at most N items from one category in a single list.
     reco_max_per_category: int = Field(default=4, ge=1)
+    # Search (M7): embedding service; compose overrides this with http://embedder:8001.
+    embedder_url: str = "http://localhost:8001"
+    embedding_model: str = "intfloat/multilingual-e5-small"
+    embedding_version: int = Field(default=1, ge=1)
+    semantic_search_enabled: bool = True
+    similar_source: Literal["cbf", "vector"] = "cbf"
+    search_rrf_k: int = Field(default=60, ge=1)
+
 settings = Settings()

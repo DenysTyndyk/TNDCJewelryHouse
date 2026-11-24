@@ -30,6 +30,12 @@ services:
       ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES:-15}
       REFRESH_TOKEN_EXPIRE_DAYS: ${REFRESH_TOKEN_EXPIRE_DAYS:-30}
       CORS_ORIGINS: ${CORS_ORIGINS:-["http://localhost:5173"]}
+      EMBEDDER_URL: ${EMBEDDER_URL:-http://embedder:8001}
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-intfloat/multilingual-e5-small}
+      EMBEDDING_VERSION: ${EMBEDDING_VERSION:-1}
+      SEMANTIC_SEARCH_ENABLED: ${SEMANTIC_SEARCH_ENABLED:-true}
+      SIMILAR_SOURCE: ${SIMILAR_SOURCE:-cbf}
+      SEARCH_RRF_K: ${SEARCH_RRF_K:-60}
     ports:
       - "8000:8000"
     depends_on:
@@ -54,7 +60,28 @@ services:
       sh -c 'while true;
              do python -m scripts.expire_pending_orders;
                 python -m scripts.anonymize_events;
+                python -m scripts.build_embeddings;
                 sleep 300; done'
+
+  # Text embeddings (multilingual-e5-small, 384 dims). The api does not depend_on it:
+  # search falls back to lexical-only when the embedder is down.
+  embedder:
+    build: ./embedder
+    container_name: tndc-embedder
+    restart: unless-stopped
+    environment:
+      HF_HOME: /models
+    ports:
+      - "8001:8001"
+    volumes:
+      - tndc_hf_cache:/models
+    mem_limit: 1g
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/health')"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 120s
 
   web:
     build:
@@ -74,3 +101,4 @@ services:
 
 volumes:
   tndc_pgdata:
+  tndc_hf_cache:
